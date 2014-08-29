@@ -13,15 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{8e78f276-f85c-48a9-9d61-25baa7d60612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine\world">
+      <UniqueIdentifier>{bc4662e1-ac4f-4f6c-b1c3-17c1cd35502a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{e86277e2-0dbc-4652-a384-28091210043e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\world">
+      <UniqueIdentifier>{93532945-1399-4f98-a065-09f6fd0d175c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main\c++\engine\world\World.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\engine\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\c++\engine\world\World.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\engine\world</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
