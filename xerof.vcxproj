@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\main\c++\engine\world\Map.cpp" />
     <ClCompile Include="src\main\c++\engine\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\main\c++\engine\world\Map.h" />
     <ClInclude Include="src\main\c++\engine\world\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

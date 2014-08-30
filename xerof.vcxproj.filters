@@ -14,25 +14,31 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Source Files\engine">
-      <UniqueIdentifier>{8e78f276-f85c-48a9-9d61-25baa7d60612}</UniqueIdentifier>
+      <UniqueIdentifier>{5ec4e3be-f26f-4596-9aab-1ec7a6b888f3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\engine\world">
-      <UniqueIdentifier>{bc4662e1-ac4f-4f6c-b1c3-17c1cd35502a}</UniqueIdentifier>
+      <UniqueIdentifier>{cfe4c093-0407-4bf3-880c-d4706521285e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\engine">
-      <UniqueIdentifier>{e86277e2-0dbc-4652-a384-28091210043e}</UniqueIdentifier>
+      <UniqueIdentifier>{c8c5b4e1-5aa2-4b86-a779-baa64380f6d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\engine\world">
-      <UniqueIdentifier>{93532945-1399-4f98-a065-09f6fd0d175c}</UniqueIdentifier>
+      <UniqueIdentifier>{9e6c6c8c-a9ae-41fd-a3e0-87a81f94b0ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main\c++\engine\world\World.cpp">
       <Filter>Source Files\engine\world</Filter>
     </ClCompile>
+    <ClCompile Include="src\main\c++\engine\world\Map.cpp">
+      <Filter>Source Files\engine\world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\c++\engine\world\World.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Map.h">
       <Filter>Header Files\engine\world</Filter>
     </ClInclude>
   </ItemGroup>
