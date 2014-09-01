@@ -14,23 +14,41 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Source Files\engine">
-      <UniqueIdentifier>{5ec4e3be-f26f-4596-9aab-1ec7a6b888f3}</UniqueIdentifier>
+      <UniqueIdentifier>{8e78f276-f85c-48a9-9d61-25baa7d60612}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\engine\world">
-      <UniqueIdentifier>{cfe4c093-0407-4bf3-880c-d4706521285e}</UniqueIdentifier>
+      <UniqueIdentifier>{bc4662e1-ac4f-4f6c-b1c3-17c1cd35502a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\engine">
-      <UniqueIdentifier>{c8c5b4e1-5aa2-4b86-a779-baa64380f6d6}</UniqueIdentifier>
+      <UniqueIdentifier>{e86277e2-0dbc-4652-a384-28091210043e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\engine\world">
-      <UniqueIdentifier>{9e6c6c8c-a9ae-41fd-a3e0-87a81f94b0ec}</UniqueIdentifier>
+      <UniqueIdentifier>{93532945-1399-4f98-a065-09f6fd0d175c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine\console">
+      <UniqueIdentifier>{2fed5b16-60b6-4c4a-b78a-6c288c4fd6f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\console">
+      <UniqueIdentifier>{e31824e7-7824-4c78-aa1d-c6a73fec64be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\world\environnement">
+      <UniqueIdentifier>{62f3c8ee-fbd9-435b-9713-c630600e7c6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\world\environnement\forest">
+      <UniqueIdentifier>{2891757d-d301-4372-a988-fcf4fe952e40}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main\c++\engine\world\World.cpp">
-      <Filter>Source Files\engine\world</Filter>
+    <ClCompile Include="src\main\c++\engine\console\Console.cpp">
+      <Filter>Source Files\engine\console</Filter>
     </ClCompile>
     <ClCompile Include="src\main\c++\engine\world\Map.cpp">
+      <Filter>Source Files\engine\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\c++\engine\world\Tile.cpp">
+      <Filter>Source Files\engine\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\c++\engine\world\World.cpp">
       <Filter>Source Files\engine\world</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +56,61 @@
     <ClInclude Include="src\main\c++\engine\world\World.h">
       <Filter>Header Files\engine\world</Filter>
     </ClInclude>
+    <ClInclude Include="src\main\c++\engine\console\Console.h">
+      <Filter>Header Files\engine\console</Filter>
+    </ClInclude>
     <ClInclude Include="src\main\c++\engine\world\Map.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Tile.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Ocean.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Grassland.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Random.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Forest\Forest.h">
+      <Filter>Header Files\engine\world\environnement\forest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Forest\FruitTemperateForest.h">
+      <Filter>Header Files\engine\world\environnement\forest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Forest\TemperateForest.h">
+      <Filter>Header Files\engine\world\environnement\forest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Tundra.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\console\ConsoleColor.h">
+      <Filter>Header Files\engine\console</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Plain.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Mountain.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Foreground.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Background.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Land.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Waterbody.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\MapElement.h">
+      <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\Temperature.h">
       <Filter>Header Files\engine\world</Filter>
     </ClInclude>
   </ItemGroup>
