@@ -24,9 +24,10 @@
     <ClInclude Include="src\main\c++\engine\world\environnement\Forest\FruitTemperateForest.h" />
     <ClInclude Include="src\main\c++\engine\world\environnement\Forest\TemperateForest.h" />
     <ClInclude Include="src\main\c++\engine\world\environnement\Grassland.h" />
-    <ClInclude Include="src\main\c++\engine\world\environnement\Mountain.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Lake.h" />
     <ClInclude Include="src\main\c++\engine\world\environnement\Ocean.h" />
     <ClInclude Include="src\main\c++\engine\world\environnement\Plain.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Rocky.h" />
     <ClInclude Include="src\main\c++\engine\world\environnement\Tundra.h" />
     <ClInclude Include="src\main\c++\engine\world\Foreground.h" />
     <ClInclude Include="src\main\c++\engine\world\Land.h" />

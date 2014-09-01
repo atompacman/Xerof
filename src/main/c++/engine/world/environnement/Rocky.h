@@ -1,7 +1,7 @@
 #pragma once
 #include "Land.h"
 
-class Mountain : public Land
+class Rocky : public Land
 {
 public:
 	virtual ConsoleColor color(bool isNight) const

@@ -92,9 +92,6 @@
     <ClInclude Include="src\main\c++\engine\world\environnement\Plain.h">
       <Filter>Header Files\engine\world\environnement</Filter>
     </ClInclude>
-    <ClInclude Include="src\main\c++\engine\world\environnement\Mountain.h">
-      <Filter>Header Files\engine\world\environnement</Filter>
-    </ClInclude>
     <ClInclude Include="src\main\c++\engine\world\Foreground.h">
       <Filter>Header Files\engine\world</Filter>
     </ClInclude>
@@ -112,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="src\main\c++\engine\world\Temperature.h">
       <Filter>Header Files\engine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Rocky.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main\c++\engine\world\environnement\Lake.h">
+      <Filter>Header Files\engine\world\environnement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

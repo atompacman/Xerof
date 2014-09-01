@@ -7,7 +7,7 @@
 
 World::World() : map(Map())
 {
-
+	setDay();
 }
 
 
