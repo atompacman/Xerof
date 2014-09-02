@@ -175,7 +175,7 @@ void Map::detectLakeBorders()
 
 bool Map::canReachLimitsFrom() const
 {
-
+	return false;
 }
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
