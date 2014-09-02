@@ -1,12 +1,36 @@
 #include "World.h"
 
 
-World::World() 
-{
+//= = = = = = = = = = = = = = = = = = = = = = =//
+//           CONSTRUCTOR/DESCTRUCTOR           //
+//- - - - - - - - - - - - - - - - - - - - - - -//
 
+World::World() : map(Map())
+{
+	setDay();
 }
 
-World::~World()
-{
 
+//= = = = = = = = = = = = = = = = = = = = = = =//
+//                   GETTERS                   //
+//- - - - - - - - - - - - - - - - - - - - - - -//
+
+bool World::isNight() const
+{
+	return isNightTime;
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = =//
+//                   SETTERS                   //
+//- - - - - - - - - - - - - - - - - - - - - - -//
+
+void World::setDay()
+{
+	isNightTime = false;
+}
+
+void World::setNight()
+{
+	isNightTime = true;
 }

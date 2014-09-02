@@ -11,11 +11,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\main\c++\engine\console\Console.cpp" />
     <ClCompile Include="src\main\c++\engine\world\Map.cpp" />
+    <ClCompile Include="src\main\c++\engine\world\Tile.cpp" />
     <ClCompile Include="src\main\c++\engine\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\main\c++\engine\console\Console.h" />
+    <ClInclude Include="src\main\c++\engine\console\ConsoleColor.h" />
+    <ClInclude Include="src\main\c++\engine\world\Background.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Forest\Forest.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Forest\FruitTemperateForest.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Forest\TemperateForest.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Grassland.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Lake.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Ocean.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Plain.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Rocky.h" />
+    <ClInclude Include="src\main\c++\engine\world\environnement\Tundra.h" />
+    <ClInclude Include="src\main\c++\engine\world\Foreground.h" />
+    <ClInclude Include="src\main\c++\engine\world\Land.h" />
     <ClInclude Include="src\main\c++\engine\world\Map.h" />
+    <ClInclude Include="src\main\c++\engine\world\MapElement.h" />
+    <ClInclude Include="src\main\c++\engine\world\Random.h" />
+    <ClInclude Include="src\main\c++\engine\world\Temperature.h" />
+    <ClInclude Include="src\main\c++\engine\world\Tile.h" />
+    <ClInclude Include="src\main\c++\engine\world\Waterbody.h" />
     <ClInclude Include="src\main\c++\engine\world\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -48,6 +69,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <SourcePath>C:\Users\Atompacman\Documents\Travaux\Université\AUT14\AUT14 - Programmation libre\Xerof\xerof\src\main\c++;$(SourcePath)</SourcePath>
+    <IncludePath>C:\Users\Utilisateur\Source\Repos\Xerof\src\main\c++\engine\console;C:\Users\Utilisateur\Source\Repos\Xerof\src\main\c++\engine\world;$(IncludePath)</IncludePath>
+    <ReferencePath>C:\Users\Utilisateur\Source\Repos\Xerof\src\main\c++\engine\console;C:\Users\Utilisateur\Source\Repos\Xerof\src\main\c++\engine\world;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -57,6 +80,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>LIBCD.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
