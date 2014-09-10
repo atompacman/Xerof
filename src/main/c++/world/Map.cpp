@@ -6,16 +6,41 @@
 
 Map::Map()
 {
+	tiles = new Tile*[MAP_WIDTH_IN_TILES * MAP_HEIGHT_IN_TILES];
+
+	int tileNo = 0;
+
+	for (int y = 0; y < MAP_HEIGHT_IN_TILES; ++y) {
+		for (int x = 0; x < MAP_WIDTH_IN_TILES; ++x) {
+			Tile * tile = new Tile();
+			tile->setEnvironnement(OCEAN);
+			tiles[x + y * MAP_WIDTH_IN_TILES] = tile;
+			++tileNo;
+			if (DEBUG_MODE && VERBOSE >= 2 && tileNo % 1000 == 0) {
+				fprintf(stdout, "[%d/%d] tiles allocated in memory.\n",
+					tileNo, TOTAL_NB_TILES);
+			}
+		}
+	}
+
 	assert(INITIAL_LAND_TILES < LAND_TILES);
 	assert(TUNDRA_PROPORTION < 1.0);
-	assert(TUNDRA_RANDOMNESS_RADIUS < MAP_HEIGHT / 2);
+	assert(TUNDRA_RANDOMNESS_RADIUS < MAP_HEIGHT_IN_TILES / 2);
 	placedInitialPlainTiles = 0;
 	placedInitialRockyTiles = 0;
 
 	initWorldGeneratorSeed();
-	fillWithOcean();
 	generateLand();
-	detectLakeBorders();
+}
+
+Map::~Map()
+{
+	for (int y = 0; y < MAP_HEIGHT_IN_TILES; ++y) {
+		for (int x = 0; x < MAP_WIDTH_IN_TILES; ++x) {
+			delete getTile(x, y);
+		}
+	}
+	delete[] tiles;
 }
 
 
@@ -23,20 +48,12 @@ Map::Map()
 //                   SETTERS                   //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-void Map::setEnvironnement(unsigned int x, unsigned int y, Background* back)
+void Map::setEnvironnement(unsigned int x, unsigned int y, EnvType type)
 {
-	assert(x < MAP_LENGTH);
-	assert(y < MAP_HEIGHT);
+	assert(x < MAP_WIDTH_IN_TILES);
+	assert(y < MAP_HEIGHT_IN_TILES);
 
-	tiles[x][y].setBackground(back);
-}
-
-void Map::setContent(unsigned int x, unsigned int y, Foreground* front)
-{
-	assert(x < MAP_LENGTH);
-	assert(y < MAP_HEIGHT);
-
-	tiles[x][y].setForeground(front);
+	getTile(x, y)->setEnvironnement(type);
 }
 
 
@@ -44,26 +61,17 @@ void Map::setContent(unsigned int x, unsigned int y, Foreground* front)
 //                   GETTERS                   //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-const Tile& Map::getTile(unsigned int x, unsigned int y) const
+Tile* Map::getTile(unsigned int x, unsigned int y) const
 {
-	assert(x < MAP_LENGTH);
-	assert(y < MAP_HEIGHT);
-	return tiles[x][y];
+	assert(x < MAP_WIDTH_IN_TILES);
+	assert(y < MAP_HEIGHT_IN_TILES);
+	return tiles[x + y * MAP_WIDTH_IN_TILES];
 }
 
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //               MAP GENERATION                //
 //- - - - - - - - - - - - - - - - - - - - - - -//
-
-void Map::fillWithOcean()
-{
-	for (int y = 0; y < MAP_HEIGHT; ++y) {
-		for (int x = 0; x < MAP_LENGTH; ++x) {
-			tiles[x][y].setBackground(new Ocean());
-		}
-	}
-}
 
 void Map::generateLand()
 {
@@ -82,9 +90,9 @@ void Map::placeInitialLandTiles()
 		if (nextRand(100) < distanceWeight * 100.0 && !isLand(coord.x, coord.y)) {
 			setLandTile(coord);
 			++nbPlacedLandTiles;
-			if (nbPlacedLandTiles % 100 == 0) {
-				std::cout << '[' << nbPlacedLandTiles << "/" << LAND_TILES
-					<< "] tiles placed." << std::endl;
+			if (DEBUG_MODE && VERBOSE >= 2 && nbPlacedLandTiles % 1000 == 0) {
+				fprintf(stdout, "[%d/%d] tiles placed.\n",
+					nbPlacedLandTiles, LAND_TILES);
 			}
 		}
 	}
@@ -103,11 +111,15 @@ void Map::growIslands()
 		if (nextRand(100) < weightedProb * 100.0 && !isLand(coord.x, coord.y)) {
 			setLandTile(coord);
 			++nbPlacedLandTiles;
-			if (nbPlacedLandTiles % 100 == 0) {
-				std::cout << '[' << nbPlacedLandTiles << "/" << LAND_TILES
-					<< "] tiles placed." << std::endl;
+			if (DEBUG_MODE && VERBOSE >= 2 && nbPlacedLandTiles % 1000 == 0) {
+				fprintf(stdout, "[%d/%d] tiles placed.\n",
+					nbPlacedLandTiles, LAND_TILES);
 			}
 		}
+	}
+	if (DEBUG_MODE && VERBOSE >= 2) {
+		fprintf(stdout, "[%d/%d] tiles placed.\n",
+			nbPlacedLandTiles, LAND_TILES);
 	}
 }
 
@@ -116,16 +128,16 @@ void Map::setLandTile(const RandCoord& coord)
 	int randomizedHeigth = coord.y + nextRand(-TUNDRA_RANDOMNESS_RADIUS, TUNDRA_RANDOMNESS_RADIUS);
 
 	if (distFromEquatorProportion(randomizedHeigth) > (1 - TUNDRA_PROPORTION)) {
-		setEnvironnement(coord.x, coord.y, new Tundra());
+		setEnvironnement(coord.x, coord.y, TUNDRA);
 	}
 	else if (suitablePlainLocation(coord)) {
-		setEnvironnement(coord.x, coord.y, new Plain());
+		setEnvironnement(coord.x, coord.y, PLAIN);
 	}
 	else if (suitableRockyLocation(coord)) {
-		setEnvironnement(coord.x, coord.y, new Rocky());
+		setEnvironnement(coord.x, coord.y, ROCKY);
 	}
 	else {
-		setEnvironnement(coord.x, coord.y, new Grassland());
+		setEnvironnement(coord.x, coord.y, GRASSLAND);
 	}
 }
 
@@ -135,7 +147,7 @@ bool Map::suitablePlainLocation(const RandCoord& coord)
 		++placedInitialPlainTiles;
 		return nextRand(100) < computeAltitudeWeight(coord.y) * 100.0;
 	}
-	if (hasSurroundingPlain(coord)) {
+	if (hasSurroundingTileOfType(coord, PLAIN)) {
 		return nextRand(100) < computeAltitudeWeight(coord.y) * 100.0;
 	}
 	return false;
@@ -148,9 +160,12 @@ bool Map::suitableRockyLocation(const RandCoord& coord)
 		++placedInitialRockyTiles;
 		return true;
 	}
-	if (countSurroundingRockyTiles(coord) > 0 &&
+
+	int surroundingRockyTiles = countSurroundingTilesOfType(coord, ROCKY);
+
+	if (surroundingRockyTiles > 0 &&
 		nextRand(100) < ROCKY_TILES_PROPORTION * 100 &&
-		countSurroundingRockyTiles(coord) < ROCKY_ZONE_THICKNESS) {
+		surroundingRockyTiles < ROCKY_ZONE_THICKNESS) {
 		return true;
 	}
 	return false;
@@ -158,25 +173,9 @@ bool Map::suitableRockyLocation(const RandCoord& coord)
 
 bool Map::isLand(unsigned int x, unsigned int y) const
 {
-	return getTile(x, y).getBackground()->isSolidLand();
+	return getTile(x, y)->getEnvironnement()->isSolidLand();
 }
 
-void Map::detectLakeBorders()
-{
-	for (int y = 1; y < MAP_HEIGHT - 1; ++y) {
-		for (int x = 1; x < MAP_LENGTH - 1; ++x) {
-			if (isLand(x, y)) {
-				continue;
-			}
-
-		}
-	}
-}
-
-bool Map::canReachLimitsFrom() const
-{
-	return false;
-}
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //                  DISTANCE                   //
@@ -184,8 +183,8 @@ bool Map::canReachLimitsFrom() const
 
 double Map::computeDistanceWeight(const RandCoord& coord) const
 {
-	double xMapRadius = MAP_LENGTH / 2.0;
-	double yMapRadius = MAP_HEIGHT / 2.0;
+	double xMapRadius = MAP_WIDTH_IN_TILES / 2.0;
+	double yMapRadius = MAP_HEIGHT_IN_TILES / 2.0;
 	double xWeight = 1 - abs((double)coord.x - xMapRadius) / xMapRadius;
 	double yWeight = 1 - abs((double)coord.y - yMapRadius) / yMapRadius;
 
@@ -199,8 +198,8 @@ double Map::computeAltitudeWeight(unsigned int y) const
 
 double Map::distFromEquatorProportion(unsigned int y) const
 {
-	double distFromEquator = abs((double)y - (double)MAP_HEIGHT / 2);
-	return distFromEquator / ((double)MAP_HEIGHT / 2);
+	double distFromEquator = abs((double)y - (double)MAP_HEIGHT_IN_TILES / 2);
+	return distFromEquator / ((double)MAP_HEIGHT_IN_TILES / 2);
 }
 
 
@@ -214,54 +213,39 @@ double Map::computeSurroundingLandWeight(const RandCoord& coord) const
 	return pow(((double)landTiles) / 8.0, SURROUNDING_LAND_CRITERIA_WEIGHT);
 }
 
-double Map::hasSurroundingLand(const RandCoord& coord) const
+bool Map::hasSurroundingLand(const RandCoord& coord) const
 {
 	return countSurroundingLandTiles(coord) != 0;
 }
 
-double Map::hasSurroundingPlain(const RandCoord& coord) const
+bool Map::hasSurroundingTileOfType(const RandCoord& coord, EnvType type) const
 {
-	return countSurroundingPlainTiles(coord) != 0;
-
+	return countSurroundingTilesOfType(coord, type) != 0;
 }
 
 int Map::countSurroundingLandTiles(const RandCoord& coord) const
 {
-	int landTiles = 0;
+	int count = 0;
 	for (int y = -1; y <= 1; ++y) {
 		for (int x = -1; x <= 1; ++x) {
 			if (isLand(coord.x + x, coord.y + y)) {
-				++landTiles;
+				++count;
 			}
 		}
 	}
-	return landTiles;
+	return count;
 }
 
-int Map::countSurroundingPlainTiles(const RandCoord& coord) const
+int Map::countSurroundingTilesOfType(const RandCoord& coord, EnvType type) const
 {
-	int plain = 0;
+	int count = 0;
 	for (int y = -1; y <= 1; ++y) {
 		for (int x = -1; x <= 1; ++x) {
-			const Background* back = getTile(coord.x + x, coord.y + y).getBackground();
-			if (typeid(*back) == typeid(const Plain)) {
-				++plain;
+			const Tile* tile = getTile(coord.x + x, coord.y + y);
+			if (tile->getEnvironnement()->getType() == type) {
+				++count;
 			}
 		}
 	}
-	return plain;
-}
-
-int Map::countSurroundingRockyTiles(const RandCoord& coord) const
-{
-	int rocky = 0;
-	for (int y = -1; y <= 1; ++y) {
-		for (int x = -1; x <= 1; ++x) {
-			const Background* back = getTile(coord.x + x, coord.y + y).getBackground();
-			if (typeid(*back) == typeid(const Rocky)) {
-				++rocky;
-			}
-		}
-	}
-	return rocky;
+	return count;
 }

@@ -1,13 +1,12 @@
-#include "World.h"
-
+#include "Civilization.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //           CONSTRUCTOR/DESCTRUCTOR           //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-World::World() : map(Map())
+Civilization::Civilization()
 {
-	setDay();
+	people = new Human*[MAX_POPULATION];
 }
 
 
@@ -15,22 +14,18 @@ World::World() : map(Map())
 //                   GETTERS                   //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-bool World::isNight() const
+Human& Civilization::getHuman(unsigned int id) const
 {
-	return isNightTime;
+	assert(id < population);
+	return *people[id];
 }
 
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
-//                   SETTERS                   //
+//                   STATUS                    //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-void World::setDay()
+unsigned int Civilization::getPopulation() const
 {
-	isNightTime = false;
-}
-
-void World::setNight()
-{
-	isNightTime = true;
+	return population;
 }

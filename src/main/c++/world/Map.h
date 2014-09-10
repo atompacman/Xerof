@@ -1,53 +1,47 @@
 #pragma once
-#include "environnement\Forest\TemperateForest.h"
-#include "environnement\Grassland.h"
-#include "environnement\Lake.h"
-#include "environnement\Plain.h"
-#include "environnement\Ocean.h"
-#include "environnement\Rocky.h"
-#include "environnement\Tundra.h"
-#include "Random.h"
+#include "..\Parameters.h"
+#include "..\utils\Random.h"
 #include "Tile.h"
 #include <assert.h>
-#include <iostream>
 #include <random>
 #include <stdlib.h>
+
 
 ///////////////////////////////////////////////////////////
 //               MAP GENERATION PARAMETERS               //
 ///////////////////////////////////////////////////////////
 
-// Map size (length = x, height = y) ----------------------
-const unsigned int MAP_LENGTH = 236;
-const unsigned int MAP_HEIGHT = 73;
+const int MAP_WIDTH_IN_TILES = 128; //128
+const int MAP_HEIGHT_IN_TILES = 96;  // 96
+const int TOTAL_NB_TILES = MAP_WIDTH_IN_TILES * MAP_HEIGHT_IN_TILES;
 
 // Land proportion (%)
-const double LAND_PROPORTION = 0.60; //0.60
+const double LAND_PROPORTION = 0.4;
 
 // Nb initial land tiles before growing the islands -------
 // ex:
 //   - < 15  = pangea
 //   - 20-50 = small continents
 //   - > 50  = archipelago
-const int INITIAL_LAND_TILES = 60;
+const int INITIAL_LAND_TILES = 120;
 
 // Distance criteria weight -------------------------------
 // ex:
 //   - 0.1 = very dispersed 
 //   - 0.5 = normal
 //   - 1.5 = concentrated in the middle -------------------
-const double DISTANCE_CRITERIA_WEIGHT = 0.5;
+const double DISTANCE_CRITERIA_WEIGHT = 0.2;
 
 // Surrounding land criteria weight------------------------
 // ex:
 //   - 0.1 = very fractal landmass
 //   - 1.0 = irregular landmass
 //   - 2.0 = completely full landmass
-const double SURROUNDING_LAND_CRITERIA_WEIGHT = 0.8;
+const double SURROUNDING_LAND_CRITERIA_WEIGHT = 0.7;
 
 // Tundra -------------------------------------------------
 const double TUNDRA_PROPORTION = 0.3;
-const int TUNDRA_RANDOMNESS_RADIUS = 2;
+const int TUNDRA_RANDOMNESS_RADIUS = 8;
 
 // Plain --------------------------------------------------
 const double INITIAL_PLAIN_TILES = 30;
@@ -59,12 +53,12 @@ const double ROCKY_TILES_PROPORTION = 0.5;
 const int ROCKY_ZONE_THICKNESS = 4;
 ///////////////////////////////////////////////////////////
 
-const int LAND_TILES = int(MAP_HEIGHT * MAP_LENGTH * LAND_PROPORTION);
+const int LAND_TILES = (int)((double)TOTAL_NB_TILES * LAND_PROPORTION);
 
 struct RandCoord
 {
-	unsigned int x = nextRand(1, MAP_LENGTH - 2);
-	unsigned int y = nextRand(1, MAP_HEIGHT - 2);
+	unsigned int x = nextRand(1, MAP_WIDTH_IN_TILES - 2);
+	unsigned int y = nextRand(1, MAP_HEIGHT_IN_TILES - 2);
 };
 
 
@@ -73,17 +67,16 @@ class Map
 public:
 	// CONSTRUCTOR/DESCTRUCTOR
 	Map();
-	~Map(){};
+	~Map();
 
 	// SETTERS
-	void setEnvironnement(unsigned int x, unsigned int y, Background*);
-	void setContent(unsigned int x, unsigned int y, Foreground*);
+	void setEnvironnement(unsigned int x, unsigned int y, EnvType);
 
 	// GETTERS
-	const Tile& getTile(unsigned int x, unsigned int y) const;
+	Tile* getTile(unsigned int x, unsigned int y) const;
 
 private:
-	Tile tiles[MAP_LENGTH][MAP_HEIGHT];
+	Tile** tiles;
 	int placedInitialPlainTiles;
 	int placedInitialRockyTiles;
 
@@ -96,8 +89,6 @@ private:
 	bool suitablePlainLocation(const RandCoord&);
 	bool suitableRockyLocation(const RandCoord&);
 	bool isLand(unsigned int x, unsigned int y) const;
-	void detectLakeBorders();
-	bool canReachLimitsFrom() const;
 
 	// DISTANCE
 	double computeDistanceWeight(const RandCoord&) const;
@@ -106,9 +97,8 @@ private:
 
 	// SURROUNDING TILES
 	double computeSurroundingLandWeight(const RandCoord&) const;
-	double hasSurroundingLand(const RandCoord&) const;
-	double hasSurroundingPlain(const RandCoord&) const;
+	bool hasSurroundingLand(const RandCoord&) const;
+	bool hasSurroundingTileOfType(const RandCoord&, EnvType) const;
 	int countSurroundingLandTiles(const RandCoord&) const;
-	int countSurroundingPlainTiles(const RandCoord&) const;
-	int countSurroundingRockyTiles(const RandCoord&) const;
+	int countSurroundingTilesOfType(const RandCoord&, EnvType) const;
 };
