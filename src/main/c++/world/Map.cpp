@@ -18,8 +18,9 @@ Map::Map()
 			tiles[linearize(coord)] = tile;
 			++tileNo;
 			if (DEBUG_MODE && VERBOSE >= 2 && tileNo % 1000 == 0) {
-				fprintf(stdout, "[%d/%d] tiles allocated in memory.\n",
-					tileNo, MAP_DIMENSIONS.area());
+				fprintf(stdout, "%s%6d/%6d%s\n",
+					"World generation -:- [", tileNo, 
+					MAP_DIMENSIONS.area(), "] tiles allocated in memory.");
 			}
 		}
 	}
@@ -91,8 +92,9 @@ void Map::placeInitialLandTiles()
 			setLandTile(coord);
 			++nbPlacedLandTiles;
 			if (DEBUG_MODE && VERBOSE >= 2 && nbPlacedLandTiles % 1000 == 0) {
-				fprintf(stdout, "[%d/%d] tiles placed.\n",
-					nbPlacedLandTiles, LAND_TILES);
+				fprintf(stdout, "%s%6d/%6d%s\n",
+					"World generation -:- [", nbPlacedLandTiles,
+					LAND_TILES, "] tiles placed.");
 			}
 		}
 	}
@@ -112,20 +114,22 @@ void Map::growIslands()
 			setLandTile(coord);
 			++nbPlacedLandTiles;
 			if (DEBUG_MODE && VERBOSE >= 2 && nbPlacedLandTiles % 1000 == 0) {
-				fprintf(stdout, "[%d/%d] tiles placed.\n",
-					nbPlacedLandTiles, LAND_TILES);
+				fprintf(stdout, "%s%6d/%6d%s\n",
+					"World generation -:- [", nbPlacedLandTiles,
+					LAND_TILES, "] tiles placed.");
 			}
 		}
 	}
 	if (DEBUG_MODE && VERBOSE >= 2) {
-		fprintf(stdout, "[%d/%d] tiles placed.\n",
-			nbPlacedLandTiles, LAND_TILES);
+		fprintf(stdout, "%s%6d/%6d%s\n", "World generation -:- [", 
+			nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
 	}
 }
 
 void Map::setLandTile(Coord<int> coord)
 {
-	int randomizedHeigth = coord.y + nextRand(-TUNDRA_RANDOMNESS_RADIUS, TUNDRA_RANDOMNESS_RADIUS);
+	int randomizedHeigth = coord.y 
+		+ nextRand(-TUNDRA_RANDOMNESS_RADIUS, TUNDRA_RANDOMNESS_RADIUS);
 
 	if (distFromEquatorProportion(randomizedHeigth) > (1 - TUNDRA_PROPORTION)) {
 		setEnvironnement(coord, TUNDRA);

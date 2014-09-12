@@ -123,12 +123,15 @@ void Display::draw() const
 	
 	int fieldOfView[4];
 	actualFieldOfView(actualWidth, actualHeight, fieldOfView);
+
 	int tileSize = TILE_SIZE[resolutionLvl];
 	int gradientSize = TILE_GRADIENT_SIZE[resolutionLvl];
-	int xOnBitmap = TEXTURE_CORNER_X[resolutionLvl];
-	int yOnBitmap = TEXTURE_CORNER_Y[resolutionLvl];
-	int xOnMap = fieldOfView[0] * tileSize;
-	int yOnMap = fieldOfView[2] * tileSize;
+	Coord<int> textureCorner;
+	textureCorner.x = TEXTURE_CORNER_X[resolutionLvl];
+	textureCorner.y = TEXTURE_CORNER_Y[resolutionLvl];
+	Coord<int> pixelOnMap;
+	pixelOnMap.x = fieldOfView[0] * tileSize;
+	pixelOnMap.y = fieldOfView[2] * tileSize;
 	int tileSizeOnBitmap = tileSize + 2 * gradientSize;
 	int tileSizeOnScreen 
 		= tileSize + 2 * gradientSize * ALPHA_OVERLAPPING[resolutionLvl];
@@ -137,26 +140,26 @@ void Display::draw() const
 	Map* map = world->map;
 
 	al_hold_bitmap_drawing(true);
-	Coord<int> coord;
-	for (coord.y = fieldOfView[2]; coord.y < fieldOfView[3]; ++coord.y) {
-		for (coord.x = fieldOfView[0]; coord.x < fieldOfView[1]; ++coord.x) {
-			Tile* tile = map->getTile(coord);
+	Coord<int> tileCoord;
+	for (tileCoord.y = fieldOfView[2]; tileCoord.y < fieldOfView[3]; ++tileCoord.y) {
+		for (tileCoord.x = fieldOfView[0]; tileCoord.x < fieldOfView[1]; ++tileCoord.x) {
+			Tile* tile = map->getTile(tileCoord);
 
 			al_draw_scaled_bitmap(
 				assets[tile->getEnvironnement()->assetFile()],
-				xOnBitmap, 
-				yOnBitmap,
-				tileSizeOnBitmap, 
-				tileSizeOnBitmap, 
-				xOnMap, 
-				yOnMap,
-				tileSizeOnScreen, 
-				tileSizeOnScreen, 
+				textureCorner.x,
+				textureCorner.y,
+				tileSizeOnBitmap,
+				tileSizeOnBitmap,
+				pixelOnMap.x,
+				pixelOnMap.y,
+				tileSizeOnScreen,
+				tileSizeOnScreen,
 				tile->getEnvironnement()->getOrientation());
-			xOnMap += tileSize;
+			pixelOnMap.x += tileSize;
 		}
-		xOnMap = fieldOfView[0] * tileSize;
-		yOnMap += tileSize;
+		pixelOnMap.x = fieldOfView[0] * tileSize;
+		pixelOnMap.y += tileSize;
 	}
 
 	for (int i = 0; i < NB_CIV; ++i) {
@@ -164,55 +167,41 @@ void Display::draw() const
 		int civPop = civ->getPopulation();
 		for (int j = 0; j < civPop; ++j) {
 			Human human = civ->getHuman(j);
-			xOnMap = human.position.coord.x * TILE_SIZE[resolutionLvl];
-			yOnMap = human.position.coord.y * TILE_SIZE[resolutionLvl];
-			Direction orientation = human.position.facingDirection;
-			if (orientation == LEFT || orientation == RIGHT) {
-				ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
-					assets[human.assetFile()],
-					xOnBitmap,
-					yOnBitmap,
-					tileSizeOnBitmap,
-					tileSizeOnBitmap);
-				float scaling = (float) tileSizeOnScreen / (float) tileSizeOnBitmap;
-				float halfTileSizeOnBitmap = tileSizeOnBitmap / 2;
-				float halfTileSizeOnScreen = tileSizeOnScreen / 2;
-				al_draw_scaled_rotated_bitmap(
-					subBitmap,
-					halfTileSizeOnBitmap,
-					halfTileSizeOnBitmap,
-					(float)xOnMap + halfTileSizeOnScreen,
-					(float)yOnMap + halfTileSizeOnScreen,
-					scaling,
-					scaling,
-					ALLEGRO_PI / 2,
-					orientation);
-			}
-			else {
-				al_draw_scaled_bitmap(
-					assets[human.assetFile()],
-					xOnBitmap,
-					yOnBitmap,
-					tileSizeOnBitmap,
-					tileSizeOnBitmap,
-					xOnMap,
-					yOnMap,
-					tileSizeOnScreen,
-					tileSizeOnScreen,
-					orientation); 
-			}
+			Coord<float> realPosition = human.position.coord * TILE_SIZE[resolutionLvl];
+			float angle = correspondingAngle(human.position.facingDirection);
 
-			xOnMap = ((int) rint(human.position.coord.x)) * TILE_SIZE[resolutionLvl];
-			yOnMap = ((int) rint(human.position.coord.y)) * TILE_SIZE[resolutionLvl];
+			ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
+				assets[human.assetFile()],
+				textureCorner.x,
+				textureCorner.y,
+				tileSizeOnBitmap,
+				tileSizeOnBitmap);
+
+			float scaling = (float)tileSizeOnScreen / (float)tileSizeOnBitmap;
+			float halfTileSizeOnBitmap = tileSizeOnBitmap * 0.5;
+			float halfTileSizeOnScreen = tileSizeOnScreen * 0.5;
+			al_draw_scaled_rotated_bitmap(
+				subBitmap,
+				halfTileSizeOnBitmap,
+				halfTileSizeOnBitmap,
+				(float)realPosition.x + halfTileSizeOnScreen,
+				(float)realPosition.y + halfTileSizeOnScreen,
+				scaling,
+				scaling,
+				angle,
+				0);
+
+			pixelOnMap.x = ((int)rint(human.position.coord.x)) * TILE_SIZE[resolutionLvl];
+			pixelOnMap.y = ((int)rint(human.position.coord.y)) * TILE_SIZE[resolutionLvl];
 
 			al_draw_scaled_bitmap(
 				assets[SELECTION],
-				xOnBitmap,
-				yOnBitmap,
+				textureCorner.x,
+				textureCorner.y,
 				tileSizeOnBitmap,
 				tileSizeOnBitmap,
-				xOnMap,
-				yOnMap,
+				pixelOnMap.x,
+				pixelOnMap.y,
 				tileSizeOnScreen,
 				tileSizeOnScreen,
 				DOWN);

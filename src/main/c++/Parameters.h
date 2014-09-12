@@ -22,7 +22,7 @@ const bool DEBUG_MODE = true;
 //		- (1) Only vital information
 //		- (2) Regular information
 //		- (3) Maximal information (can significantly reduce performances)
-const int VERBOSE = 2;
+const int VERBOSE = 3;
 
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
@@ -66,9 +66,7 @@ const int BG_COLOR[] = { 0 , 0, 0 };
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
 //                            MAP GENERATION                             //
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
-const Dimensions MAP_DIMENSIONS = Dimensions(128, 96); // (128, 96)
-
-
+const Dimensions MAP_DIMENSIONS = Dimensions(300, 200); // (128, 96)
 
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//

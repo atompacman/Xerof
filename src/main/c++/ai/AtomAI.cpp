@@ -13,9 +13,8 @@ AtomAI::AtomAI(Civilization* civ) : AI(civ) {}
 
 Order AtomAI::giveOrderToHuman(Human& human)
 {
-	if (human.getEnvironnementInFront() == OCEAN) {
-		const Direction* currentDirection = &human.position.facingDirection;
-		human.position.facingDirection = Direction((*currentDirection + 1) % 8);
+	while (human.getEnvironnementInFront() == OCEAN) {
+		human.position.facingDirection = Direction((nextRand(8)) % 8);
 	}
 	return Order(WALK, human.position.facingDirection);
 }
