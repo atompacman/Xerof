@@ -1,6 +1,4 @@
 #pragma once
-#include "..\Parameters.h"
-#include "..\utils\Random.h"
 #include "Tile.h"
 #include <assert.h>
 #include <random>
@@ -10,11 +8,6 @@
 ///////////////////////////////////////////////////////////
 //               MAP GENERATION PARAMETERS               //
 ///////////////////////////////////////////////////////////
-
-const int MAP_WIDTH_IN_TILES = 128; //128
-const int MAP_HEIGHT_IN_TILES = 96;  // 96
-const int TOTAL_NB_TILES = MAP_WIDTH_IN_TILES * MAP_HEIGHT_IN_TILES;
-
 // Land proportion (%)
 const double LAND_PROPORTION = 0.4;
 
@@ -53,14 +46,21 @@ const double ROCKY_TILES_PROPORTION = 0.5;
 const int ROCKY_ZONE_THICKNESS = 4;
 ///////////////////////////////////////////////////////////
 
-const int LAND_TILES = (int)((double)TOTAL_NB_TILES * LAND_PROPORTION);
+const int LAND_TILES = (int)((double) MAP_DIMENSIONS.area() * LAND_PROPORTION);
 
-struct RandCoord
+static Coord<int> randTile()
 {
-	unsigned int x = nextRand(1, MAP_WIDTH_IN_TILES - 2);
-	unsigned int y = nextRand(1, MAP_HEIGHT_IN_TILES - 2);
-};
+	int x = nextRand(1, MAP_DIMENSIONS.x - 2);
+	int y = nextRand(1, MAP_DIMENSIONS.y - 2);
+	return Coord<int>(x, y);
+}
 
+static unsigned int linearize(Coord<int> coord)
+{
+	int linearization = coord.x + coord.y * MAP_DIMENSIONS.x;
+	assert(linearization >= 0);
+	return linearization;
+}
 
 class Map
 {
@@ -70,10 +70,10 @@ public:
 	~Map();
 
 	// SETTERS
-	void setEnvironnement(unsigned int x, unsigned int y, EnvType);
+	void setEnvironnement(Coord<int>, EnvType);
 
 	// GETTERS
-	Tile* getTile(unsigned int x, unsigned int y) const;
+	Tile* getTile(Coord<int>) const;
 
 private:
 	Tile** tiles;
@@ -85,20 +85,20 @@ private:
 	void generateLand();
 	void placeInitialLandTiles();
 	void growIslands();
-	void setLandTile(const RandCoord&);
-	bool suitablePlainLocation(const RandCoord&);
-	bool suitableRockyLocation(const RandCoord&);
-	bool isLand(unsigned int x, unsigned int y) const;
+	void setLandTile(Coord<int>);
+	bool suitablePlainLocation(Coord<int>);
+	bool suitableRockyLocation(Coord<int>);
+	bool isLand(Coord<int>) const;
 
 	// DISTANCE
-	double computeDistanceWeight(const RandCoord&) const;
-	double computeAltitudeWeight(unsigned int y) const;
-	double distFromEquatorProportion(unsigned int y) const;
+	double computeDistanceWeight(Coord<int>) const;
+	double computeAltitudeWeight(int y) const;
+	double distFromEquatorProportion(int y) const;
 
 	// SURROUNDING TILES
-	double computeSurroundingLandWeight(const RandCoord&) const;
-	bool hasSurroundingLand(const RandCoord&) const;
-	bool hasSurroundingTileOfType(const RandCoord&, EnvType) const;
-	int countSurroundingLandTiles(const RandCoord&) const;
-	int countSurroundingTilesOfType(const RandCoord&, EnvType) const;
+	double computeSurroundingLandWeight(Coord<int>) const;
+	bool hasSurroundingLand(Coord<int>) const;
+	bool hasSurroundingTileOfType(Coord<int>, EnvType) const;
+	int countSurroundingLandTiles(Coord<int>) const;
+	int countSurroundingTilesOfType(Coord<int>, EnvType) const;
 };
