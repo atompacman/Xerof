@@ -8,11 +8,11 @@ enum EnvType
 	GRASSLAND, LAKE, OCEAN, PLAIN, ROCKY, TUNDRA
 };
 
-class Environnement: public MapElement
+class Environment: public MapElement
 {
 public:
 	// CONSTRUCTOR/DESCTRUCTOR
-	Environnement(EnvType type);
+	Environment(EnvType type);
 	
 	// GETTERS
 	EnvType getType() const;

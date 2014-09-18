@@ -1,5 +1,5 @@
 #pragma once
-#include "Environnement.h"
+#include "Environment.h"
 #include "Object.h"
 #include <assert.h>
 
@@ -12,24 +12,24 @@ public:
 
 	// SETTERS
 	void setObject(Direction, Object*);
-	void setEnvironnement(EnvType);
+	void setEnvironment(EnvType);
 
 	// REMOVE
 	void removeObject(Direction);
 
 	// GETTERS
 	Object* getObject(Direction) const;
-	Environnement* getEnvironnement() const;
+	Environment* getEnvironment() const;
 
 	// HAS
 	bool hasObject(Direction) const;
 	bool hasObject() const;
-	bool hasEnvironnement() const;
+	bool hasEnvironment() const;
 
 	// STATUS
 	bool isPassable() const;
 
 private:
 	Object** objects;
-	Environnement* environnement;
+	Environment* environment;
 };

@@ -169,7 +169,7 @@ bool GameLoop::processAI()
 			if (!human->isReady()) {
 				continue;
 			}
-			Order order = ai->giveOrderToHuman(*human);
+			Order order = ai->giveOrder(*human);
 			if (processOrder(human, order) == EXIT_FAILURE) {
 				return EXIT_FAILURE;
 			}

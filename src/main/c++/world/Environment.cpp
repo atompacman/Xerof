@@ -1,10 +1,10 @@
-#include "Environnement.h"
+#include "Environment.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //           CONSTRUCTOR/DESCTRUCTOR           //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-Environnement::Environnement(EnvType type)
+Environment::Environment(EnvType type)
 {
 	this->type = type;
 	this->orientation = Direction(nextRand(3));
@@ -15,12 +15,12 @@ Environnement::Environnement(EnvType type)
 //                  GETTERS                    //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-EnvType Environnement::getType() const
+EnvType Environment::getType() const
 {
 	return type;
 }
 
-Direction Environnement::getOrientation() const
+Direction Environment::getOrientation() const
 {
 	return orientation;
 }
@@ -30,7 +30,7 @@ Direction Environnement::getOrientation() const
 //                   STATUS                    //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-bool Environnement::isSolidLand() const
+bool Environment::isSolidLand() const
 {
 	return type != LAKE && type != OCEAN;
 }
@@ -40,7 +40,7 @@ bool Environnement::isSolidLand() const
 //                    ASSET                    //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-Asset Environnement::assetFile() const
+Asset Environment::assetFile() const
 {
 	switch (type) {
 	case GRASSLAND: return GRASSLAND_TILE_FILE;
@@ -57,7 +57,7 @@ Asset Environnement::assetFile() const
 //                    OTHER                    //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-const char* Environnement::toString() const
+const char* Environment::toString() const
 {
 	switch (type) {
 	case GRASSLAND: return "GRASSLAND";

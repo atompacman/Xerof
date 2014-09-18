@@ -146,7 +146,7 @@ void Display::draw() const
 			Tile* tile = map->getTile(tileCoord);
 
 			al_draw_scaled_bitmap(
-				assets[tile->getEnvironnement()->assetFile()],
+				assets[tile->getEnvironment()->assetFile()],
 				textureCorner.x,
 				textureCorner.y,
 				tileSizeOnBitmap,
@@ -155,7 +155,7 @@ void Display::draw() const
 				pixelOnMap.y,
 				tileSizeOnScreen,
 				tileSizeOnScreen,
-				tile->getEnvironnement()->getOrientation());
+				tile->getEnvironment()->getOrientation());
 			pixelOnMap.x += tileSize;
 		}
 		pixelOnMap.x = fieldOfView[0] * tileSize;

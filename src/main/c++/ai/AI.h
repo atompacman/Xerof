@@ -9,7 +9,7 @@ public:
 	AI(Civilization*);
 
 	// MOVE HUMAN
-	virtual Order giveOrderToHuman(Human& human) = 0;
+	virtual Order giveOrder(Human& human) = 0;
 
 protected:
 	Civilization* civ;

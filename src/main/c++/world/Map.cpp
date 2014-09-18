@@ -14,7 +14,7 @@ Map::Map()
 	for (coord.y = 0; coord.y < MAP_DIMENSIONS.y; ++coord.y) {
 		for (coord.x = 0; coord.x < MAP_DIMENSIONS.x; ++coord.x) {
 			Tile * tile = new Tile();
-			tile->setEnvironnement(OCEAN);
+			tile->setEnvironment(OCEAN);
 			tiles[linearize(coord)] = tile;
 			++tileNo;
 			if (DEBUG_MODE && VERBOSE >= 2 && tileNo % 1000 == 0) {
@@ -54,7 +54,7 @@ Map::~Map()
 
 void Map::setEnvironnement(Coord<int> coord, EnvType type)
 {
-	getTile(coord)->setEnvironnement(type);
+	getTile(coord)->setEnvironment(type);
 }
 
 
@@ -177,7 +177,7 @@ bool Map::suitableRockyLocation(Coord<int> coord)
 
 bool Map::isLand(Coord<int> coord) const
 {
-	return getTile(coord)->getEnvironnement()->isSolidLand();
+	return getTile(coord)->getEnvironment()->isSolidLand();
 }
 
 
@@ -246,7 +246,7 @@ int Map::countSurroundingTilesOfType(Coord<int> coord, EnvType type) const
 	for (int y = -1; y <= 1; ++y) {
 		for (int x = -1; x <= 1; ++x) {
 			const Tile* tile = getTile(Coord<int>(coord.x + x, coord.y + y));
-			if (tile->getEnvironnement()->getType() == type) {
+			if (tile->getEnvironment()->getType() == type) {
 				++count;
 			}
 		}

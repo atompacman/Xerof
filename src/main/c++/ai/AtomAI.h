@@ -8,7 +8,7 @@ public:
 	AtomAI(Civilization*);
 
 	// MOVE HUMAN
-	Order giveOrderToHuman(Human& human);
+	Order giveOrder(Human& human);
 
 private:
 	// HELPERS

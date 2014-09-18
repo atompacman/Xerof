@@ -68,7 +68,7 @@ const Tile* const Human::getTileInFront() const
 
 EnvType Human::getEnvironnementInFront() const
 {
-	return getTileInFront()->getEnvironnement()->getType();
+	return getTileInFront()->getEnvironment()->getType();
 }
 
 bool Human::isReady() const

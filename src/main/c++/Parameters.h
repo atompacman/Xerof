@@ -40,14 +40,14 @@ const int VERBOSE = 3;
 //		- ALLEGRO_NOFRAME
 const int DISPLAY_MODE = ALLEGRO_RESIZABLE;
 
-// If true, the "best" screen resoluation for the current display mode will
+// If true, the "best" screen resolution for the current display mode will
 // be selected. Warning: what is considered the "best" resolution is not
 // always the one with the bigger dimensions.
 const bool AUTOMATIC_SCREEN_RESOLUTION = false;
 
 // Screen resolution (if AUTOMATIC_SCREEN_RESOLUTION is false).
-const int RESOLUTION_WIDTH = 1600; //1920
-const int RESOLUATION_HEIGHT = 900; //1080
+const int RESOLUTION_WIDTH = 800; //1920
+const int RESOLUATION_HEIGHT = 600; //1080
 
 // FPS when the system is not overloaded
 const float TARGET_FPS = 60.0;
@@ -66,7 +66,34 @@ const int BG_COLOR[] = { 0 , 0, 0 };
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
 //                            MAP GENERATION                             //
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
+// Width X Height
 const Dimensions MAP_DIMENSIONS = Dimensions(300, 200); // (128, 96)
+
+// Land proportion
+const float LAND_PROPORTION_2 = 0.6;
+
+// Quantity of initial land tiles before growing the islands
+//		- 0.001  = pangea
+//		- 0.01   = continents
+//		- 0.1    = archipelago
+const float INITIAL_LAND_TILES_2 = 0.01;
+
+//		- 0.1 = very dispersed 
+//		- 0.5 = normal
+//		- 1.5 = concentrated in the middle
+const float LAND_DISPERTION = 0.5;
+
+//   - 0.1 = very fractal
+//   - 1.0 = irregular
+//   - 2.0 = completely full
+const float LANDMASS_COMPACTNESS = 1.0;
+
+// If this is 0.1, it means that every 10%, a message will appear on the
+// console to indicate the progression of the map generation.
+const float PROGRESSION_INCREMENTS_PERC = 0.1;
+
+// Minimal width between land and map borders
+const unsigned int OCEAN_MARGINS = 1;
 
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//

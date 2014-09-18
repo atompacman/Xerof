@@ -29,9 +29,9 @@ void Tile::setObject(Direction direction, Object* object)
 	objects[direction - UPPER_LEFT] = object;
 }
 
-void Tile::setEnvironnement(EnvType type)
+void Tile::setEnvironment(EnvType type)
 {
-	this->environnement = new Environnement(type);
+	this->environment = new Environment(type);
 }
 
 
@@ -56,10 +56,10 @@ Object* Tile::getObject(Direction direction) const
 	return objects[direction - UPPER_LEFT];
 }
 
-Environnement* Tile::getEnvironnement() const
+Environment* Tile::getEnvironment() const
 {
-	assert(hasEnvironnement());
-	return environnement;
+	assert(hasEnvironment());
+	return environment;
 }
 
 
@@ -79,9 +79,9 @@ bool Tile::hasObject() const
 		hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
 }
 
-bool Tile::hasEnvironnement() const
+bool Tile::hasEnvironment() const
 {
-	return environnement != nullptr;
+	return environment != nullptr;
 }
 
 
@@ -91,5 +91,5 @@ bool Tile::hasEnvironnement() const
 
 bool Tile::isPassable() const
 {
-	return environnement->isSolidLand();
+	return environment->isSolidLand();
 }
