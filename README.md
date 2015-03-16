@@ -7,11 +7,11 @@
   - Debugging/Environment <br>
       PATH=$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\bin;%PATH%
   - VC++ Directories/Include Directories <br>
-      $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)
+      $(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)
   - VC++ Directories/References Directories <br>
       $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)
   - C/C++/General/Additional Include Directories <br>
-      $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;%(AdditionalIncludeDirectories) 
+      $(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;%(AdditionalIncludeDirectories) 
   - Linker/General/Additional Library Directories <br>
       $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;%(AdditionalLibraryDirectories)
   - Linker/Input/Additional Dependence <br>
