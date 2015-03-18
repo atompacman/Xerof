@@ -4,30 +4,12 @@
 //           CONSTRUCTOR/DESCTRUCTOR           //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-Display::Display()
+Display::Display(Mouse* a_Mouse, ALLEGRO_BITMAP** a_Assets) :
+m_Mouse(a_Mouse),
+m_Assets(a_Assets)
 {
-	initSuccess = al_init();
-	if (!initSuccess) {
-		FatalErrorDialog("Allegro 5 core library initialization failed.");
-		return;
-	}
-
-	initSuccess = al_init_image_addon();
-	if (!initSuccess){
-		FatalErrorDialog("Allegro image add-on initialization failed.");
-		return;
-	}
-
-	initSuccess = al_init_primitives_addon();
-	if (!initSuccess){
-		FatalErrorDialog("Allegro primitives add-on initialization failed.");
-		return;
-	}
-
-	initSuccess = createWindow();
-	if (!initSuccess){
+	if (!createWindow()){
 		FatalErrorDialog("Display creation failed.");
-		return;
 	}
 
 	loadGameIcon();
@@ -105,13 +87,13 @@ void Display::draw() const
 	ALLEGRO_TRANSFORM transform;
 	al_identity_transform(&transform);
 
-	float fixedScrollX = mouse->scrollX * RESOLU_FRACTION[resolutionLvl];
-	float fixedScrollY = mouse->scrollY * RESOLU_FRACTION[resolutionLvl];
+	float fixedScrollX = m_Mouse->scrollX * RESOLU_FRACTION[resolutionLvl];
+	float fixedScrollY = m_Mouse->scrollY * RESOLU_FRACTION[resolutionLvl];
 	al_translate_transform(&transform, -fixedScrollX, -fixedScrollY);
 	
-	al_rotate_transform(&transform, mouse->rotate);
+	al_rotate_transform(&transform, m_Mouse->rotate);
 
-	float fixedZoomLvl = mouse->zoom * RESOLU_FACTOR[resolutionLvl];
+	float fixedZoomLvl = m_Mouse->zoom * RESOLU_FACTOR[resolutionLvl];
 	al_scale_transform(&transform, fixedZoomLvl, fixedZoomLvl);
 
 	float actualWidth = al_get_display_width(window);
@@ -146,7 +128,7 @@ void Display::draw() const
 			Tile* tile = map->getTile(tileCoord);
 
 			al_draw_scaled_bitmap(
-				assets[tile->getEnvironment()->assetFile()],
+				m_Assets[tile->getEnvironment()->assetFile()],
 				textureCorner.x,
 				textureCorner.y,
 				tileSizeOnBitmap,
@@ -171,7 +153,7 @@ void Display::draw() const
 			float angle = correspondingAngle(human.position.facingDirection);
 
 			ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
-				assets[human.assetFile()],
+				m_Assets[human.assetFile()],
 				textureCorner.x,
 				textureCorner.y,
 				tileSizeOnBitmap,
@@ -195,7 +177,7 @@ void Display::draw() const
 			pixelOnMap.y = ((int)rint(human.position.coord.y)) * TILE_SIZE[resolutionLvl];
 
 			al_draw_scaled_bitmap(
-				assets[SELECTION],
+				m_Assets[SELECTION],
 				textureCorner.x,
 				textureCorner.y,
 				tileSizeOnBitmap,
@@ -215,7 +197,7 @@ void Display::draw() const
 
 int Display::resolutionLevel() const
 {
-	float zoomLevel = mouse->zoom;
+	float zoomLevel = m_Mouse->zoom;
 	if      (zoomLevel > 0.5)	{ return 0; }
 	else if (zoomLevel > 0.25)  { return 1; }
 	else if (zoomLevel > 0.125) { return 2; }
@@ -225,8 +207,8 @@ int Display::resolutionLevel() const
 void Display::actualFieldOfView(float actualWidth, 
 	float actualHeight, int* values) const
 {
-	float zoom = mouse->zoom;
-	float rotation = mouse->rotate;
+	float zoom = m_Mouse->zoom;
+	float rotation = m_Mouse->rotate;
 	float tilePerUnit = 1 / (TILE_SIZE[0] * zoom);
 	float halfNbTilesX = actualWidth * tilePerUnit * 0.5;
 	float halfNbTilesY = actualHeight * tilePerUnit * 0.5;
@@ -236,8 +218,8 @@ void Display::actualFieldOfView(float actualWidth,
 	float halfGoodNbTilesY = abs(sin(rotation)) * halfNbTilesX
 		+ abs(cos(rotation)) * halfNbTilesY;
 
-	float currentXTile = mouse->scrollX * zoom * tilePerUnit;
-	float currentYTile = mouse->scrollY * zoom * tilePerUnit;
+	float currentXTile = m_Mouse->scrollX * zoom * tilePerUnit;
+	float currentYTile = m_Mouse->scrollY * zoom * tilePerUnit;
 
 	float leftBound = (int)(currentXTile - halfGoodNbTilesX) - 1;
 	float rightBound = (int)(currentXTile + halfGoodNbTilesX) + 1;
@@ -255,19 +237,9 @@ void Display::actualFieldOfView(float actualWidth,
 //                  SETTERS                    //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-void Display::setAssets(ALLEGRO_BITMAP** assets)
-{
-	this->assets = assets;
-}
-
 void Display::setCivs(CivController** civs)
 {
 	civilizations = civs;
-}
-
-void Display::setMouse(Mouse* mouse)
-{
-	this->mouse = mouse;
 }
 
 void Display::setFPS(int fps)

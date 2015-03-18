@@ -27,29 +27,27 @@ static float correspondingAngle(Direction direction) {
 	return 0.0;
 }
 
-class Display: public Initializable
+class Display
 {
 public:
 	ALLEGRO_DISPLAY* window;
 
 	//CONSTRUCTOR/DESCTRUCTOR
-	Display();
+	Display(Mouse* a_Mouse, ALLEGRO_BITMAP** a_Assets);
 	~Display();
 
 	//DRAW
 	void draw() const;
 
 	//SETTERS
-	void setAssets(ALLEGRO_BITMAP** assets);
 	void setCivs(CivController**);
-	void setMouse(Mouse* mouse);
 	void setFPS(int fps);
 
 private:
-	ALLEGRO_BITMAP** assets;
+	ALLEGRO_BITMAP** m_Assets;
 	ALLEGRO_FONT* gameFont;
 	CivController** civilizations;
-	Mouse* mouse;
+	Mouse* m_Mouse;
 
 	//CONSTRUCTOR/DESCTRUCTOR
 	bool createWindow();

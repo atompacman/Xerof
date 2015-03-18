@@ -1,9 +1,8 @@
 #pragma once
-#include "Initializable.h"
 
-class Keyboard: public Initializable
+class Keyboard
 {
 public:
-	//CONSTRUCTOR/DESCTRUCTOR
+	//CONSTRUCTOR/DESTRUCTOR
 	Keyboard();
 };

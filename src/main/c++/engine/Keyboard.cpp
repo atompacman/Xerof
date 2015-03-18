@@ -1,4 +1,5 @@
 #include "Keyboard.h"
+#include "dialog\FatalErrorDialog.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //           CONSTRUCTOR/DESCTRUCTOR           //
@@ -6,8 +7,7 @@
 
 Keyboard::Keyboard()
 {
-	initSuccess = al_install_keyboard();
-	if (!initSuccess) {
+	if (!al_install_keyboard()) {
 		FatalErrorDialog("Keyboard installation failed.");
 	}
 }

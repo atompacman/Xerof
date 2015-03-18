@@ -5,7 +5,7 @@
 #include "Keyboard.h"
 #include "MoveProcess.h"
 
-class GameLoop: public Initializable
+class GameLoop
 {
 public:
 	// CONSTRUCTOR/DESCTRUCTOR

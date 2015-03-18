@@ -15,17 +15,13 @@ GameLoop::GameLoop(Display* display, Mouse* mouse, Keyboard* keyboard) :
 	mouse->maxScrollY = maxBufferDimensions().y;
 
 	queue = al_create_event_queue();
-	initSuccess = queue != nullptr;
-	if (!initSuccess){
+	if (queue == nullptr){
 		FatalErrorDialog("Creation of event queue failed.");
-		return;
 	}
 
 	screenRefresher = al_create_timer(1.0 / TARGET_FPS);
-	initSuccess = screenRefresher != nullptr;
-	if (!initSuccess){
+	if (screenRefresher == nullptr){
 		FatalErrorDialog("Creation of timer for screen refreshing failed.");
-		return;
 	}
 
 	al_register_event_source(queue, al_get_keyboard_event_source());

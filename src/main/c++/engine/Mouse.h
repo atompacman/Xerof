@@ -1,9 +1,8 @@
 #pragma once
 #include "..\Parameters.h"
-#include "Initializable.h"
 #include <math.h>
 
-class Mouse: public Initializable
+class Mouse
 {
 public:
 	int state;

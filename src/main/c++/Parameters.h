@@ -17,12 +17,11 @@
 // Prints information about the internal system in the console.
 const bool DEBUG_MODE = true;
 
-// The quantity of information that is sent to the console while DEBUG_MODE
-// is on.
-//		- (1) Only vital information
-//		- (2) Regular information
-//		- (3) Maximal information (can significantly reduce performances)
-const int VERBOSE = 3;
+// Verbose (REMOVE ME)
+#define VERBOSE 3
+
+// The path to the easylogging++ configuration file
+#define LOGGER_CONFIG_FILE "logs/log_config.conf"
 
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//

@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include "dialog\FatalErrorDialog.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //           CONSTRUCTOR/DESCTRUCTOR           //
@@ -6,11 +7,9 @@
 
 Mouse::Mouse()
 {
-	initSuccess = al_install_mouse();
-	if (!initSuccess) {
+	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");
 	}
-
 	zoom = 1.0;
 	rotate = 0.0;
 	scrollX = 0.0;
