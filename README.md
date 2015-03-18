@@ -22,12 +22,15 @@
 ### Logging
 Use the following functions to log messages to console:
 
-- LOG(LEVEL)
-- LOG_IF(COND, LEVEL)
-- LOG_EVERY_N(n, LEVEL)
-- LOG_TRACE_F(FORMAT, ARGS...)
-- LOG_WARNING_F(FORMAT, ARGS...)
-- LOG_DEBUG_F(FORMAT, ARGS...)
-- LOG_INFO_F(FORMAT, ARGS...)
-- LOG_FATAL_F(FORMAT, ARGS...)
+- LOG([LEVEL])
+- LOG_IF(COND, [LEVEL])
+- LOG_EVERY_N(n, [LEVEL])
+- LOG_[LEVEL]_F(FORMAT, ARGS...)
 - CHECK()
+
+Ex.: LOG(INFO) << "Information";
+
+Available LEVEL are: TRACE, DEBUG, INFO, WARNING.
+
+*** Do not log "FATAL" level messages. Instead, use this:
+FatalErrorDialog("Something important failed.");
