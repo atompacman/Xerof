@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 	// Start the game loop
 	GameLoop(display, mouse, keyboard).start();
 
-	// Free asset memory
+	// Free assets memory
 	destroyAssets(display->m_Assets);
 
 	// Delete peripherals
