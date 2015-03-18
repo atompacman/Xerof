@@ -31,9 +31,10 @@ class Display
 {
 public:
 	ALLEGRO_DISPLAY* window;
+	ALLEGRO_BITMAP** m_Assets;
 
 	//CONSTRUCTOR/DESCTRUCTOR
-	Display(Mouse* a_Mouse, ALLEGRO_BITMAP** a_Assets);
+	Display(Mouse* a_Mouse);
 	~Display();
 
 	//DRAW
@@ -44,7 +45,6 @@ public:
 	void setFPS(int fps);
 
 private:
-	ALLEGRO_BITMAP** m_Assets;
 	ALLEGRO_FONT* gameFont;
 	CivController** civilizations;
 	Mouse* m_Mouse;

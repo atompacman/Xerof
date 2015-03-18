@@ -4,7 +4,6 @@
 #include "..\engine\dialog\FatalErrorDialog.h"
 #include <string>
 
-static ALLEGRO_BITMAP** assets;
 const int NB_ASSETS = 9;
 
 enum Asset
@@ -21,40 +20,35 @@ enum Asset
 	APARATUS3
 };
 
-static bool loadBitmap(Asset id, const char* filePath);
-
-static bool loadAssets()
-{
-	assets = new ALLEGRO_BITMAP*[NB_ASSETS];
-
-	if (loadBitmap(GRASSLAND_TILE_FILE, "assets/background/grassland.tga"))				{ return EXIT_FAILURE; }
-	if (loadBitmap(OCEAN_TILE_FILE,		"assets/background/ocean.tga"))					{ return EXIT_FAILURE; }
-	if (loadBitmap(PLAINS_TILE_FILE,	"assets/background/plains.tga"))				{ return EXIT_FAILURE; }
-	if (loadBitmap(ROCKY_TILE_FILE,		"assets/background/rocky.tga"))					{ return EXIT_FAILURE; }
-	if (loadBitmap(TUNDRA_TILE_FILE,	"assets/background/tundra.tga"))				{ return EXIT_FAILURE; }
-	if (loadBitmap(ALPHA_TEST_PACMAN,	"assets/testalpha.tga"))						{ return EXIT_FAILURE; }
-	if (loadBitmap(STICKMAN,			"assets/foreground/character/stickman.tga"))	{ return EXIT_FAILURE; }
-	if (loadBitmap(SELECTION,			"assets/foreground/selection.tga"))				{ return EXIT_FAILURE; }
-	if (loadBitmap(APARATUS3,			"assets/foreground/character/Aparatus3.tga"))	{ return EXIT_FAILURE; }
-
-	return EXIT_SUCCESS;
-}
-
-static bool loadBitmap(Asset id, const char* filePath)
+static ALLEGRO_BITMAP* loadBitmap(const char* filePath)
 {
 	ALLEGRO_BITMAP* bitmap = al_load_bitmap(filePath);
 	if (bitmap == nullptr) {
 		std::string msg = filePath;
 		msg = "Failed to load asset at \"" + msg + "\".";
 		FatalErrorDialog(msg.c_str());
-		return EXIT_FAILURE;
 	}
-	assets[id] = bitmap;
-
-	return EXIT_SUCCESS;
+	return bitmap;
 }
 
-static void destroyAssets()
+static ALLEGRO_BITMAP** loadAssets()
+{
+	ALLEGRO_BITMAP** assets = new ALLEGRO_BITMAP*[NB_ASSETS];
+
+	assets[GRASSLAND_TILE_FILE] = loadBitmap("assets/background/grassland.tga");
+	assets[OCEAN_TILE_FILE] = loadBitmap("assets/background/ocean.tga");
+	assets[PLAINS_TILE_FILE] = loadBitmap("assets/background/plains.tga");
+	assets[ROCKY_TILE_FILE] = loadBitmap("assets/background/rocky.tga");
+	assets[TUNDRA_TILE_FILE] = loadBitmap("assets/background/tundra.tga");
+	assets[ALPHA_TEST_PACMAN] = loadBitmap("assets/testalpha.tga");
+	assets[STICKMAN] = loadBitmap("assets/foreground/character/stickman.tga");
+	assets[SELECTION] = loadBitmap("assets/foreground/selection.tga");
+	assets[APARATUS3] = loadBitmap("assets/foreground/character/Aparatus3.tga");
+
+	return assets;
+}
+
+static void destroyAssets(ALLEGRO_BITMAP** assets)
 {
 	for (int i = 0; i < NB_ASSETS; ++i) {
 		al_destroy_bitmap(assets[i]);

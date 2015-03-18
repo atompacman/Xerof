@@ -16,3 +16,18 @@
       $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;%(AdditionalLibraryDirectories)
   - Linker/Input/Additional Dependence <br>
       add allegro-5.0.10-monolith-md-debug.lib;
+
+
+## Development tools
+### Logging
+Use the following functions to log messages to console:
+
+- LOG(LEVEL)
+- LOG_IF(COND, LEVEL)
+- LOG_EVERY_N(n, LEVEL)
+- LOG_TRACE_F(FORMAT, ARGS...)
+- LOG_WARNING_F(FORMAT, ARGS...)
+- LOG_DEBUG_F(FORMAT, ARGS...)
+- LOG_INFO_F(FORMAT, ARGS...)
+- LOG_FATAL_F(FORMAT, ARGS...)
+- CHECK()

@@ -4,9 +4,8 @@
 //           CONSTRUCTOR/DESCTRUCTOR           //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-Display::Display(Mouse* a_Mouse, ALLEGRO_BITMAP** a_Assets) :
-m_Mouse(a_Mouse),
-m_Assets(a_Assets)
+Display::Display(Mouse* a_Mouse) :
+m_Mouse(a_Mouse)
 {
 	if (!createWindow()){
 		FatalErrorDialog("Display creation failed.");

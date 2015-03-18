@@ -23,32 +23,30 @@ int main(int argc, char** argv)
 	// Welcome message !
 	LOG(INFO) << "-====-===-==-=- XEROF -=-==-===-====-";
 
-	// Initialize Allegro5 library
-	initGameEngine();
-
 	// Create the world... nothing less
 	const World* world = World::getInstance();
 
-	// Load assets
-	if (loadAssets()) {
-		return EXIT_FAILURE;
-	}
+	// Initialize Allegro5 library
+	initGameEngine();
 
 	// Initialize peripherals
 	mouse = new Mouse();
-	display = new Display(mouse, assets);
+	display = new Display(mouse);
 	keyboard = new Keyboard();
+
+	// Load assets
+	display->m_Assets = loadAssets();
 
 	// Start the game loop
 	GameLoop(display, mouse, keyboard).start();
+
+	// Free asset memory
+	destroyAssets(display->m_Assets);
 
 	// Delete peripherals
 	delete display;
 	delete mouse;
 	delete keyboard;
-
-	// Free asset memory
-	destroyAssets();
 
 	return EXIT_SUCCESS;
 }
