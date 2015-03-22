@@ -1,5 +1,5 @@
 #include "Keyboard.h"
-#include "dialog\FatalErrorDialog.h"
+#include "internal\dialog\FatalErrorDialog.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //           CONSTRUCTOR/DESCTRUCTOR           //

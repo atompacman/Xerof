@@ -9,14 +9,17 @@ enum PossibleOrders
 class Order
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	Order(PossibleOrders action, int param1 = -1, int param2 = -1, int param3 = -1);
+	// CONSTRUCTOR/DESTRUCTOR
+	Order(PossibleOrders i_Action, 
+          int            i_Param1 = -1, 
+          int            i_Param2 = -1, 
+          int            i_Param3 = -1);
 
 	// GETTERS
-	PossibleOrders getAction() const;
-	int* getParams() const;
+	inline PossibleOrders getAction() const;
+	inline int* getParams() const;
 
 private:
-	PossibleOrders action;
-	int* params;
+	PossibleOrders m_Action;
+	int* m_Params;
 };

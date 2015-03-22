@@ -17,9 +17,8 @@ Map::Map()
 			tile->setEnvironment(OCEAN);
 			tiles[linearize(coord)] = tile;
 			++tileNo;
-			if (DEBUG_MODE && VERBOSE >= 2 && tileNo % 1000 == 0) {
-				fprintf(stdout, "%s%6d/%6d%s\n",
-					"World generation -:- [", tileNo, 
+			if (tileNo % 1000 == 0) {
+				LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [", tileNo,
 					MAP_DIMENSIONS.area(), "] tiles allocated in memory.");
 			}
 		}
@@ -91,10 +90,9 @@ void Map::placeInitialLandTiles()
 		if (nextRand(100) < distanceWeight * 100.0 && !isLand(coord)) {
 			setLandTile(coord);
 			++nbPlacedLandTiles;
-			if (DEBUG_MODE && VERBOSE >= 2 && nbPlacedLandTiles % 1000 == 0) {
-				fprintf(stdout, "%s%6d/%6d%s\n",
-					"World generation -:- [", nbPlacedLandTiles,
-					LAND_TILES, "] tiles placed.");
+			if (nbPlacedLandTiles % 1000 == 0) {
+				LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [", 
+					nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
 			}
 		}
 	}
@@ -113,17 +111,14 @@ void Map::growIslands()
 		if (nextRand(100) < weightedProb * 100.0 && !isLand(coord)) {
 			setLandTile(coord);
 			++nbPlacedLandTiles;
-			if (DEBUG_MODE && VERBOSE >= 2 && nbPlacedLandTiles % 1000 == 0) {
-				fprintf(stdout, "%s%6d/%6d%s\n",
-					"World generation -:- [", nbPlacedLandTiles,
-					LAND_TILES, "] tiles placed.");
+			if (nbPlacedLandTiles % 1000 == 0) {
+				LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [",
+					nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
 			}
 		}
 	}
-	if (DEBUG_MODE && VERBOSE >= 2) {
-		fprintf(stdout, "%s%6d/%6d%s\n", "World generation -:- [", 
-			nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
-	}
+	LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [",
+		nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
 }
 
 void Map::setLandTile(Coord<int> coord)

@@ -5,6 +5,7 @@
 - (1) File/New Project -> Templates/Visual C++ -> Empty Project. Create the project directly in the repository.
 
 - (2) Copy those project properties "tel quel". Right click on the project -> Properties -> Configuration Properties
+	  (make sure Configuration is set to "All configurations" and not "Debug"
   - Debugging/Environment <br>
       PATH=$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\bin;%PATH%
   - VC++ Directories/Include Directories <br>
@@ -16,7 +17,10 @@
   - Linker/General/Additional Library Directories <br>
       $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;%(AdditionalLibraryDirectories)
   - Linker/Input/Additional Dependence <br>
-      add allegro-5.0.10-monolith-md-debug.lib;
+	  FOR "Debug" configuration:
+	  add allegro-5.0.10-monolith-md-debug.lib;
+	  FOR "Release" configuration
+	  add allegro-5.0.10-monolith-md.lib;
 
 
 ## Development tools
@@ -35,3 +39,8 @@ Ex.: LOG(INFO) << "Information";
 
 *** Do not log "FATAL" level messages. Instead, use this:
 FatalErrorDialog("Something important failed.");
+
+
+### Max line length
+The maximum length of lines of code is 80. Install this plugin to be able to add a guideline:
+https://visualstudiogallery.msdn.microsoft.com/da227a0b-0e31-4a11-8f6b-3a149cf2e459

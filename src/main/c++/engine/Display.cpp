@@ -1,8 +1,8 @@
 #include "Display.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESCTRUCTOR                           //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 Display::Display(Mouse* a_Mouse) :
 m_Mouse(a_Mouse)
@@ -19,14 +19,13 @@ bool Display::createWindow()
 {
 	al_set_new_display_flags(DISPLAY_MODE);
 
-	if (DEBUG_MODE && VERBOSE >= 3) {
-		fprintf(stdout, "AVAILABLE DISPLAY MODES:/n");
-		for (int i = 0; i < al_get_num_display_modes(); ++i) {
-			ALLEGRO_DISPLAY_MODE mode;
-			al_get_display_mode(i, &mode);
-			fprintf(stdout, "  %2d : %4dx%4d, format: %d, refresh rate: %d\n", 
-				i + 1, mode.width, mode.height, mode.format, mode.refresh_rate);
-		}
+	LOG(DEBUG) << "AVAILABLE DISPLAY MODES:";
+
+	for (int i = 0; i < al_get_num_display_modes(); ++i) {
+		ALLEGRO_DISPLAY_MODE mode;
+		al_get_display_mode(i, &mode);
+		LOG_DEBUG_F("  %2d : %4dx%4d, format: %d, refresh rate: %d\n",
+			i + 1, mode.width, mode.height, mode.format, mode.refresh_rate);
 	}
 
 	int displayWidth, displayHeight;
@@ -56,16 +55,15 @@ void Display::loadGameIcon()
 		al_set_display_icon(window, icon);
 	}
 	else {
-		fprintf(stderr, "ERROR: Could not load the game icon.");
+		LOG(WARNING) << "Could not load the game icon";
 	}
 }
 
 void Display::loadGameFont()
 {
 	al_init_font_addon();
-	gameFont = al_load_font("assets/font.tga", 0, 0);
-	if (gameFont == nullptr) {
-		fprintf(stderr, "ERROR: Could not load the game font.\n");
+	if (al_load_font("assets/font.tga", 0, 0) == NULL) {
+		LOG(WARNING) << "Could not load the game font";
 	}
 }
 
@@ -75,9 +73,9 @@ Display::~Display()
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                    DRAW                     //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    DRAW                                    //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 void Display::draw() const
 {
@@ -204,7 +202,8 @@ int Display::resolutionLevel() const
 }
 
 void Display::actualFieldOfView(float actualWidth, 
-	float actualHeight, int* values) const
+                                float actualHeight, 
+                                int* values) const
 {
 	float zoom = m_Mouse->zoom;
 	float rotation = m_Mouse->rotate;
@@ -232,9 +231,9 @@ void Display::actualFieldOfView(float actualWidth,
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                  SETTERS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                  SETTERS                                   //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 void Display::setCivs(CivController** civs)
 {

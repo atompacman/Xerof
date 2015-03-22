@@ -4,6 +4,7 @@
 #include "constraint\Clustering.h"
 #include "constraint\DistanceFromCenter.h"
 #include "constraint\EnvironmentIs.h"
+#include "..\engine\internal\Logger.h"
 
 static Coord<int> randTile()
 {

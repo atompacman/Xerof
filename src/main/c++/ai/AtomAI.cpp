@@ -1,39 +1,42 @@
 #include "AtomAI.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-AtomAI::AtomAI(Civilization* civ) : AI(civ) {}
+AtomAI::AtomAI(Civilization* i_Civ) : 
+AI(i_Civ) 
+{}
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                  MOVE HUMAN                 //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                GIVE ORDER                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Order AtomAI::giveOrder(Human& human)
+Order AtomAI::giveOrder(const Human& i_Human)
 {
-	while (human.getEnvironnementInFront() == OCEAN) {
-		human.position.facingDirection = Direction((nextRand(8)) % 8);
+    int direction;
+    while (i_Human.getEnvironnementInFront() == OCEAN) {
+        direction = Direction((nextRand(8)) % 8);
 	}
-	return Order(WALK, human.position.facingDirection);
+    return Order(WALK, direction);
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   HELPERS                   //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                  HELPERS                                   //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void AtomAI::printSurroundingTiles(const Human& human) 
+void AtomAI::printSurroundingTiles(const Human& i_Human)
 {
-	const Tile*** tiles = human.getSurroundingTiles();
-	int zoneLength = human.getRangeOfSight() * 2 + 1;
+    const Tile*** tiles = i_Human.getSurroundingTiles();
+    int zoneLength = i_Human.getRangeOfSight() * 2 + 1;
 
 	for (int y = 0; y < zoneLength; ++y) {
 		for (int x = 0; x < zoneLength; ++x) {
 			const char* name = tiles[x][y]->getEnvironment()->toString();
-			fprintf(stdout, "%-10s   ", name);
+			LOG_TRACE_F("%-10s   ", name);
 		}
-		fprintf(stdout, "\n");
+		LOG(TRACE) << '\n';
 	}
 }

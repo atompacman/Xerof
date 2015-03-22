@@ -11,14 +11,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
-//                              Debugging                                //
+//                               CONFIG                                  //
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
-
-// Prints information about the internal system in the console.
-const bool DEBUG_MODE = true;
-
-// Verbose (REMOVE ME)
-#define VERBOSE 3
 
 // The path to the easylogging++ configuration file
 #define LOGGER_CONFIG_FILE "logs/log_config.conf"

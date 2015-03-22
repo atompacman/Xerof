@@ -28,8 +28,7 @@ Map2* MapGenerator::generate()
 void MapGenerator::fillWithOcean()
 {
 	unsigned int tileCount = 0;
-	unsigned int progrIncr 
-		= (int)(PROGRESSION_INCREMENTS_PERC * (float)MAP_DIMENSIONS.area());
+	unsigned int progrIncr = (int)(PROGRESSION_INCREMENTS_PERC * (float)MAP_DIMENSIONS.area());
 	unsigned int countObjective = progrIncr;
 	unsigned int currPerc = PROGRESSION_INCREMENTS_PERC;
 
@@ -41,7 +40,7 @@ void MapGenerator::fillWithOcean()
 			tiles[linearize(coord)] = tile;
 
 			++tileCount;
-			if (DEBUG_MODE && VERBOSE >= 2 && tileCount > countObjective) {
+			if (tileCount > countObjective) {
 				printProgress("Allocating tiles to memory", currPerc);
 				countObjective += progrIncr;
 				currPerc += PROGRESSION_INCREMENTS_PERC;
@@ -93,7 +92,7 @@ void MapGenerator::generateEnvironment(EnvType type, unsigned int elemQuant,
 			tiles[linearize(coord)]->setEnvironment(type);
 	
 			++elemPlaced;
-			if (DEBUG_MODE && VERBOSE >= 2 && elemPlaced > countObjective) {
+			if (elemPlaced > countObjective) {
 				printProgress(taskDesc, currPerc);
 				countObjective += progrIncr;
 				currPerc += PROGRESSION_INCREMENTS_PERC;
@@ -104,5 +103,5 @@ void MapGenerator::generateEnvironment(EnvType type, unsigned int elemQuant,
 
 void MapGenerator::printProgress(const char* taskDesc, unsigned int progress)
 {
-	fprintf(stdout, "World generation -:- %s: %3d%%\n", taskDesc, progress);
+	LOG_DEBUG_F("World generation -:- %s: %3d%%\n", taskDesc, progress);
 }

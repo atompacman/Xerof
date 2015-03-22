@@ -215,12 +215,12 @@ bool GameLoop::verifyDestination(const Position& destination) const
 	Map* map = World::getInstance()->map;
 	Coord<int> coord = Coord<int>(destination.coord.x, destination.coord.y);
 	Tile* destTile = map->getTile(coord);
-	if (!destTile->isPassable() && DEBUG_MODE) {
-		fprintf(stderr, "ERROR IN AI: Cannot move on water.\n");
+	if (!destTile->isPassable()) {
+		LOG(WARNING) << "ERROR IN AI: Cannot move on water";
 		return false;
 	}
-	if (isOccupied(coord) && DEBUG_MODE) {
-		fprintf(stderr, "ERROR IN AI: Tile is already occupied.\n");
+	if (isOccupied(coord)) {
+		LOG(WARNING) << "ERROR IN AI: Tile is already occupied";
 		return false;
 	}
 	return true;

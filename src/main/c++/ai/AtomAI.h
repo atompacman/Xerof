@@ -1,16 +1,17 @@
 #pragma once
 #include "AI.h"
+#include "..\engine\internal\Logger.h"
 
 class AtomAI: public AI
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	AtomAI(Civilization*);
+	// CONSTRUCTOR/DESTRUCTOR
+	AtomAI(Civilization* i_Civ);
 
-	// MOVE HUMAN
-	Order giveOrder(Human& human);
+	// GIVE ORDER
+	Order giveOrder(const Human& i_Human);
 
 private:
 	// HELPERS
-	void printSurroundingTiles(const Human& human);
+	void printSurroundingTiles(const Human& i_Human);
 };

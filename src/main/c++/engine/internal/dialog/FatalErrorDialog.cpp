@@ -1,5 +1,4 @@
 #include "FatalErrorDialog.h"
-#include <easylogging++.h>
 
 FatalErrorDialog::FatalErrorDialog(const char* msg)
 {
