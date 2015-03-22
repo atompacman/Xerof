@@ -18,8 +18,9 @@ Map::Map()
 			tiles[linearize(coord)] = tile;
 			++tileNo;
 			if (tileNo % 1000 == 0) {
-				LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [", tileNo,
-					MAP_DIMENSIONS.area(), "] tiles allocated in memory.");
+                LOG(DEBUG) << "World generation -:- [" << 
+                    std::setw(6) << tileNo << '/' << std::setw(6) << 
+                    MAP_DIMENSIONS.area() << "] tiles allocated in memory";
 			}
 		}
 	}
@@ -91,8 +92,9 @@ void Map::placeInitialLandTiles()
 			setLandTile(coord);
 			++nbPlacedLandTiles;
 			if (nbPlacedLandTiles % 1000 == 0) {
-				LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [", 
-					nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
+                LOG(DEBUG) << "World generation -:- [" <<
+                    std::setw(6) << nbPlacedLandTiles << '/' 
+                    << std::setw(6) << LAND_TILES << "] tiles placed";
 			}
 		}
 	}
@@ -112,13 +114,15 @@ void Map::growIslands()
 			setLandTile(coord);
 			++nbPlacedLandTiles;
 			if (nbPlacedLandTiles % 1000 == 0) {
-				LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [",
-					nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
+                LOG(DEBUG) << "World generation -:- [" <<
+                    std::setw(6) << nbPlacedLandTiles << '/'
+                    << std::setw(6) << LAND_TILES << "] tiles placed";
 			}
 		}
 	}
-	LOG_DEBUG_F("%s%6d/%6d%s", "World generation -:- [",
-		nbPlacedLandTiles, LAND_TILES, "] tiles placed.");
+    LOG(DEBUG) << "World generation -:- [" <<
+        std::setw(6) << nbPlacedLandTiles << '/'
+        << std::setw(6) << LAND_TILES << "] tiles placed";
 }
 
 void Map::setLandTile(Coord<int> coord)

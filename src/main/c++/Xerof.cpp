@@ -1,6 +1,7 @@
 #include "engine\GameLoop.h"
 #include "easylogging++.h"
 #include <stdlib.h>
+#include <iomanip>
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -22,9 +23,6 @@ int main(int argc, char** argv)
 
 	// Welcome message !
 	LOG(INFO) << "-====-===-==-=- XEROF -=-==-===-====-";
-    el::Loggers::getLogger("default")->info("Salut %d", 5);
-    LOG_INFO_F("Salut %d", 5);
-    LOG(INFO) << "-====-===-==-=- XEROF -=-==-===-====-";
 
 	// Create the world... nothing less
 	const World* world = World::getInstance();

@@ -24,8 +24,9 @@ bool Display::createWindow()
 	for (int i = 0; i < al_get_num_display_modes(); ++i) {
 		ALLEGRO_DISPLAY_MODE mode;
 		al_get_display_mode(i, &mode);
-		LOG_DEBUG_F("  %2d : %4dx%4d, format: %d, refresh rate: %d\n",
-			i + 1, mode.width, mode.height, mode.format, mode.refresh_rate);
+        LOG(DEBUG) << "  " << std::setw(2) << i + 1 << " : " << std::setw(4) << 
+            mode.width << "x" << std::setw(4) << mode.height << ", format: " <<
+            mode.format << ", refresh rate: " << mode.refresh_rate;
 	}
 
 	int displayWidth, displayHeight;

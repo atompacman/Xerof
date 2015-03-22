@@ -30,7 +30,6 @@ Use the following functions to log messages to console:
 - LOG(LEVEL)
 - LOG_IF(COND, LEVEL)
 - LOG_EVERY_N(N, LEVEL)
-- LOG_LEVEL_F(FORMAT, ARGS...)
 - CHECK(COND)
 
 Replace LEVEL by: TRACE, DEBUG, INFO or WARNING.

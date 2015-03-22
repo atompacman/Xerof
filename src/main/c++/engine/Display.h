@@ -6,7 +6,6 @@
 #include "allegro5\allegro_native_dialog.h"
 #include "..\civilization\CivController.h"
 #include "Mouse.h"
-#include "internal\Logger.h"
 
 static Dimensions maxBufferDimensions() {
 	return MAP_DIMENSIONS * (int) TILE_SIZE[0];

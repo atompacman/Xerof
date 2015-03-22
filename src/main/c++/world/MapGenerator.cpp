@@ -1,4 +1,5 @@
 #include "MapGenerator.h"
+#include <iomanip>
 
 Map2* Constraint::map;
 
@@ -28,7 +29,8 @@ Map2* MapGenerator::generate()
 void MapGenerator::fillWithOcean()
 {
 	unsigned int tileCount = 0;
-	unsigned int progrIncr = (int)(PROGRESSION_INCREMENTS_PERC * (float)MAP_DIMENSIONS.area());
+	unsigned int progrIncr = 
+        (int)(PROGRESSION_INCREMENTS_PERC * (float)MAP_DIMENSIONS.area());
 	unsigned int countObjective = progrIncr;
 	unsigned int currPerc = PROGRESSION_INCREMENTS_PERC;
 
@@ -70,15 +72,15 @@ void MapGenerator::growLandmasses()
 		new Clustering(GRASSLAND, LANDMASS_COMPACTNESS),
 		new EnvironmentIs(OCEAN)
 	};
-	generateEnvironment(GRASSLAND, landTilesToPlace,
-		constrs, 3, "Growing landmasses");
+	generateEnvironment(GRASSLAND, landTilesToPlace, 
+        constrs, 3, "Growing landmasses");
 }
 
 void MapGenerator::generateEnvironment(EnvType type, unsigned int elemQuant,
 	Constraint** constraints, int nbConst, const char* taskDesc)
 {
 	unsigned int elemPlaced = 0;
-	unsigned int progrIncr = (int)(PROGRESSION_INCREMENTS_PERC * (float)elemQuant);
+	unsigned int progrIncr =(int)(PROGRESSION_INCREMENTS_PERC*(float)elemQuant);
 	unsigned int countObjective = progrIncr;
 	unsigned int currPerc = PROGRESSION_INCREMENTS_PERC;
 
@@ -103,5 +105,6 @@ void MapGenerator::generateEnvironment(EnvType type, unsigned int elemQuant,
 
 void MapGenerator::printProgress(const char* taskDesc, unsigned int progress)
 {
-	LOG_DEBUG_F("World generation -:- %s: %3d%%\n", taskDesc, progress);
+    LOG(DEBUG) << "World generation -:- " << std::setw(10)
+        << taskDesc << ": " << std::setw(3) << progress << "%";
 }

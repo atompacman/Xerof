@@ -1,6 +1,5 @@
 #pragma once
 #include "AI.h"
-#include "..\engine\internal\Logger.h"
 
 class AtomAI: public AI
 {
