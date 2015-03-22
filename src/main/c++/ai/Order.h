@@ -16,8 +16,8 @@ public:
           int            i_Param3 = -1);
 
 	// GETTERS
-	inline PossibleOrders getAction() const;
-	inline int* getParams() const;
+    PossibleOrders getAction() const { return m_Action; };
+    int* getParams() const { return m_Params; };
 
 private:
 	PossibleOrders m_Action;

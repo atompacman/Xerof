@@ -12,18 +12,3 @@ Order::Order(PossibleOrders i_Action, int i_Param1, int i_Param2, int i_Param3)
 	m_Params[1] = i_Param2;
 	m_Params[2] = i_Param3;
 }
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                  GETTERS                                   //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-inline PossibleOrders Order::getAction() const
-{
-	return m_Action;
-}
-
-inline int* Order::getParams() const
-{
-	return m_Params;
-}

@@ -13,13 +13,12 @@ AI(i_Civ)
 //                                GIVE ORDER                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Order AtomAI::giveOrder(const Human& i_Human)
+Order AtomAI::giveOrder(Human& i_Human)
 {
-    int direction;
     while (i_Human.getEnvironnementInFront() == OCEAN) {
-        direction = Direction((nextRand(8)) % 8);
+        i_Human.position.facingDirection = Direction((nextRand(8)) % 8);
 	}
-    return Order(WALK, direction);
+    return Order(WALK, i_Human.position.facingDirection);
 }
 
 

@@ -9,7 +9,7 @@ public:
 	AtomAI(Civilization* i_Civ);
 
 	// GIVE ORDER
-	Order giveOrder(const Human& i_Human);
+	Order giveOrder(Human& i_Human);
 
 private:
 	// HELPERS
