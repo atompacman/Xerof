@@ -85,13 +85,13 @@ void Display::draw() const
 	ALLEGRO_TRANSFORM transform;
 	al_identity_transform(&transform);
 
-	float fixedScrollX = m_Mouse->scrollX * RESOLU_FRACTION[resolutionLvl];
-	float fixedScrollY = m_Mouse->scrollY * RESOLU_FRACTION[resolutionLvl];
+	float fixedScrollX = m_Mouse->m_ScrollX * RESOLU_FRACTION[resolutionLvl];
+	float fixedScrollY = m_Mouse->m_ScrollY * RESOLU_FRACTION[resolutionLvl];
 	al_translate_transform(&transform, -fixedScrollX, -fixedScrollY);
 	
-	al_rotate_transform(&transform, m_Mouse->rotate);
+	al_rotate_transform(&transform, m_Mouse->m_Rotate);
 
-	float fixedZoomLvl = m_Mouse->zoom * RESOLU_FACTOR[resolutionLvl];
+	float fixedZoomLvl = m_Mouse->m_Zoom * RESOLU_FACTOR[resolutionLvl];
 	al_scale_transform(&transform, fixedZoomLvl, fixedZoomLvl);
 
 	float actualWidth = al_get_display_width(m_Window);
@@ -195,7 +195,7 @@ void Display::draw() const
 
 int Display::resolutionLevel() const
 {
-	float zoomLevel = m_Mouse->zoom;
+	float zoomLevel = m_Mouse->m_Zoom;
 	if      (zoomLevel > 0.5)	{ return 0; }
 	else if (zoomLevel > 0.25)  { return 1; }
 	else if (zoomLevel > 0.125) { return 2; }
@@ -206,8 +206,8 @@ void Display::actualFieldOfView(float i_ActualWidth,
                                 float i_ActualHeight, 
                                 int*  i_Values) const
 {
-	float zoom = m_Mouse->zoom;
-	float rotation = m_Mouse->rotate;
+	float zoom = m_Mouse->m_Zoom;
+	float rotation = m_Mouse->m_Rotate;
 	float tilePerUnit = 1 / (TILE_SIZE[0] * zoom);
 	float halfNbTilesX = i_ActualWidth * tilePerUnit * 0.5;
 	float halfNbTilesY = i_ActualHeight * tilePerUnit * 0.5;
@@ -217,8 +217,8 @@ void Display::actualFieldOfView(float i_ActualWidth,
 	float halfGoodNbTilesY = abs(sin(rotation)) * halfNbTilesX
 		+ abs(cos(rotation)) * halfNbTilesY;
 
-	float currentXTile = m_Mouse->scrollX * zoom * tilePerUnit;
-	float currentYTile = m_Mouse->scrollY * zoom * tilePerUnit;
+	float currentXTile = m_Mouse->m_ScrollX * zoom * tilePerUnit;
+	float currentYTile = m_Mouse->m_ScrollY * zoom * tilePerUnit;
 
 	float leftBound = (int)(currentXTile - halfGoodNbTilesX) - 1;
 	float rightBound = (int)(currentXTile + halfGoodNbTilesX) + 1;

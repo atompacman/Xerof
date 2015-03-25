@@ -5,15 +5,15 @@
 class Mouse
 {
 public:
-	int state;
-	float zoom;
-	float rotate;
-	float scrollX, scrollY;
-	float maxScrollX, maxScrollY;
+	int  m_State;
+	float m_Zoom;
+	float m_Rotate;
+	float m_ScrollX, m_ScrollY;
+	float m_MaxScrollX, m_MaxScrollY;
 
-	//CONSTRUCTOR/DESCTRUCTOR
+	//CONSTRUCTOR/DESTRUCTOR
 	Mouse();
 
 	//EVENT HANDLING
-	void handleMouseEvent(const ALLEGRO_EVENT&);
+	void handleMouseEvent(const ALLEGRO_EVENT& i_Event);
 };

@@ -1,57 +1,58 @@
 #include "Mouse.h"
 #include "internal\dialog\FatalErrorDialog.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Mouse::Mouse()
+Mouse::Mouse():
+m_State(0),
+m_Zoom(1.0),
+m_Rotate(1.0),
+m_ScrollX(1.0),
+m_ScrollY(1.0)
 {
 	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");
 	}
-	zoom = 1.0;
-	rotate = 0.0;
-	scrollX = 0.0;
-	scrollY = 0.0;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                EVENT HANDLING               //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                               EVENT HANDLING                               //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Mouse::handleMouseEvent(const ALLEGRO_EVENT& event)
+void Mouse::handleMouseEvent(const ALLEGRO_EVENT& i_Event)
 {
-	switch (event.type) {
+	switch (i_Event.type) {
 	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-		state = event.mouse.button;
+		m_State = i_Event.mouse.button;
 		break;
 	case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-		state = 0;
+		m_State = 0;
 		break;
 	case ALLEGRO_EVENT_MOUSE_AXES:
-		if (state == 1) {
-			float x = event.mouse.dx / zoom;
-			float y = event.mouse.dy / zoom;
-			scrollX -= x * cos(rotate) + y * sin(rotate);
-			scrollY -= y * cos(rotate) - x * sin(rotate);
+		if (m_State == 1) {
+			float x = i_Event.mouse.dx / m_Zoom;
+			float y = i_Event.mouse.dy / m_Zoom;
+			m_ScrollX -= x * cos(m_Rotate) + y * sin(m_Rotate);
+			m_ScrollY -= y * cos(m_Rotate) - x * sin(m_Rotate);
 
-			scrollX = scrollX < 0 ? 0 : scrollX;
-			scrollX = scrollX > maxScrollX ? maxScrollX : scrollX;
-			scrollY = scrollY < 0 ? 0 : scrollY;
-			scrollY = scrollY > maxScrollY ? maxScrollY : scrollY;
+			m_ScrollX = m_ScrollX < 0 ? 0 : m_ScrollX;
+			m_ScrollX = m_ScrollX > m_MaxScrollX ? m_MaxScrollX : m_ScrollX;
+			m_ScrollY = m_ScrollY < 0 ? 0 : m_ScrollY;
+			m_ScrollY = m_ScrollY > m_MaxScrollY ? m_MaxScrollY : m_ScrollY;
 		}
-		if (state == 2) {
-			rotate += event.mouse.dx * 0.01;
-			zoom -= event.mouse.dy * 0.01 * zoom;
+		if (m_State == 2) {
+			m_Rotate += i_Event.mouse.dx * 0.01;
+			m_Zoom -= i_Event.mouse.dy * 0.01 * m_Zoom;
 		}
-		zoom += event.mouse.dz * 0.1 * zoom;
-		if (zoom < MIN_ZOOM_SCALE) {
-			zoom = MIN_ZOOM_SCALE;
+		m_Zoom += i_Event.mouse.dz * 0.1 * m_Zoom;
+		if (m_Zoom < MIN_ZOOM_SCALE) {
+			m_Zoom = MIN_ZOOM_SCALE;
 		}
-		if (zoom > MAX_ZOOM_SCALE) {
-			zoom = MAX_ZOOM_SCALE;
+		if (m_Zoom > MAX_ZOOM_SCALE) {
+			m_Zoom = MAX_ZOOM_SCALE;
 		}
 	}
 }

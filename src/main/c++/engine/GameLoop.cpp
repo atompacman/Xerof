@@ -9,10 +9,10 @@ m_Disp(i_Disp),
 m_Mouse(i_Mouse),
 m_Keyboard(i_Key)
 {
-	i_Mouse->scrollX = maxBufferDimensions().x / 2;
-	i_Mouse->scrollY = maxBufferDimensions().y / 2;
-	i_Mouse->maxScrollX = maxBufferDimensions().x;
-	i_Mouse->maxScrollY = maxBufferDimensions().y;
+	i_Mouse->m_ScrollX = maxBufferDimensions().x / 2;
+	i_Mouse->m_ScrollY = maxBufferDimensions().y / 2;
+	i_Mouse->m_MaxScrollX = maxBufferDimensions().x;
+	i_Mouse->m_MaxScrollY = maxBufferDimensions().y;
 
 	m_Queue = al_create_event_queue();
 	if (m_Queue == nullptr){
