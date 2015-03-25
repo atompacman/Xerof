@@ -18,31 +18,36 @@ struct Coord
 	//           CONSTRUCTOR/DESCTRUCTOR           //
 	//- - - - - - - - - - - - - - - - - - - - - - -//
 
-	Coord<T>() : x(0), y(0) {}
-	Coord<T>(const T x, const T y) : x(x), y(y) {}
+	Coord<T>() : 
+        x(0), y(0) 
+    {}
+
+	Coord<T>(const T m_X, const T m_Y) : 
+        x(m_X), y(m_Y) 
+    {}
 
 
 	//= = = = = = = = = = = = = = = = = = = = = = =//
 	//                  OPERATORS                  //
 	//- - - - - - - - - - - - - - - - - - - - - - -//
 
-	Coord<T>& operator+=(const Coord<T> other)
+	Coord<T>& operator+=(const Coord<T> i_Other)
 	{
-		x += other.x;
-		y += other.y;
+		x += i_Other.x;
+		y += i_Other.y;
 		return *this;
 	}
 
-	Coord<T>& operator*=(const T factor)
+	Coord<T>& operator*=(const T i_Factor)
 	{
-		x *= factor;
-		y *= factor;
+		x *= i_Factor;
+		y *= i_Factor;
 		return *this;
 	}
 
-	Coord<T> operator*(const T factor) const
+	Coord<T> operator*(const T i_Factor) const
 	{
-		return Coord<T>(x * factor, y * factor);
+		return Coord<T>(x * i_Factor, y * i_Factor);
 	}
 
 
@@ -50,13 +55,13 @@ struct Coord
 	//          INCREMENTED TO DIRECTION           //
 	//- - - - - - - - - - - - - - - - - - - - - - -//
 
-	Coord<T> incrementedToDirection(Direction direction) const
+	Coord<T> incrementedToDirection(Direction i_Dir) const
 	{
-		assert(direction != MIDDLE);
+		assert(i_Dir != MIDDLE);
 
 		Coord<T> incremented = Coord(x, y);
 
-		switch (direction) {
+		switch (i_Dir) {
 		case LEFT:			incremented.x -= 1;						break;
 		case RIGHT:			incremented.x += 1;						break;
 		case UP:								incremented.y -= 1;	break;
