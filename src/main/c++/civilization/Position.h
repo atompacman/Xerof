@@ -1,25 +1,25 @@
 #pragma once
 #include "..\Parameters.h"
 
-static bool isFourWayDirection(Direction direction)
-{
-	return direction < 4;
-}
-
-static bool isDiagonalDirection(Direction direction)
-{
-	return direction >= 4 && direction < 8;
-}
-
 struct Position
 {
-	Coord<float> coord;
-	Direction facingDirection;
+	Coord<float> m_Coord;
+	Direction    m_FacingDir;
 
-	// CONSTRUCTOR/DESCTRUCTOR
-	Position(Coord<float> coord, Direction facingDirection);
-	Position(Direction facingDirection, Coord<int> coord);
+	// CONSTRUCTOR/DESTRUCTOR
+	Position(Coord<float> i_Coord, Direction i_FacingDir);
+	Position(Direction i_FacingDir, Coord<int> i_Coord);
 
 	// OPERATORS
-	bool operator==(Position);
+	bool operator==(Position i_Other);
 };
+
+static bool isFourWayDirection(Direction i_Dir)
+{
+    return i_Dir < 4;
+}
+
+static bool isDiagonalDirection(Direction i_Dir)
+{
+    return i_Dir >= 4 && i_Dir < 8;
+}

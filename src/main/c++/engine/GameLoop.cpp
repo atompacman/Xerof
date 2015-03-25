@@ -199,7 +199,7 @@ bool GameLoop::processMovingOrder(Human* human,
 	case WALK: tilePerTurn; break;
 	}
 
-	Coord<float> after = human->m_Pos.coord.incrementedToDirection(direction);
+	Coord<float> after = human->m_Pos.m_Coord.incrementedToDirection(direction);
 	Position dest = Position(after, direction);
 
 	if (verifyDestination(dest)) {
@@ -213,7 +213,7 @@ bool GameLoop::processMovingOrder(Human* human,
 bool GameLoop::verifyDestination(const Position& destination) const
 {
 	Map* map = World::getInstance()->map;
-	Coord<int> coord = Coord<int>(destination.coord.x, destination.coord.y);
+	Coord<int> coord = Coord<int>(destination.m_Coord.x, destination.m_Coord.y);
 	Tile* destTile = map->getTile(coord);
 	if (!destTile->isPassable()) {
 		LOG(WARNING) << "ERROR IN AI: Cannot move on water";

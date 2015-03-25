@@ -1,29 +1,29 @@
 #include "Position.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Position::Position(Coord<float> coord, Direction facingDirection)
+Position::Position(Coord<float> i_Coord, Direction i_FacingDir)
 {
-	assert(facingDirection != MIDDLE);
-	this->coord = coord;
-	this->facingDirection = facingDirection;
+	assert(i_FacingDir != MIDDLE);
+	this->m_Coord = i_Coord;
+	this->m_FacingDir = i_FacingDir;
 }
 
-Position::Position(Direction facingDirection, Coord<int> coord)
+Position::Position(Direction i_FacingDir, Coord<int> i_Coord)
 {
-	assert(facingDirection != MIDDLE);
-	this->coord = Coord<float>(coord.x, coord.y);
-	this->facingDirection = facingDirection;
+	assert(i_FacingDir != MIDDLE);
+	this->m_Coord = Coord<float>(i_Coord.x, i_Coord.y);
+	this->m_FacingDir = i_FacingDir;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                  OPERATORS                  //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                 OPERATORS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool Position::operator==(Position other)
+bool Position::operator==(Position i_Other)
 {
-	return coord.x == other.coord.x && coord.y == other.coord.y;
+	return m_Coord.x == i_Other.m_Coord.x && m_Coord.y == i_Other.m_Coord.y;
 }

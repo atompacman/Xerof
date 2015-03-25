@@ -147,8 +147,8 @@ void Display::draw() const
 		int civPop = civ->getPopulation();
 		for (int j = 0; j < civPop; ++j) {
 			Human human = civ->getHuman(j);
-			Coord<float> realPosition = human.m_Pos.coord * TILE_SIZE[resolutionLvl];
-			float angle = correspondingAngle(human.m_Pos.facingDirection);
+			Coord<float> realPosition = human.m_Pos.m_Coord * TILE_SIZE[resolutionLvl];
+			float angle = correspondingAngle(human.m_Pos.m_FacingDir);
 
 			ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
 				m_Assets[human.assetFile()],
@@ -171,8 +171,8 @@ void Display::draw() const
 				angle,
 				0);
 
-			pixelOnMap.x = ((int)rint(human.m_Pos.coord.x)) * TILE_SIZE[resolutionLvl];
-			pixelOnMap.y = ((int)rint(human.m_Pos.coord.y)) * TILE_SIZE[resolutionLvl];
+			pixelOnMap.x = ((int)rint(human.m_Pos.m_Coord.x)) * TILE_SIZE[resolutionLvl];
+			pixelOnMap.y = ((int)rint(human.m_Pos.m_Coord.y)) * TILE_SIZE[resolutionLvl];
 
 			al_draw_scaled_bitmap(
 				m_Assets[SELECTION],

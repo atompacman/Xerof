@@ -41,14 +41,14 @@ const Tile*** const Human::getSurroundingTiles() const
 	Coord<int> delta;
 
 	for (delta.x = 0; delta.x < zoneSideLength; ++delta.x) {
-		tileCoord.x = (int)m_Pos.coord.x + delta.x - m_ROSight;
+		tileCoord.x = (int)m_Pos.m_Coord.x + delta.x - m_ROSight;
 		if (tileCoord.x <= 0 && tileCoord.x >= MAP_DIMENSIONS.x) {
 			continue;
 		}
 		surroundings[delta.x] = new const Tile*[zoneSideLength];
 
 		for (delta.y = 0; delta.y < zoneSideLength; ++delta.y) {
-			tileCoord.y = (int)m_Pos.coord.y + delta.y - m_ROSight;
+			tileCoord.y = (int)m_Pos.m_Coord.y + delta.y - m_ROSight;
 			if (tileCoord.y <= 0 && tileCoord.y >= MAP_DIMENSIONS.y) {
 				continue;
 			}
@@ -61,7 +61,7 @@ const Tile*** const Human::getSurroundingTiles() const
 const Tile* const Human::getTileInFront() const
 {
 	Coord<float> tileCoordF = 
-		m_Pos.coord.incrementedToDirection(m_Pos.facingDirection);
+		m_Pos.m_Coord.incrementedToDirection(m_Pos.m_FacingDir);
 	Coord<int> tileCoord = Coord<int>(tileCoordF.x, tileCoordF.y);
 	return World::getInstance()->map->getTile(tileCoord);
 }
