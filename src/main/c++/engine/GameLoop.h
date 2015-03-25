@@ -8,45 +8,44 @@
 class GameLoop
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	GameLoop(Display*, Mouse*, Keyboard*);
+	// CONSTRUCTOR/DESTRUCTOR
+	GameLoop(Display* i_Disp, Mouse* i_Mouse, Keyboard* i_Key);
 	~GameLoop();
 
 	// START
 	bool start();
 
 private:
-	ALLEGRO_EVENT_QUEUE* queue;
-	ALLEGRO_TIMER* screenRefresher;
+	ALLEGRO_EVENT_QUEUE* m_Queue;
+	ALLEGRO_TIMER*       m_ScreenRefresher;
 
-	CivController** civilizations;
-	AI** ais;
+	CivController**      m_CivCtrlrs;
+	AI**                 m_AIs;
 	
-	int nbMoveProcess;
-	MoveProcess** moveProcesses;
+	int                  m_NumMoveProcs;
+	MoveProcess**        m_MoveProcs;
 
-	Display* display;
-	Mouse* mouse;
-	Keyboard* keyboard;
-	ALLEGRO_BITMAP** assets;
+	Display*             m_Disp;
+	Mouse*               m_Mouse;
+	Keyboard*            m_Keyboard;
+	ALLEGRO_BITMAP**     m_Assets;
 
-	// CONSTRUCTOR/DESCTRUCTOR
-	void initializeCivsAndAIs();
+    // CONSTRUCTOR/DESTRUCTOR
+    void initializeCivsAndAIs();
 
 	// UPDATE
 	bool updateGame();
 	bool processAI();
-	bool processOrder(Human*, const Order&);
-	bool processMovingOrder(Human*, PossibleOrders, Direction);
-	bool verifyDestination(const Position&) const;
-	bool isOccupied(Coord<int>) const;
+    bool processOrder(Human* io_Human, const Order& i_Order);
+    bool processMovingOrder(Human* i_Human,
+                            PossibleOrders i_Action,
+                            Direction i_Dir);
+    bool verifyDestination(const Position& i_Dest) const;
+    bool isOccupied(Coord<int> i_Coord) const;
 
 	// UPDATE ANIMATIONS
 	void updateMovements();
 
 	// END
 	void endProcesses();
-
-	// OTHER
-	void printError(const char* msg);
 };

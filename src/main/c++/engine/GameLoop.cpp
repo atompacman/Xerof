@@ -1,73 +1,68 @@
 #include "GameLoop.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-GameLoop::GameLoop(Display* display, Mouse* mouse, Keyboard* keyboard) :
-	display(display),
-	mouse(mouse),
-	keyboard(keyboard)
+GameLoop::GameLoop(Display* i_Disp, Mouse* i_Mouse, Keyboard* i_Key) :
+m_Disp(i_Disp),
+m_Mouse(i_Mouse),
+m_Keyboard(i_Key)
 {
-	mouse->scrollX = maxBufferDimensions().x / 2;
-	mouse->scrollY = maxBufferDimensions().y / 2;
-	mouse->maxScrollX = maxBufferDimensions().x;
-	mouse->maxScrollY = maxBufferDimensions().y;
+	i_Mouse->scrollX = maxBufferDimensions().x / 2;
+	i_Mouse->scrollY = maxBufferDimensions().y / 2;
+	i_Mouse->maxScrollX = maxBufferDimensions().x;
+	i_Mouse->maxScrollY = maxBufferDimensions().y;
 
-	queue = al_create_event_queue();
-	if (queue == nullptr){
+	m_Queue = al_create_event_queue();
+	if (m_Queue == nullptr){
 		FatalErrorDialog("Creation of event queue failed.");
 	}
 
-	screenRefresher = al_create_timer(1.0 / TARGET_FPS);
-	if (screenRefresher == nullptr){
+	m_ScreenRefresher = al_create_timer(1.0 / TARGET_FPS);
+	if (m_ScreenRefresher == nullptr){
 		FatalErrorDialog("Creation of timer for screen refreshing failed.");
 	}
 
-	al_register_event_source(queue, al_get_keyboard_event_source());
-	al_register_event_source(queue, al_get_mouse_event_source());
-	al_register_event_source(queue, al_get_display_event_source(display->m_Window));
-	al_register_event_source(queue, al_get_timer_event_source(screenRefresher));
+	al_register_event_source(m_Queue, al_get_keyboard_event_source());
+	al_register_event_source(m_Queue, al_get_mouse_event_source());
+	al_register_event_source(m_Queue, al_get_display_event_source(i_Disp->m_Window));
+	al_register_event_source(m_Queue, al_get_timer_event_source(m_ScreenRefresher));
 
 	initializeCivsAndAIs();
 
-	nbMoveProcess = 0;
-	moveProcesses = new MoveProcess*[NB_CIV * MAX_POPULATION];
+	m_NumMoveProcs = 0;
+	m_MoveProcs = new MoveProcess*[NB_CIV * MAX_POPULATION];
 }
 
 GameLoop::~GameLoop()
 {
-	al_destroy_timer(screenRefresher);
-	al_destroy_event_queue(queue);
+	al_destroy_timer(m_ScreenRefresher);
+	al_destroy_event_queue(m_Queue);
 }
-
-
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//               INITIALIZE CIVS               //
-//- - - - - - - - - - - - - - - - - - - - - - -//
 
 void GameLoop::initializeCivsAndAIs()
 {
-	civilizations = new CivController*[NB_CIV];
-	ais = new AI*[NB_CIV];
+	m_CivCtrlrs = new CivController*[NB_CIV];
+	m_AIs = new AI*[NB_CIV];
 
 	for (int i = 0; i < NB_CIV; ++i) {
 		CivController* civ = new CivController();
 		civ->placeFirstHuman();
-		civilizations[i] = civ;
-		ais[i] = new AtomAI(civ);
+		m_CivCtrlrs[i] = civ;
+		m_AIs[i] = new AtomAI(civ);
 	}
-	display->setCivs(civilizations);
+	m_Disp->setCivs(m_CivCtrlrs);
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                    START                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    START                                   //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 bool GameLoop::start()
 {
-	al_start_timer(screenRefresher);
+	al_start_timer(m_ScreenRefresher);
 
 	int currentFrame = 0;
 	int frameForGameUpdate = TARGET_FPS * SECONDS_BETWEEN_AI_PROCESS;
@@ -79,7 +74,7 @@ bool GameLoop::start()
 
 	while (!exitGame) {
 		ALLEGRO_EVENT ev;
-		al_wait_for_event(queue, &ev);
+		al_wait_for_event(m_Queue, &ev);
 
 		if (currentFrame == frameForGameUpdate) {
 			endProcesses();
@@ -103,7 +98,7 @@ bool GameLoop::start()
 		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN :
 		case ALLEGRO_EVENT_MOUSE_BUTTON_UP :
 		case ALLEGRO_EVENT_MOUSE_AXES :
-			mouse->handleMouseEvent(ev);
+			m_Mouse->handleMouseEvent(ev);
 			break;
 
 		case ALLEGRO_EVENT_TIMER:
@@ -111,17 +106,17 @@ bool GameLoop::start()
 			break;
 
 		case ALLEGRO_EVENT_DISPLAY_RESIZE:
-			al_acknowledge_resize(display->m_Window);
+			al_acknowledge_resize(m_Disp->m_Window);
 			refresh = true;
 			break;
 		}
 
-		if (refresh && al_is_event_queue_empty(queue)) {
+		if (refresh && al_is_event_queue_empty(m_Queue)) {
 			updateMovements();
 
 			double time = al_get_time();
 
-			display->draw();
+			m_Disp->draw();
 			al_flip_display();
 
 			fps_accum++;
@@ -130,7 +125,7 @@ bool GameLoop::start()
 				fps_accum = 0;
 				fps_time = time;
 			}
-			display->setFPS(fps);
+			m_Disp->setFPS(fps);
 
 			refresh = false;
 
@@ -141,9 +136,9 @@ bool GameLoop::start()
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   UPDATE                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    UPDATE                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 bool GameLoop::updateGame()
 {
@@ -156,8 +151,8 @@ bool GameLoop::updateGame()
 bool GameLoop::processAI()
 {
 	for (int i = 0; i < NB_CIV; ++i) {
-		CivController* civ = civilizations[i];
-		AI* ai = ais[i];
+		CivController* civ = m_CivCtrlrs[i];
+		AI* ai = m_AIs[i];
 		int civPop = civ->getPopulation();
 
 		for (int j = 0; j < civPop; ++j) {
@@ -174,15 +169,15 @@ bool GameLoop::processAI()
 	return EXIT_SUCCESS;
 }
 
-bool GameLoop::processOrder(Human* human, const Order& order)
+bool GameLoop::processOrder(Human* io_Human, const Order& i_Order)
 {
-	PossibleOrders action = order.getAction();
+	PossibleOrders action = i_Order.getAction();
 
 	switch (action) {
 	case WALK:
-		Direction direction = Direction(order.getParams()[0]);
+		Direction direction = Direction(i_Order.getParams()[0]);
 		assert(direction != MIDDLE);
-		if (processMovingOrder(human, action, direction)) {
+		if (processMovingOrder(io_Human, action, direction)) {
 			return EXIT_FAILURE;
 		}
 		break;
@@ -191,20 +186,21 @@ bool GameLoop::processOrder(Human* human, const Order& order)
 	return EXIT_SUCCESS;
 }
 
-bool GameLoop::processMovingOrder(Human* human,	
-	PossibleOrders action, Direction direction)
+bool GameLoop::processMovingOrder(Human* i_Human,	
+	                              PossibleOrders i_Action, 
+                                  Direction i_Dir)
 {
-	float tilePerTurn = human->getMoveSpeed();
-	switch (action) {
+	float tilePerTurn = i_Human->getMoveSpeed();
+	switch (i_Action) {
 	case WALK: tilePerTurn; break;
 	}
 
-	Coord<float> after = human->m_Pos.m_Coord.incrementedToDirection(direction);
-	Position dest = Position(after, direction);
+	Coord<float> after = i_Human->m_Pos.m_Coord.incrementedToDirection(i_Dir);
+	Position dest = Position(after, i_Dir);
 
 	if (verifyDestination(dest)) {
-		moveProcesses[nbMoveProcess] = new MoveProcess(human, dest);
-		++nbMoveProcess;
+		m_MoveProcs[m_NumMoveProcs] = new MoveProcess(i_Human, dest);
+		++m_NumMoveProcs;
 	}
 
 	return EXIT_SUCCESS;
@@ -229,7 +225,7 @@ bool GameLoop::verifyDestination(const Position& destination) const
 bool GameLoop::isOccupied(Coord<int> coord) const
 {
 	for (int i = 0; i < NB_CIV; ++i) {
-		CivController* civ = civilizations[i];
+		CivController* civ = m_CivCtrlrs[i];
 		for (unsigned int j = 0; j < civ->getPopulation(); ++j) {
 			Human* human = civ->getHuman(j);
 			if (human->m_Pos == Position(UP, coord)) {
@@ -247,8 +243,8 @@ bool GameLoop::isOccupied(Coord<int> coord) const
 
 void GameLoop::updateMovements()
 {
-	for (int i = 0; i < nbMoveProcess; ++i) {
-		moveProcesses[i]->nextIteration();
+	for (int i = 0; i < m_NumMoveProcs; ++i) {
+		m_MoveProcs[i]->nextIteration();
 	}
 }
 
@@ -259,8 +255,8 @@ void GameLoop::updateMovements()
 
 void GameLoop::endProcesses()
 {
-	for (int i = 0; i < nbMoveProcess; ++i) {
-		delete moveProcesses[i];
+	for (int i = 0; i < m_NumMoveProcs; ++i) {
+		delete m_MoveProcs[i];
 	}
-	nbMoveProcess = 0;
+	m_NumMoveProcs = 0;
 }
