@@ -6,9 +6,9 @@
 INITIALIZE_EASYLOGGINGPP
 
 // Peripherals
-Display* display;
-Mouse* mouse;
-Keyboard* keyboard;
+Display*  s_Display;
+Mouse*    s_Mouse;
+Keyboard* s_Keyboard;
 
 // Game world
 World* World::s_World;
@@ -31,23 +31,23 @@ int main(int argc, char** argv)
 	initGameEngine();
 
 	// Initialize peripherals
-	mouse = new Mouse();
-	display = new Display(mouse);
-	keyboard = new Keyboard();
+	s_Mouse = new Mouse();
+	s_Display = new Display(s_Mouse);
+	s_Keyboard = new Keyboard();
 
 	// Load assets
-	display->m_Assets = loadAssets();
+	s_Display->m_Assets = loadAssets();
 
 	// Start the game loop
-	GameLoop(display, mouse, keyboard).start();
+	GameLoop(s_Display, s_Mouse, s_Keyboard).start();
 
 	// Free assets memory
-	destroyAssets(display->m_Assets);
+	destroyAssets(s_Display->m_Assets);
 
 	// Delete peripherals
-	delete display;
-	delete mouse;
-	delete keyboard;
+	delete s_Display;
+	delete s_Mouse;
+	delete s_Keyboard;
 
 	return EXIT_SUCCESS;
 }
