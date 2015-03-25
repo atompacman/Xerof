@@ -1,39 +1,39 @@
 #include "Human.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Human::Human(Position pos): position(pos) 
-{
-	ready = true;
-	moveSpeed = 1;
-	rangeOfSight = 2;
-}
+Human::Human(Position i_Pos): 
+m_Pos(i_Pos),
+m_IsReady(true),
+m_MoveSpeed(1),
+m_ROSight(2)
+{}
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   SETTERS                   //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   SETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 void Human::setReady()
 {
-	ready = true;
+	m_IsReady = true;
 }
 
 void Human::setBusy()
 {
-	ready = false;
+	m_IsReady = false;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   GETTERS                   //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 const Tile*** const Human::getSurroundingTiles() const
 {
-	int zoneSideLength = rangeOfSight * 2 + 1;
+	int zoneSideLength = m_ROSight * 2 + 1;
 	const Tile*** surroundings = new const Tile**[zoneSideLength];
 	Map* map = World::getInstance()->map;
 
@@ -41,14 +41,14 @@ const Tile*** const Human::getSurroundingTiles() const
 	Coord<int> delta;
 
 	for (delta.x = 0; delta.x < zoneSideLength; ++delta.x) {
-		tileCoord.x = (int)position.coord.x + delta.x - rangeOfSight;
+		tileCoord.x = (int)m_Pos.coord.x + delta.x - m_ROSight;
 		if (tileCoord.x <= 0 && tileCoord.x >= MAP_DIMENSIONS.x) {
 			continue;
 		}
 		surroundings[delta.x] = new const Tile*[zoneSideLength];
 
 		for (delta.y = 0; delta.y < zoneSideLength; ++delta.y) {
-			tileCoord.y = (int)position.coord.y + delta.y - rangeOfSight;
+			tileCoord.y = (int)m_Pos.coord.y + delta.y - m_ROSight;
 			if (tileCoord.y <= 0 && tileCoord.y >= MAP_DIMENSIONS.y) {
 				continue;
 			}
@@ -61,7 +61,7 @@ const Tile*** const Human::getSurroundingTiles() const
 const Tile* const Human::getTileInFront() const
 {
 	Coord<float> tileCoordF = 
-		position.coord.incrementedToDirection(position.facingDirection);
+		m_Pos.coord.incrementedToDirection(m_Pos.facingDirection);
 	Coord<int> tileCoord = Coord<int>(tileCoordF.x, tileCoordF.y);
 	return World::getInstance()->map->getTile(tileCoord);
 }
@@ -73,20 +73,20 @@ EnvType Human::getEnvironnementInFront() const
 
 bool Human::isReady() const
 {
-	return ready;
+	return m_IsReady;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                    STATS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     STATS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 float Human::getMoveSpeed() const
 {
-	return moveSpeed;
+	return m_MoveSpeed;
 }
 
 unsigned int Human::getRangeOfSight() const
 {
-	return rangeOfSight;
+	return m_ROSight;
 }

@@ -16,9 +16,9 @@ AI(i_Civ)
 Order AtomAI::giveOrder(Human& i_Human)
 {
     while (i_Human.getEnvironnementInFront() == OCEAN) {
-        i_Human.position.facingDirection = Direction((nextRand(8)) % 8);
+        i_Human.m_Pos.facingDirection = Direction((nextRand(8)) % 8);
 	}
-    return Order(WALK, i_Human.position.facingDirection);
+    return Order(WALK, i_Human.m_Pos.facingDirection);
 }
 
 

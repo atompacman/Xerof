@@ -6,9 +6,9 @@
 
 MoveProcess::MoveProcess(Human* human, const Position& destination)
 {
-	human->position.facingDirection = destination.facingDirection;
-	delta.x = (destination.coord.x - human->position.coord.x) / TARGET_FPS;
-	delta.y = (destination.coord.y - human->position.coord.y) / TARGET_FPS;
+	human->m_Pos.facingDirection = destination.facingDirection;
+	delta.x = (destination.coord.x - human->m_Pos.coord.x) / TARGET_FPS;
+	delta.y = (destination.coord.y - human->m_Pos.coord.y) / TARGET_FPS;
 	this->human = human;
 }
 
@@ -19,17 +19,17 @@ MoveProcess::MoveProcess(Human* human, const Position& destination)
 
 void MoveProcess::nextIteration()
 {
-	human->position.coord += delta;
+	human->m_Pos.coord += delta;
 
-	float x = human->position.coord.x;
-	float y = human->position.coord.y;
+	float x = human->m_Pos.coord.x;
+	float y = human->m_Pos.coord.y;
 
 	float error = 1.0 / (TARGET_FPS * 2.0);
 
 	if (abs(x - rint(x)) < error) {
-		human->position.coord.x = rint(x);
+		human->m_Pos.coord.x = rint(x);
 	}
 	if (abs(y - rint(y)) < error) {
-		human->position.coord.y = rint(y);
+		human->m_Pos.coord.y = rint(y);
 	}
 }

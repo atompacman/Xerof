@@ -4,10 +4,10 @@
 class Human: public MapElement
 {
 public:
-	Position position;
+	Position m_Pos;
 
-	// CONSTRUCTOR/DESCTRUCTOR
-	Human(Position);
+	// CONSTRUCTOR/DESTRUCTOR
+    Human(Position i_Pos);
 
 	// SETTERS
 	void setReady();
@@ -27,7 +27,7 @@ public:
 	virtual Asset assetFile() const { return APARATUS3; }
 
 private:
-	bool ready;
-	float moveSpeed;
-	unsigned int rangeOfSight;
+	bool  m_IsReady;
+	float m_MoveSpeed;
+	UINT  m_ROSight;
 };

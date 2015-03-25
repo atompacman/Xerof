@@ -199,7 +199,7 @@ bool GameLoop::processMovingOrder(Human* human,
 	case WALK: tilePerTurn; break;
 	}
 
-	Coord<float> after = human->position.coord.incrementedToDirection(direction);
+	Coord<float> after = human->m_Pos.coord.incrementedToDirection(direction);
 	Position dest = Position(after, direction);
 
 	if (verifyDestination(dest)) {
@@ -232,7 +232,7 @@ bool GameLoop::isOccupied(Coord<int> coord) const
 		CivController* civ = civilizations[i];
 		for (unsigned int j = 0; j < civ->getPopulation(); ++j) {
 			Human* human = civ->getHuman(j);
-			if (human->position == Position(UP, coord)) {
+			if (human->m_Pos == Position(UP, coord)) {
 				return true;
 			}
 		}
