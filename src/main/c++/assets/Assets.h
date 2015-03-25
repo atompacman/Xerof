@@ -20,11 +20,11 @@ enum Asset
 	APARATUS3
 };
 
-static ALLEGRO_BITMAP* loadBitmap(const char* filePath)
+static ALLEGRO_BITMAP* loadBitmap(const char* i_FilePath)
 {
-	ALLEGRO_BITMAP* bitmap = al_load_bitmap(filePath);
+	ALLEGRO_BITMAP* bitmap = al_load_bitmap(i_FilePath);
 	if (bitmap == nullptr) {
-		std::string msg = filePath;
+		std::string msg = i_FilePath;
 		msg = "Failed to load asset at \"" + msg + "\".";
 		FatalErrorDialog(msg.c_str());
 	}
@@ -48,10 +48,10 @@ static ALLEGRO_BITMAP** loadAssets()
 	return assets;
 }
 
-static void destroyAssets(ALLEGRO_BITMAP** assets)
+static void destroyAssets(ALLEGRO_BITMAP** io_Assets)
 {
 	for (int i = 0; i < NB_ASSETS; ++i) {
-		al_destroy_bitmap(assets[i]);
+		al_destroy_bitmap(io_Assets[i]);
 	}
-	delete assets;
+	delete io_Assets;
 }
