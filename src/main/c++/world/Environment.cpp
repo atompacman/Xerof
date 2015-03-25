@@ -1,48 +1,47 @@
 #include "Environment.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Environment::Environment(EnvType type)
-{
-	this->type = type;
-	this->orientation = Direction(nextRand(3));
-}
+Environment::Environment(EnvType i_Type) :
+m_Type(i_Type),
+m_Orien(Direction(nextRand(3)))
+{}
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                  GETTERS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 EnvType Environment::getType() const
 {
-	return type;
+	return m_Type;
 }
 
 Direction Environment::getOrientation() const
 {
-	return orientation;
+	return m_Orien;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   STATUS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    STATUS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 bool Environment::isSolidLand() const
 {
-	return type != LAKE && type != OCEAN;
+	return m_Type != LAKE && m_Type != OCEAN;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                    ASSET                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     ASSET                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 Asset Environment::assetFile() const
 {
-	switch (type) {
+	switch (m_Type) {
 	case GRASSLAND: return GRASSLAND_TILE_FILE;
 	case OCEAN:		return OCEAN_TILE_FILE;
 	case PLAIN:		return PLAINS_TILE_FILE;
@@ -53,13 +52,13 @@ Asset Environment::assetFile() const
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                    OTHER                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    OTHER                                   //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 const char* Environment::toString() const
 {
-	switch (type) {
+	switch (m_Type) {
 	case GRASSLAND: return "GRASSLAND";
 	case OCEAN:		return "OCEAN";
 	case PLAIN:		return "PLAIN";

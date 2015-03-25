@@ -8,11 +8,11 @@ enum EnvType
 	GRASSLAND, LAKE, OCEAN, PLAIN, ROCKY, TUNDRA
 };
 
-class Environment: public MapElement
+class Environment : public MapElement
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	Environment(EnvType type);
+	// CONSTRUCTOR/DESTRUCTOR
+    Environment(EnvType i_Type);
 	
 	// GETTERS
 	EnvType getType() const;
@@ -28,6 +28,6 @@ public:
 	const char* toString() const;
 
 private:
-	EnvType type;
-	Direction orientation;
+	EnvType   m_Type;
+	Direction m_Orien;
 };
