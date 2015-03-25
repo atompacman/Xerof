@@ -1,50 +1,51 @@
 #include "CivController.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-CivController::CivController(): Civilization() {}
+CivController::CivController(): 
+Civilization() 
+{}
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//              DAWN OF CIVILIZATION           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                            DAWN OF CIVILIZATION                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
 
 void CivController::placeFirstHuman()
 {
-	Map* map = World::getInstance()->map;
-
 	Coord<int> startLoc;
 
 	do {
 		startLoc = randTile();
-	} while (!map->getTile(startLoc)->isPassable());
+    } while (!World::getInstance()->map->getTile(startLoc)->isPassable());
 
 	addHuman(startLoc);
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                     ADD                     //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     ADD                                    //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void CivController::addHuman(Coord<int> coord)
+void CivController::addHuman(Coord<int> i_Pos)
 {
 	assert(population < MAX_POPULATION);
-	assert(World::getInstance()->map->getTile(coord)->isPassable());
+	assert(World::getInstance()->map->getTile(i_Pos)->isPassable());
 
-	people[population] = new Human(Position(UP, coord));
+	people[population] = new Human(Position(UP, i_Pos));
 	++population;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   GETTERS                   //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Human* CivController::getHumanPtr(unsigned int id)
+Human* CivController::getHuman(UINT i_ID)
 {
-	assert(id < population);
-	return people[id];
+    assert(i_ID < population);
+    return people[i_ID];
 }

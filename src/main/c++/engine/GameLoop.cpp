@@ -161,7 +161,7 @@ bool GameLoop::processAI()
 		int civPop = civ->getPopulation();
 
 		for (int j = 0; j < civPop; ++j) {
-			Human* human = civ->getHumanPtr(j);
+			Human* human = civ->getHuman(j);
 			if (!human->isReady()) {
 				continue;
 			}
@@ -231,7 +231,7 @@ bool GameLoop::isOccupied(Coord<int> coord) const
 	for (int i = 0; i < NB_CIV; ++i) {
 		CivController* civ = civilizations[i];
 		for (unsigned int j = 0; j < civ->getPopulation(); ++j) {
-			Human* human = civ->getHumanPtr(j);
+			Human* human = civ->getHuman(j);
 			if (human->position == Position(UP, coord)) {
 				return true;
 			}

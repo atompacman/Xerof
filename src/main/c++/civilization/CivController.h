@@ -4,15 +4,15 @@
 class CivController: public Civilization
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
+	// CONSTRUCTOR/DESTRUCTOR
 	CivController();
 
 	// DAWN OF CIVILIZATION
 	void placeFirstHuman();
 
 	// ADD
-	void addHuman(Coord<int>);
+	void addHuman(Coord<int> i_Pos);
 
 	// GETTERS
-	Human* getHumanPtr(unsigned int id);
+	Human* getHuman(UINT i_ID);
 };
