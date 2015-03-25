@@ -26,7 +26,7 @@ GameLoop::GameLoop(Display* display, Mouse* mouse, Keyboard* keyboard) :
 
 	al_register_event_source(queue, al_get_keyboard_event_source());
 	al_register_event_source(queue, al_get_mouse_event_source());
-	al_register_event_source(queue, al_get_display_event_source(display->window));
+	al_register_event_source(queue, al_get_display_event_source(display->m_Window));
 	al_register_event_source(queue, al_get_timer_event_source(screenRefresher));
 
 	initializeCivsAndAIs();
@@ -111,7 +111,7 @@ bool GameLoop::start()
 			break;
 
 		case ALLEGRO_EVENT_DISPLAY_RESIZE:
-			al_acknowledge_resize(display->window);
+			al_acknowledge_resize(display->m_Window);
 			refresh = true;
 			break;
 		}

@@ -4,8 +4,8 @@
 //                          CONSTRUCTOR/DESCTRUCTOR                           //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Display::Display(Mouse* a_Mouse) :
-m_Mouse(a_Mouse)
+Display::Display(Mouse* i_Mouse) :
+m_Mouse(i_Mouse)
 {
 	if (!createWindow()){
 		FatalErrorDialog("Display creation failed.");
@@ -42,18 +42,18 @@ bool Display::createWindow()
 		displayHeight = RESOLUATION_HEIGHT;
 	}
 
-	window = al_create_display(displayWidth, displayHeight);
+	m_Window = al_create_display(displayWidth, displayHeight);
 
-	al_set_window_title(window, WINDOW_TITLE);
+	al_set_window_title(m_Window, WINDOW_TITLE);
 
-	return window != nullptr;
+	return m_Window != nullptr;
 }
 
 void Display::loadGameIcon()
 {
 	ALLEGRO_BITMAP* icon = al_load_bitmap("assets/icon.tga");
 	if (icon != nullptr) {
-		al_set_display_icon(window, icon);
+		al_set_display_icon(m_Window, icon);
 	}
 	else {
 		LOG(WARNING) << "Could not load the game icon";
@@ -70,7 +70,7 @@ void Display::loadGameFont()
 
 Display::~Display()
 {
-	al_destroy_display(window);
+	al_destroy_display(m_Window);
 }
 
 
@@ -94,8 +94,8 @@ void Display::draw() const
 	float fixedZoomLvl = m_Mouse->zoom * RESOLU_FACTOR[resolutionLvl];
 	al_scale_transform(&transform, fixedZoomLvl, fixedZoomLvl);
 
-	float actualWidth = al_get_display_width(window);
-	float actualHeight = al_get_display_height(window);
+	float actualWidth = al_get_display_width(m_Window);
+	float actualHeight = al_get_display_height(m_Window);
 	al_translate_transform(&transform, actualWidth * 0.5, actualHeight * 0.5);
 	
 	al_use_transform(&transform);
@@ -143,7 +143,7 @@ void Display::draw() const
 	}
 
 	for (int i = 0; i < NB_CIV; ++i) {
-		Civilization* civ = civilizations[i];
+		Civilization* civ = m_Civs[i];
 		int civPop = civ->getPopulation();
 		for (int j = 0; j < civPop; ++j) {
 			Human human = civ->getHuman(j);
@@ -202,15 +202,15 @@ int Display::resolutionLevel() const
 	else						{ return 3; }
 }
 
-void Display::actualFieldOfView(float actualWidth, 
-                                float actualHeight, 
-                                int* values) const
+void Display::actualFieldOfView(float i_ActualWidth, 
+                                float i_ActualHeight, 
+                                int*  i_Values) const
 {
 	float zoom = m_Mouse->zoom;
 	float rotation = m_Mouse->rotate;
 	float tilePerUnit = 1 / (TILE_SIZE[0] * zoom);
-	float halfNbTilesX = actualWidth * tilePerUnit * 0.5;
-	float halfNbTilesY = actualHeight * tilePerUnit * 0.5;
+	float halfNbTilesX = i_ActualWidth * tilePerUnit * 0.5;
+	float halfNbTilesY = i_ActualHeight * tilePerUnit * 0.5;
 
 	float halfGoodNbTilesX = abs(cos(rotation)) * halfNbTilesX
 		+ abs(sin(rotation)) * halfNbTilesY;
@@ -225,10 +225,10 @@ void Display::actualFieldOfView(float actualWidth,
 	float topBound = (int)(currentYTile - halfGoodNbTilesY) - 1;
 	float bottomBound = (int)(currentYTile + halfGoodNbTilesY) + 1;
 
-	values[0] = leftBound < 0 ? 0 : leftBound;
-	values[1] = rightBound > MAP_DIMENSIONS.x ? MAP_DIMENSIONS.x : rightBound;
-	values[2] = topBound < 0 ? 0 : topBound;
-	values[3] = bottomBound > MAP_DIMENSIONS.y ? MAP_DIMENSIONS.y : bottomBound;
+	i_Values[0] = leftBound < 0 ? 0 : leftBound;
+	i_Values[1] = rightBound > MAP_DIMENSIONS.x ? MAP_DIMENSIONS.x : rightBound;
+	i_Values[2] = topBound < 0 ? 0 : topBound;
+	i_Values[3] = bottomBound > MAP_DIMENSIONS.y ? MAP_DIMENSIONS.y : bottomBound;
 }
 
 
@@ -236,14 +236,14 @@ void Display::actualFieldOfView(float actualWidth,
 //                                  SETTERS                                   //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Display::setCivs(CivController** civs)
+void Display::setCivs(CivController** i_Civs)
 {
-	civilizations = civs;
+	m_Civs = i_Civs;
 }
 
-void Display::setFPS(int fps)
+void Display::setFPS(int i_FPS)
 {
 	char buff[100];
-	sprintf_s(buff, "%s (FPS: %d)", WINDOW_TITLE, fps);
-	al_set_window_title(window, buff);
+	sprintf_s(buff, "%s (FPS: %d)", WINDOW_TITLE, i_FPS);
+	al_set_window_title(m_Window, buff);
 }
