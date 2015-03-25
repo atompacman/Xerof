@@ -1,10 +1,10 @@
 #include "FatalErrorDialog.h"
 
-FatalErrorDialog::FatalErrorDialog(const char* msg)
+FatalErrorDialog::FatalErrorDialog(const char* i_Msg)
 {
 	al_show_native_message_box(al_get_current_display(),
-		"Fatal error", msg, "The game will now exit", 
+		"Fatal error", i_Msg, "The game will now exit", 
 		NULL, ALLEGRO_MESSAGEBOX_ERROR);
 
-	LOG(FATAL) << msg;
+	LOG(FATAL) << i_Msg;
 }

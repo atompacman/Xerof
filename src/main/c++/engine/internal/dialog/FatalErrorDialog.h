@@ -6,6 +6,6 @@
 class FatalErrorDialog
 {
 public:
-	FatalErrorDialog(const char* description);
+	FatalErrorDialog(const char* i_Msg);
 };
 
