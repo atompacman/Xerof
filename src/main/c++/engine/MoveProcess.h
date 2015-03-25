@@ -4,13 +4,13 @@
 class MoveProcess
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	MoveProcess(Human*, const Position&);
+	// CONSTRUCTOR/DESTRUCTOR
+    MoveProcess(Human* i_Human, const Position& i_Dest);
 
 	// NEXT ITERATION
 	void nextIteration();
 
 private:
-	Human* human;
-	Coord<float> delta;
+	Human*       m_Human;
+	Coord<float> m_Delta;
 };
