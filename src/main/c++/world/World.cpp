@@ -1,11 +1,11 @@
 #include "World.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 World::World()
 {
 	LOG(INFO) << "World generation -:- Generating world";
-	map = new Map();
+	m_Map = new Map();
 }

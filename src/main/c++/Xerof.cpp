@@ -11,7 +11,7 @@ Mouse* mouse;
 Keyboard* keyboard;
 
 // Game world
-World* World::world;
+World* World::s_World;
 
 void initLoggingLibrary();
 void initGameEngine();

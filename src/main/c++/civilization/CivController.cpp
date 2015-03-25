@@ -19,7 +19,7 @@ void CivController::placeFirstHuman()
 	Coord<int> startLoc;
 	do {
 		startLoc = randTile();
-    } while (!World::getInstance()->map->getTile(startLoc)->isPassable());
+    } while (!World::getInstance()->m_Map->getTile(startLoc)->isPassable());
 
 	addHuman(startLoc);
 }
@@ -32,7 +32,7 @@ void CivController::placeFirstHuman()
 void CivController::addHuman(Coord<int> i_Pos)
 {
 	assert(m_Pop < MAX_POPULATION);
-	assert(World::getInstance()->map->getTile(i_Pos)->isPassable());
+	assert(World::getInstance()->m_Map->getTile(i_Pos)->isPassable());
 
 	m_People[m_Pop] = new Human(Position(UP, i_Pos));
 	++m_Pop;

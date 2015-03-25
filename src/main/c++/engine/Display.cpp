@@ -117,7 +117,7 @@ void Display::draw() const
 		= tileSize + 2 * gradientSize * ALPHA_OVERLAPPING[resolutionLvl];
 
 	const World* world = World::getInstance();
-	Map* map = world->map;
+	Map* map = world->m_Map;
 
 	al_hold_bitmap_drawing(true);
 	Coord<int> tileCoord;

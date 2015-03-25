@@ -5,18 +5,20 @@
 class World
 {
 public:
-	Map* map;
+	Map* m_Map;
 
 	// GET INSTANCE
 	const static World* getInstance() 
 	{
-		if (world == nullptr) { world = new World(); }
-		return world;
+		if (s_World == NULL) { 
+            s_World = new World(); 
+        }
+		return s_World;
 	}
 
 private:
-	static World* world;
+	static World* s_World;
 
-	// CONSTRUCTOR/DESCTRUCTOR
+	// CONSTRUCTOR/DESTRUCTOR
 	World();
 };

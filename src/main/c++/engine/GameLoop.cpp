@@ -208,7 +208,7 @@ bool GameLoop::processMovingOrder(Human* i_Human,
 
 bool GameLoop::verifyDestination(const Position& i_Dest) const
 {
-	Map* map = World::getInstance()->map;
+	Map* map = World::getInstance()->m_Map;
 	Coord<int> coord = Coord<int>(i_Dest.m_Coord.x, i_Dest.m_Coord.y);
 	Tile* destTile = map->getTile(coord);
 	if (!destTile->isPassable()) {
