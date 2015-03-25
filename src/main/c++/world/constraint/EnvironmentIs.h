@@ -2,18 +2,20 @@
 #include "..\Map2.h"
 #include "Constraint.h"
 
-class EnvironmentIs: public Constraint
+class EnvironmentIs : public Constraint
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	EnvironmentIs(EnvType type): type(type) {}
+	// CONSTRUCTOR/DESTRUCTOR
+    EnvironmentIs(EnvType i_Type) : 
+        m_Type(i_Type) 
+    {}
 
 	// WEIGHT
-	float getWeightFor(Coord<int> coord) const
+	float getWeightFor(Coord<int> m_Coord) const
 	{
-		return map->getTile(coord)->getEnvironment()->getType() == type;
+		return s_Map->getTile(m_Coord)->getEnvironment()->getType() == m_Type;
 	}
 
 private:
-	EnvType type;
+	EnvType m_Type;
 };

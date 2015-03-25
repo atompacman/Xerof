@@ -3,22 +3,24 @@
 #include "Constraint.h"
 #include <math.h>
 
-class DistanceFromCenter: public Constraint
+class DistanceFromCenter : public Constraint
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	DistanceFromCenter(float dispertion) : dispertion(dispertion) {}
+	// CONSTRUCTOR/DESTRUCTOR
+    DistanceFromCenter(float i_Dispoertion) : 
+        m_Dispertion(i_Dispoertion) 
+    {}
 
 	// WEIGHT
-	float getWeightFor(Coord<int> coord) const
+	float getWeightFor(Coord<int> i_Coord) const
 	{
 		float xMapRadius = MAP_DIMENSIONS.x / 2.0;
 		float yMapRadius = MAP_DIMENSIONS.y / 2.0;
-		float xWeight = 1 - abs((float)coord.x - xMapRadius) / xMapRadius;
-		float yWeight = 1 - abs((float)coord.y - yMapRadius) / yMapRadius;
-		return pow(xWeight * yWeight, dispertion);
+		float xWeight = 1 - abs((float)i_Coord.x - xMapRadius) / xMapRadius;
+		float yWeight = 1 - abs((float)i_Coord.y - yMapRadius) / yMapRadius;
+		return pow(xWeight * yWeight, m_Dispertion);
 	}
 
 private:
-	float dispertion;
+	float m_Dispertion;
 };

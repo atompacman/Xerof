@@ -6,18 +6,20 @@
 class Clustering : public Constraint
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
-	Clustering(EnvType type, float compactness) :
-		type(type), compactness(compactness) {}
+	// CONSTRUCTOR/DESTRUCTOR
+	Clustering(EnvType i_Type, float i_Compactness) :
+        m_Type(i_Type), 
+        m_Compactness(i_Compactness) 
+    {}
 
 	// WEIGHT
-	float getWeightFor(Coord<int> coord) const
+	float getWeightFor(Coord<int> i_Coord) const
 	{
-		int nbTiles = countSurroundingEnvironOfType(coord, type);
-		return pow(((float)nbTiles) / 8.0, compactness);
+		int nbTiles = countSurroundingEnvironOfType(i_Coord, m_Type);
+		return pow(((float)nbTiles) / 8.0, m_Compactness);
 	}
 
 private:
-	EnvType type;
-	float compactness;
+	EnvType m_Type;
+	float   m_Compactness;
 };

@@ -1,7 +1,7 @@
 #include "MapGenerator.h"
 #include <iomanip>
 
-Map2* Constraint::map;
+Map2* Constraint::s_Map;
 
 //= = = = = = = = = = = = = = = = = = = = = = =//
 //           CONSTRUCTOR/DESCTRUCTOR           //
