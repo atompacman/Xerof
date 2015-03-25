@@ -16,10 +16,10 @@ public:
           int            i_Param3 = -1);
 
 	// GETTERS
-    PossibleOrders getAction() const { return m_Action; };
-    int* getParams() const { return m_Params; };
+    PossibleOrders getAction() const;
+    int* getParams() const;
 
 private:
 	PossibleOrders m_Action;
-	int* m_Params;
+	int*           m_Params;
 };
