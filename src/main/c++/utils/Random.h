@@ -14,13 +14,13 @@ static void initWorldGeneratorSeed()
 	}
 }
 
-static int nextRand(int min, int max)
+static int nextRand(int i_Min, int i_Max)
 {
-	assert(min <= max && max > 0);
-	return rand() % (max - min + 1) + min;
+	assert(i_Min <= i_Max && i_Max > 0);
+	return rand() % (i_Max - i_Min + 1) + i_Min;
 }
 
-static int nextRand(int max)
+static int nextRand(int i_Max)
 {
-	return nextRand(0, max);
+	return nextRand(0, i_Max);
 }
