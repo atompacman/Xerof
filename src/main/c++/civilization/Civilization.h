@@ -5,16 +5,16 @@
 class Civilization
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
+	// CONSTRUCTOR/DESTRUCTOR
 	Civilization();
 
 	// GETTERS
-	Human& getHuman(unsigned int id) const;
+	Human& getHuman(UINT i_ID) const;
 	  
 	// STATUS
-	unsigned int getPopulation() const;
+	UINT getPopulation() const;
 
 protected:
-	unsigned int population;
-	Human** people;
+    UINT    m_Pop;
+	Human** m_People;
 };

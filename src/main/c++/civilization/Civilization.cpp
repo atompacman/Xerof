@@ -1,31 +1,31 @@
 #include "Civilization.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 Civilization::Civilization()
 {
-	people = new Human*[MAX_POPULATION];
+	m_People = new Human*[MAX_POPULATION];
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   GETTERS                   //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Human& Civilization::getHuman(unsigned int id) const
+Human& Civilization::getHuman(UINT i_ID) const
 {
-	assert(id < population);
-	return *people[id];
+    assert(i_ID < m_Pop);
+    return *m_People[i_ID];
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   STATUS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    STATUS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-unsigned int Civilization::getPopulation() const
+UINT Civilization::getPopulation() const
 {
-	return population;
+	return m_Pop;
 }
