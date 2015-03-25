@@ -1,76 +1,75 @@
 #include "Tile.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Tile::Tile()
-{
-	objects = new Object*[4];
-}
+Tile::Tile() :
+m_Objs(new Object*[4])
+{}
 
 Tile::~Tile()
 {
 	for (int i = 0; i < 4; ++i) {
-		delete objects[i];
+		delete m_Objs[i];
 	}
-	delete objects;
+	delete m_Objs;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                  SETTERS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   SETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Tile::setObject(Direction direction, Object* object)
+void Tile::setObject(Direction i_Dir, Object* i_Obj)
 {
-	assert(isDiagonalDirection(direction));
-	assert(!hasObject(direction));
-	objects[direction - UPPER_LEFT] = object;
+	assert(isDiagonalDirection(i_Dir));
+	assert(!hasObject(i_Dir));
+	m_Objs[i_Dir - UPPER_LEFT] = i_Obj;
 }
 
-void Tile::setEnvironment(EnvType type)
+void Tile::setEnvironment(EnvType i_Type)
 {
-	this->environment = new Environment(type);
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   REMOVE                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
-
-void Tile::removeObject(Direction direction)
-{
-	assert(isDiagonalDirection(direction));
-	delete objects[direction - UPPER_LEFT];
+	m_Env = new Environment(i_Type);
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   GETTERS                   //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    REMOVE                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Object* Tile::getObject(Direction direction) const
+void Tile::removeObject(Direction i_Dir)
 {
-	assert(hasObject(direction));
-	return objects[direction - UPPER_LEFT];
+	assert(isDiagonalDirection(i_Dir));
+	delete m_Objs[i_Dir - UPPER_LEFT];
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+Object* Tile::getObject(Direction i_Dir) const
+{
+	assert(hasObject(i_Dir));
+	return m_Objs[i_Dir - UPPER_LEFT];
 }
 
 Environment* Tile::getEnvironment() const
 {
 	assert(hasEnvironment());
-	return environment;
+	return m_Env;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                    HAS                     //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     HAS                                    //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool Tile::hasObject(Direction direction) const
+bool Tile::hasObject(Direction i_Dir) const
 {
-	assert(isDiagonalDirection(direction));
-	return objects[direction - UPPER_LEFT] != nullptr;
+	assert(isDiagonalDirection(i_Dir));
+	return m_Objs[i_Dir - UPPER_LEFT] != nullptr;
 }
 
 bool Tile::hasObject() const
@@ -81,15 +80,15 @@ bool Tile::hasObject() const
 
 bool Tile::hasEnvironment() const
 {
-	return environment != nullptr;
+	return m_Env != nullptr;
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   STATUS                    //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                    STATUS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 bool Tile::isPassable() const
 {
-	return environment->isSolidLand();
+	return m_Env->isSolidLand();
 }

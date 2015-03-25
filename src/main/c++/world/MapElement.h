@@ -6,7 +6,6 @@ enum MapElemType
 	ENVIRONNEMENT, OBJECT
 };
 
-
 class MapElement
 {
 public:

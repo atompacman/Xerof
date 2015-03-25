@@ -6,23 +6,23 @@
 class Tile
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
+	// CONSTRUCTOR/DESTRUCTOR
 	Tile();
 	~Tile();
 
 	// SETTERS
-	void setObject(Direction, Object*);
-	void setEnvironment(EnvType);
+    void setObject(Direction i_Dir, Object* i_Obj);
+    void setEnvironment(EnvType i_Type);
 
 	// REMOVE
-	void removeObject(Direction);
+    void removeObject(Direction i_Dir);
 
 	// GETTERS
-	Object* getObject(Direction) const;
+    Object* getObject(Direction i_Dir) const;
 	Environment* getEnvironment() const;
 
 	// HAS
-	bool hasObject(Direction) const;
+    bool hasObject(Direction i_Dir) const;
 	bool hasObject() const;
 	bool hasEnvironment() const;
 
@@ -30,6 +30,6 @@ public:
 	bool isPassable() const;
 
 private:
-	Object** objects;
-	Environment* environment;
+	Object**     m_Objs;
+	Environment* m_Env;
 };
