@@ -13,9 +13,7 @@ m_Tiles(new Tile*[area(MAP_DIMENSIONS)])
     //
 
     for (UINT i = 0; i < area(MAP_DIMENSIONS); ++i) {
-        Tile * tile = new Tile();
-        tile->setEnvironment(OCEAN);
-        m_Tiles[i] = tile;
+        m_Tiles[i] = new Tile();
         LOG_EVERY_N(n, DEBUG) << "World generation - Allocating tiles "
             << "to memory [" << std::setw(3) << ++progres * PGI << "%]";
     }
@@ -133,7 +131,7 @@ bool Map::suitableRockyLocation(Coord i_Coord)
 
 bool Map::isLand(Coord i_Coord) const
 {
-    return getTile(i_Coord)->getEnvironment()->isSolidLand();
+    return getTile(i_Coord)->getEnvironment().isSolidLand();
 }
 
 Map::~Map()
@@ -229,7 +227,7 @@ UINT Map::countSurroundingTilesOfType(Coord i_Coord, EnvType i_Type) const
 	for (int y = -1; y <= 1; ++y) {
 		for (int x = -1; x <= 1; ++x) {
 			const Tile* tile = getTile(Coord(i_Coord.x + x, i_Coord.y + y));
-			if (tile->getEnvironment()->getType() == i_Type) {
+			if (tile->getEnvironment().getType() == i_Type) {
 				++count;
 			}
 		}

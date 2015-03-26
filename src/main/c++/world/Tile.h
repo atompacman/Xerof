@@ -19,17 +19,16 @@ public:
 
 	// GETTERS
     Object* getObject(Direction i_Dir) const;
-	Environment* getEnvironment() const;
+	const Environment& getEnvironment() const;
 
 	// HAS
     bool hasObject(Direction i_Dir) const;
 	bool hasObject() const;
-	bool hasEnvironment() const;
 
 	// STATUS
 	bool isPassable() const;
 
 private:
-	Object**     m_Objs;
-	Environment* m_Env;
+	Object**    m_Objs;
+	Environment m_Env;
 };

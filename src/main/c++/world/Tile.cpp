@@ -4,16 +4,17 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Tile::Tile() :
-m_Objs(new Object*[4])
+Tile::Tile():
+m_Objs(new Object*[4]),
+m_Env(OCEAN)
 {}
 
 Tile::~Tile()
 {
-	for (int i = 0; i < 4; ++i) {
-		delete m_Objs[i];
-	}
-	delete m_Objs;
+    for (int i = 0; i < 4; ++i) {
+        delete[] m_Objs[i];
+    }
+	delete[] m_Objs;
 }
 
 
@@ -30,7 +31,7 @@ void Tile::setObject(Direction i_Dir, Object* i_Obj)
 
 void Tile::setEnvironment(EnvType i_Type)
 {
-	m_Env = new Environment(i_Type);
+    m_Env = Environment(i_Type);
 }
 
 
@@ -55,9 +56,8 @@ Object* Tile::getObject(Direction i_Dir) const
 	return m_Objs[i_Dir - UPPER_LEFT];
 }
 
-Environment* Tile::getEnvironment() const
+const Environment& Tile::getEnvironment() const
 {
-	assert(hasEnvironment());
 	return m_Env;
 }
 
@@ -78,11 +78,6 @@ bool Tile::hasObject() const
 		hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
 }
 
-bool Tile::hasEnvironment() const
-{
-	return m_Env != nullptr;
-}
-
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                    STATUS                                  //
@@ -90,5 +85,5 @@ bool Tile::hasEnvironment() const
 
 bool Tile::isPassable() const
 {
-	return m_Env->isSolidLand();
+	return m_Env.isSolidLand();
 }

@@ -33,7 +33,7 @@ void AtomAI::printSurroundingTiles(const Human& i_Human)
 
 	for (int y = 0; y < zoneLength; ++y) {
 		for (int x = 0; x < zoneLength; ++x) {
-			const char* name = tiles[x][y]->getEnvironment()->toString();
+			const char* name = tiles[x][y]->getEnvironment().toString();
             LOG(TRACE) << std::setw(10) << name << "  ";
 		}
 		LOG(TRACE) << '\n';

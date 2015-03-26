@@ -22,7 +22,7 @@ protected:
 			for (int x = -1; x <= 1; ++x) {
 				Coord currCoord = Coord(m_Coord.x + x, m_Coord.y + y);
 				const Tile* tile = s_Map->getTile(currCoord);
-				if (tile->getEnvironment()->getType() == m_Type) {
+				if (tile->getEnvironment().getType() == m_Type) {
 					++count;
 				}
 			}

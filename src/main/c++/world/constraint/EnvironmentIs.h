@@ -12,7 +12,7 @@ public:
 	// WEIGHT
 	float getWeightFor(Coord m_Coord) const
 	{
-		return s_Map->getTile(m_Coord)->getEnvironment()->getType() == m_Type;
+		return s_Map->getTile(m_Coord)->getEnvironment().getType() == m_Type;
 	}
 
 private:
