@@ -1,7 +1,6 @@
 #pragma once
-#include "Constraint.h"
-#include "..\..\Parameters.h"
 #include <math.h>
+#include "Constraint.h"
 
 class DistanceFromCenter: public Constraint
 {

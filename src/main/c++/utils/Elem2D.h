@@ -1,6 +1,6 @@
 #pragma once
-#include "Direction.h"
 #include <assert.h>
+#include "Direction.h"
 
 #define Coord       Elem2D<unsigned int>
 #define DCoord      Elem2D<double>

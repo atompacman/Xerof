@@ -1,6 +1,6 @@
 #pragma once
-#include "Map.h"
 #include <assert.h>
+#include "Map.h"
 
 class World
 {

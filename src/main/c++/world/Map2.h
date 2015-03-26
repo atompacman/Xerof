@@ -1,6 +1,6 @@
 #pragma once
-#include "Tile.h"
 #include <assert.h>
+#include "Tile.h"
 
 class Map2
 {

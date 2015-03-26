@@ -1,10 +1,9 @@
 #pragma once
-#include "Tile.h"
 #include <assert.h>
 #include <iomanip>
 #include <random>
 #include <stdlib.h>
-
+#include "Tile.h"
 
 ///////////////////////////////////////////////////////////
 //               MAP GENERATION PARAMETERS               //

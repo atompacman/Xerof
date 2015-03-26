@@ -1,7 +1,6 @@
 #pragma once
-#include "..\..\Parameters.h"
-#include "Constraint.h"
 #include <math.h>
+#include "Constraint.h"
 
 class Clustering : public Constraint
 {

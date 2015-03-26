@@ -1,5 +1,6 @@
 #pragma once
 #include "..\Map2.h"
+#include "..\..\Parameters.h"
 
 class Constraint
 {

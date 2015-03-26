@@ -1,7 +1,7 @@
 #pragma once
+#include "MapElement.h"
 #include "..\civilization\Position.h"
 #include "..\utils\Random.h"
-#include "MapElement.h"
 
 enum EnvType
 {

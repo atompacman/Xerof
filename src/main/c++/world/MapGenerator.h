@@ -1,10 +1,10 @@
 #pragma once
+#include <iomanip>
 #include "constraint\Clustering.h"
 #include "constraint\DistanceFromCenter.h"
 #include "constraint\EnvironmentIs.h"
 #include "Map2.h"
 #include "..\utils\Random.h"
-#include <iomanip>
 
 class MapGenerator: public Map2
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "Human.h"
 #include <assert.h>
+#include "Human.h"
 
 class Civilization
 {

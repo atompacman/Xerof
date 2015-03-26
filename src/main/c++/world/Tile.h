@@ -1,7 +1,7 @@
 #pragma once
+#include <assert.h>
 #include "Environment.h"
 #include "Object.h"
-#include <assert.h>
 
 class Tile
 {

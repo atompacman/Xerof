@@ -1,6 +1,6 @@
 #pragma once
-#include "..\Parameters.h"
 #include <math.h>
+#include "..\Parameters.h"
 
 class Mouse
 {

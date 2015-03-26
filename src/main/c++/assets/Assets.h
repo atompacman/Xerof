@@ -1,8 +1,8 @@
 #pragma once
+#include <string>
 #include "allegro5\bitmap.h"
 #include "allegro5\bitmap_io.h"
 #include "..\engine\internal\dialog\FatalErrorDialog.h"
-#include <string>
 
 const int NB_ASSETS = 9;
 

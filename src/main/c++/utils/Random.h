@@ -1,8 +1,8 @@
 #pragma once
-#include "..\Parameters.h"
 #include <assert.h>
 #include <ctime>
 #include <stdlib.h>
+#include "..\Parameters.h"
 
 static void initWorldGeneratorSeed()
 {

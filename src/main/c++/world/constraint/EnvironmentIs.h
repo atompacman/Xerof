@@ -1,5 +1,4 @@
 #pragma once
-#include "..\Map2.h"
 #include "Constraint.h"
 
 class EnvironmentIs: public Constraint

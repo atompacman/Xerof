@@ -1,7 +1,7 @@
-#include "engine\GameLoop.h"
-#include "easylogging++.h"
-#include <stdlib.h>
 #include <iomanip>
+#include <stdlib.h>
+#include "easylogging++.h"
+#include "engine\GameLoop.h"
 
 INITIALIZE_EASYLOGGINGPP
 
