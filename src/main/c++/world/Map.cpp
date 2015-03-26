@@ -7,22 +7,18 @@
 Map::Map() :
 m_Tiles(new Tile*[area(MAP_DIMENSIONS)])
 {
-	int tileNo = 0;
-	Coord coord = Coord();
+    // For progression bar
+    UINT n = area(MAP_DIMENSIONS) / PGI;
+    UINT progres = 0;
+    //
 
-	for (coord.y = 0; coord.y < MAP_DIMENSIONS.y; ++coord.y) {
-		for (coord.x = 0; coord.x < MAP_DIMENSIONS.x; ++coord.x) {
-			Tile * tile = new Tile();
-			tile->setEnvironment(OCEAN);
-			m_Tiles[linearize(coord)] = tile;
-			++tileNo;
-			if (tileNo % 1000 == 0) {
-                LOG(DEBUG) << "World generation -:- [" << 
-                    std::setw(6) << tileNo << '/' << std::setw(6) << 
-                    area(MAP_DIMENSIONS) << "] tiles allocated in memory";
-			}
-		}
-	}
+    for (UINT i = 0; i < area(MAP_DIMENSIONS); ++i) {
+        Tile * tile = new Tile();
+        tile->setEnvironment(OCEAN);
+        m_Tiles[i] = tile;
+        LOG_EVERY_N(n, DEBUG) << "World generation - Allocating tiles "
+            << "to memory [" << std::setw(3) << ++progres * PGI << "%]";
+    }
 
 	assert(INITIAL_LAND_TILES < LAND_TILES);
 	assert(TUNDRA_PROPORTION < 1.0);
@@ -43,28 +39,35 @@ void Map::generateLand()
 
 void Map::placeInitialLandTiles()
 {
-    int nbPlacedLandTiles = 0;
+    // For progression bar
+    UINT n = INITIAL_LAND_TILES / PGI;
+    UINT progres = 0;
+    //
 
-    while (nbPlacedLandTiles < INITIAL_LAND_TILES) {
+    UINT placedTiles = 0;
+
+    while (placedTiles < INITIAL_LAND_TILES) {
         Coord coord = randTile();
         double distanceWeight = computeDistanceWeight(coord);
         if (nextRand(100) < distanceWeight * 100.0 && !isLand(coord)) {
             setLandTile(coord);
-            ++nbPlacedLandTiles;
-            if (nbPlacedLandTiles % 1000 == 0) {
-                LOG(DEBUG) << "World generation -:- [" <<
-                    std::setw(6) << nbPlacedLandTiles << '/'
-                    << std::setw(6) << LAND_TILES << "] tiles placed";
-            }
+            ++placedTiles;
+            LOG_EVERY_N(n, DEBUG) << "World generation - Placing initial "
+                << "land tiles [" << std::setw(3) << ++progres * PGI << "%]";
         }
     }
 }
 
 void Map::growIslands()
 {
-    UINT nbPlacedLandTiles = INITIAL_LAND_TILES;
+    // For progression bar
+    UINT n = (LAND_TILES - INITIAL_LAND_TILES) / PGI;
+    UINT progres = 0;
+    //
 
-    while (nbPlacedLandTiles < LAND_TILES) {
+    UINT placedTiles = INITIAL_LAND_TILES;
+
+    while (placedTiles < LAND_TILES) {
         Coord coord = randTile();
         double distanceWeight = computeDistanceWeight(coord);
         double surroundingLandWeight = computeSurroundingLandWeight(coord);
@@ -72,17 +75,11 @@ void Map::growIslands()
 
         if (nextRand(100) < weightedProb * 100.0 && !isLand(coord)) {
             setLandTile(coord);
-            ++nbPlacedLandTiles;
-            if (nbPlacedLandTiles % 1000 == 0) {
-                LOG(DEBUG) << "World generation -:- [" <<
-                    std::setw(6) << nbPlacedLandTiles << '/'
-                    << std::setw(6) << LAND_TILES << "] tiles placed";
-            }
+            ++placedTiles;
+            LOG_EVERY_N(n, DEBUG) << "World generation - Placing land "
+                << "tiles [" << std::setw(3) << ++progres * PGI << "%]";
         }
     }
-    LOG(DEBUG) << "World generation -:- [" <<
-        std::setw(6) << nbPlacedLandTiles << '/'
-        << std::setw(6) << LAND_TILES << "] tiles placed";
 }
 
 void Map::setLandTile(Coord i_Coord)

@@ -11,11 +11,14 @@
 ///////////////////////////////////////////////////////////////////////////
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
-//                               CONFIG                                  //
+//                              LOGGING                                  //
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
 
 // The path to the easylogging++ configuration file
 #define LOGGER_CONFIG_FILE "logs/log_config.conf"
+
+// Progress bar increments
+#define PGI 10
 
 
 //=== - === - === - === - === - === - === - === - === - === - === - === -//
