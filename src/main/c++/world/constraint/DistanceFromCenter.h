@@ -1,9 +1,9 @@
 #pragma once
-#include "..\..\Parameters.h"
 #include "Constraint.h"
+#include "..\..\Parameters.h"
 #include <math.h>
 
-class DistanceFromCenter : public Constraint
+class DistanceFromCenter: public Constraint
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
@@ -12,7 +12,7 @@ public:
     {}
 
 	// WEIGHT
-	float getWeightFor(Coord<int> i_Coord) const
+	float getWeightFor(Coord i_Coord) const
 	{
 		float xMapRadius = MAP_DIMENSIONS.x / 2.0;
 		float yMapRadius = MAP_DIMENSIONS.y / 2.0;

@@ -4,9 +4,14 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Civilization::Civilization()
+Civilization::Civilization() :
+m_Pop(0),
+m_People(new Human*[MAX_POPULATION])
+{}
+
+Civilization::~Civilization()
 {
-	m_People = new Human*[MAX_POPULATION];
+    delete[] m_People;
 }
 
 

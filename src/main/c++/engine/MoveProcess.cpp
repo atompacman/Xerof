@@ -8,8 +8,7 @@ MoveProcess::MoveProcess(Human* i_Human, const Position& i_Dest):
 m_Human(i_Human)
 {
 	i_Human->m_Pos.m_FacingDir = i_Dest.m_FacingDir;
-	m_Delta.x = (i_Dest.m_Coord.x - i_Human->m_Pos.m_Coord.x) / TARGET_FPS;
-	m_Delta.y = (i_Dest.m_Coord.y - i_Human->m_Pos.m_Coord.y) / TARGET_FPS;
+    m_Delta = (i_Dest.m_Coord - i_Human->m_Pos.m_Coord) / TARGET_FPS;
 }
 
 

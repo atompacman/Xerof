@@ -36,11 +36,11 @@ private:
 	
 	//DRAW
 	int resolutionLevel() const;
-	void actualFieldOfView(float i_ActualWidth, float i_ActualHeight, int* i_Values) const;
+	void actualFieldOfView(float i_ActualWidth, float i_ActualHeight, UINT* i_Values) const;
 };
 
 static Dimensions maxBufferDimensions() {
-    return MAP_DIMENSIONS * (int)TILE_SIZE[0];
+    return MAP_DIMENSIONS * (UINT)TILE_SIZE[0];
 }
 
 static float correspondingAngle(Direction i_Dir) {

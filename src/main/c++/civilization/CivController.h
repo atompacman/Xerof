@@ -1,5 +1,7 @@
 #pragma once
 #include "Civilization.h"
+#include "..\utils\Direction.h"
+#include "..\utils\Elem2D.h"
 
 class CivController: public Civilization
 {
@@ -11,7 +13,7 @@ public:
 	void placeFirstHuman();
 
 	// ADD
-	void addHuman(Coord<int> i_Pos);
+	void addHuman(Coord i_Pos);
 
 	// GETTERS
 	Human* getHuman(UINT i_ID);

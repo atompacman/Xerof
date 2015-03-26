@@ -1,6 +1,6 @@
 #pragma once
 #include "allegro5\allegro.h"
-#include "world\Coord.h"
+#include "utils\Elem2D.h"
 
 ///////////////////////////////////////////////////////////////////////////
 //  <     #     #     #     #     #     #     #     #     #     #     >  //
@@ -43,7 +43,7 @@ const int RESOLUTION_WIDTH = 800; //1920
 const int RESOLUATION_HEIGHT = 600; //1080
 
 // FPS when the system is not overloaded
-const float TARGET_FPS = 60.0;
+const double TARGET_FPS = 60.0;
 
 // Zoom scales
 static const float MIN_ZOOM_SCALE = 0.0625;
@@ -95,8 +95,8 @@ const unsigned int OCEAN_MARGINS = 1;
 // Resolution level:               (64)   (32)   (16)   (8)
 
 // Size in pixels of a tile depending on zoom level (resolution level)
-const float TILE_SIZE[] =		  { 64,    32,    16,    8    };
-const float TILE_GRADIENT_SIZE[]= { 16,    8,     4,     2    };
+const double TILE_SIZE[]          = { 64,    32,    16,    8    };
+const double TILE_GRADIENT_SIZE[] = { 16,    8,     4,     2    };
 
 // Resolution factors (should not be modified unless new resolutions are
 // added)

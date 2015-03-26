@@ -1,23 +1,18 @@
 #include "Map2.h"
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Map2::Map2()
-{
-	tiles = new Tile*[MAP_DIMENSIONS.area()];
-}
+Map2::Map2() :
+m_Tiles(new Tile*[area(MAP_DIMENSIONS)])
+{}
+
+
 
 Map2::~Map2()
 {
-	Coord<int> coord;
-	for (coord.y = 0; coord.y < MAP_DIMENSIONS.y; ++coord.y) {
-		for (coord.x = 0; coord.x < MAP_DIMENSIONS.x; ++coord.x) {
-			delete tiles[linearize(coord)];
-		}
-	}
-	delete[] tiles;
+	delete[] m_Tiles;
 }
 
 
@@ -25,9 +20,9 @@ Map2::~Map2()
 //                   GETTERS                   //
 //- - - - - - - - - - - - - - - - - - - - - - -//
 
-const Tile* Map2::getTile(Coord<int> coord) const
+const Tile* Map2::getTile(Coord i_Coord) const
 {
-	assert(coord.x < MAP_DIMENSIONS.x);
-	assert(coord.y < MAP_DIMENSIONS.y);
-	return tiles[linearize(coord)];
+    assert(i_Coord.x < MAP_DIMENSIONS.x);
+    assert(i_Coord.y < MAP_DIMENSIONS.y);
+    return m_Tiles[i_Coord.x + i_Coord.y * MAP_DIMENSIONS.x];
 }

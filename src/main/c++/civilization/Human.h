@@ -1,4 +1,5 @@
 #pragma once
+#include "..\utils\Elem2D.h"
 #include "..\world\World.h"
 
 class Human: public MapElement

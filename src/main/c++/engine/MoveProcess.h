@@ -11,6 +11,6 @@ public:
 	void nextIteration();
 
 private:
-	Human*       m_Human;
-	Coord<float> m_Delta;
+	Human* m_Human;
+	DCoord m_Delta;
 };

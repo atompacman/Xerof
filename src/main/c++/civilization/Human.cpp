@@ -33,12 +33,12 @@ void Human::setBusy()
 
 const Tile*** const Human::getSurroundingTiles() const
 {
-	int zoneSideLength = m_ROSight * 2 + 1;
+	UINT zoneSideLength = m_ROSight * 2 + 1;
 	const Tile*** surroundings = new const Tile**[zoneSideLength];
 	Map* map = World::getInstance()->m_Map;
 
-	Coord<int> tileCoord;
-	Coord<int> delta;
+	Coord tileCoord;
+	Coord delta;
 
 	for (delta.x = 0; delta.x < zoneSideLength; ++delta.x) {
 		tileCoord.x = (int)m_Pos.m_Coord.x + delta.x - m_ROSight;
@@ -60,9 +60,8 @@ const Tile*** const Human::getSurroundingTiles() const
 
 const Tile* const Human::getTileInFront() const
 {
-	Coord<float> tileCoordF = 
-		m_Pos.m_Coord.incrementedToDirection(m_Pos.m_FacingDir);
-	Coord<int> tileCoord = Coord<int>(tileCoordF.x, tileCoordF.y);
+    DCoord tileCoordF = incrementedToDirection(m_Pos.m_Coord,m_Pos.m_FacingDir);
+	Coord tileCoord = Coord(tileCoordF.x, tileCoordF.y);
 	return World::getInstance()->m_Map->getTile(tileCoord);
 }
 

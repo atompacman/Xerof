@@ -101,15 +101,15 @@ void Display::draw() const
 	al_use_transform(&transform);
 	al_clear_to_color(al_map_rgb(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
 	
-	int fieldOfView[4];
+	UINT fieldOfView[4];
 	actualFieldOfView(actualWidth, actualHeight, fieldOfView);
 
 	int tileSize = TILE_SIZE[resolutionLvl];
 	int gradientSize = TILE_GRADIENT_SIZE[resolutionLvl];
-	Coord<int> textureCorner;
+	Coord textureCorner;
 	textureCorner.x = TEXTURE_CORNER_X[resolutionLvl];
 	textureCorner.y = TEXTURE_CORNER_Y[resolutionLvl];
-	Coord<int> pixelOnMap;
+	Coord pixelOnMap;
 	pixelOnMap.x = fieldOfView[0] * tileSize;
 	pixelOnMap.y = fieldOfView[2] * tileSize;
 	int tileSizeOnBitmap = tileSize + 2 * gradientSize;
@@ -120,7 +120,7 @@ void Display::draw() const
 	Map* map = world->m_Map;
 
 	al_hold_bitmap_drawing(true);
-	Coord<int> tileCoord;
+	Coord tileCoord;
 	for (tileCoord.y = fieldOfView[2]; tileCoord.y < fieldOfView[3]; ++tileCoord.y) {
 		for (tileCoord.x = fieldOfView[0]; tileCoord.x < fieldOfView[1]; ++tileCoord.x) {
 			Tile* tile = map->getTile(tileCoord);
@@ -147,7 +147,7 @@ void Display::draw() const
 		int civPop = civ->getPopulation();
 		for (int j = 0; j < civPop; ++j) {
 			Human human = civ->getHuman(j);
-			Coord<float> realPosition = human.m_Pos.m_Coord * TILE_SIZE[resolutionLvl];
+			DCoord realPosition = human.m_Pos.m_Coord*TILE_SIZE[resolutionLvl];
 			float angle = correspondingAngle(human.m_Pos.m_FacingDir);
 
 			ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
@@ -204,7 +204,7 @@ int Display::resolutionLevel() const
 
 void Display::actualFieldOfView(float i_ActualWidth, 
                                 float i_ActualHeight, 
-                                int*  i_Values) const
+                                UINT*  i_Values) const
 {
 	float zoom = m_Mouse->m_Zoom;
 	float rotation = m_Mouse->m_Rotate;

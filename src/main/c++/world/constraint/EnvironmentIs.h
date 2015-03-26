@@ -2,7 +2,7 @@
 #include "..\Map2.h"
 #include "Constraint.h"
 
-class EnvironmentIs : public Constraint
+class EnvironmentIs: public Constraint
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
@@ -11,7 +11,7 @@ public:
     {}
 
 	// WEIGHT
-	float getWeightFor(Coord<int> m_Coord) const
+	float getWeightFor(Coord m_Coord) const
 	{
 		return s_Map->getTile(m_Coord)->getEnvironment()->getType() == m_Type;
 	}

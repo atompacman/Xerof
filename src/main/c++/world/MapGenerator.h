@@ -1,22 +1,15 @@
 #pragma once
-#include "..\utils\Random.h"
-#include "Map2.h"
 #include "constraint\Clustering.h"
 #include "constraint\DistanceFromCenter.h"
 #include "constraint\EnvironmentIs.h"
-
-static Coord<int> randTile()
-{
-	int x = nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.x - 2 * OCEAN_MARGINS);
-	int y = nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.y - 2 * OCEAN_MARGINS);
-	return Coord<int>(x, y);
-}
-
+#include "Map2.h"
+#include "..\utils\Random.h"
+#include <iomanip>
 
 class MapGenerator: public Map2
 {
 public:
-	// CONSTRUCTOR/DESCTRUCTOR
+	// CONSTRUCTOR/DESTRUCTOR
 	MapGenerator();
 
 	// GENERATION
@@ -27,7 +20,17 @@ private:
 	void fillWithOcean();
 	void placeInitialLandTiles();
 	void growLandmasses();
-	void generateEnvironment(EnvType type, unsigned int elemQuant,
-		Constraint** constraints, int nbConst, const char* taskDesc);
-	void printProgress(const char* taskDesc, unsigned int progress);
+	void generateEnvironment(EnvType      i_Type, 
+                             UINT         i_NumElem,
+		                     Constraint** i_Constr, 
+                             int          i_NumConstr, 
+                             const char*  i_TaskDesc);
+    void printProgress(const char* i_TaskDesc, UINT i_Progress);
 };
+
+static Coord randTile()
+{
+    int x = nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.x - 2 * OCEAN_MARGINS);
+    int y = nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.y - 2 * OCEAN_MARGINS);
+    return Coord(x, y);
+}

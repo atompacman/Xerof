@@ -7,6 +7,7 @@ class Civilization
 public:
 	// CONSTRUCTOR/DESTRUCTOR
 	Civilization();
+    ~Civilization();
 
 	// GETTERS
 	Human& getHuman(UINT i_ID) const;

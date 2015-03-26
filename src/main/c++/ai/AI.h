@@ -1,5 +1,6 @@
 #pragma once
 #include "..\civilization\Civilization.h"
+#include "..\utils\Direction.h"
 #include "Order.h"
 
 class AI

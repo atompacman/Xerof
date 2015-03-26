@@ -41,7 +41,7 @@ private:
                             PossibleOrders i_Action,
                             Direction i_Dir);
     bool verifyDestination(const Position& i_Dest) const;
-    bool isOccupied(Coord<int> i_Coord) const;
+    bool isOccupied(Coord i_Coord) const;
 
 	// UPDATE ANIMATIONS
 	void updateMovements();

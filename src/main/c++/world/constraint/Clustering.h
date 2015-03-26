@@ -13,7 +13,7 @@ public:
     {}
 
 	// WEIGHT
-	float getWeightFor(Coord<int> i_Coord) const
+	float getWeightFor(Coord i_Coord) const
 	{
 		int nbTiles = countSurroundingEnvironOfType(i_Coord, m_Type);
 		return pow(((float)nbTiles) / 8.0, m_Compactness);

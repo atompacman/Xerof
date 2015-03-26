@@ -4,7 +4,7 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Environment::Environment(EnvType i_Type) :
+Environment::Environment(EnvType i_Type):
 m_Type(i_Type),
 m_Orien(Direction(nextRand(3)))
 {}

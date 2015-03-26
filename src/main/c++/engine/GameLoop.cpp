@@ -195,7 +195,7 @@ bool GameLoop::processMovingOrder(Human* i_Human,
 	case WALK: tilePerTurn; break;
 	}
 
-	Coord<float> after = i_Human->m_Pos.m_Coord.incrementedToDirection(i_Dir);
+    DCoord after = incrementedToDirection(i_Human->m_Pos.m_Coord, i_Dir);
 	Position dest = Position(after, i_Dir);
 
 	if (verifyDestination(dest)) {
@@ -209,7 +209,7 @@ bool GameLoop::processMovingOrder(Human* i_Human,
 bool GameLoop::verifyDestination(const Position& i_Dest) const
 {
 	Map* map = World::getInstance()->m_Map;
-	Coord<int> coord = Coord<int>(i_Dest.m_Coord.x, i_Dest.m_Coord.y);
+	Coord coord = Coord(i_Dest.m_Coord.x, i_Dest.m_Coord.y);
 	Tile* destTile = map->getTile(coord);
 	if (!destTile->isPassable()) {
 		LOG(WARNING) << "ERROR IN AI: Cannot move on water";
@@ -222,13 +222,13 @@ bool GameLoop::verifyDestination(const Position& i_Dest) const
 	return true;
 }
 
-bool GameLoop::isOccupied(Coord<int> i_Coord) const
+bool GameLoop::isOccupied(Coord i_Coord) const
 {
 	for (int i = 0; i < NB_CIV; ++i) {
 		CivController* civ = m_CivCtrlrs[i];
 		for (unsigned int j = 0; j < civ->getPopulation(); ++j) {
 			Human* human = civ->getHuman(j);
-			if (human->m_Pos == Position(UP, i_Coord)) {
+            if (human->m_Pos == Position(i_Coord, UP)) {
 				return true;
 			}
 		}
