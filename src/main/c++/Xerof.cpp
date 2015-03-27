@@ -5,14 +5,6 @@
 
 INITIALIZE_EASYLOGGINGPP
 
-// Peripherals
-Display*  s_Display;
-Mouse*    s_Mouse;
-Keyboard* s_Keyboard;
-
-// Game world
-World* World::s_World;
-
 void initLoggingLibrary();
 void initGameEngine();
 
@@ -22,26 +14,16 @@ int main(int argc, char** argv)
 	initLoggingLibrary();
 
 	// Welcome message !
-	LOG(INFO) << "-====-===-==-=- XEROF -=-==-===-====-";
+	LOG(INFO) <<"======-=====-====-===-==-=- XEROF -=-==-===-====-=====-======";
 
 	// Create the world... nothing less
-	const World* world = World::getInstance();
+	World::getInstance();
 
 	// Initialize Allegro5 library
 	initGameEngine();
 
-	// Initialize peripherals
-	s_Mouse = new Mouse();
-	s_Display = new Display(s_Mouse);
-	s_Keyboard = new Keyboard();
-
 	// Start the game loop
-	GameLoop(s_Display, s_Mouse, s_Keyboard).start();
-
-	// Delete peripherals
-	delete s_Display;
-	delete s_Mouse;
-	delete s_Keyboard;
+    GameLoop::run();
 
 	return EXIT_SUCCESS;
 }
@@ -51,7 +33,8 @@ void initLoggingLibrary()
 	el::Configurations conf;
 	if (!conf.parseFromFile(LOGGER_CONFIG_FILE))
 	{
-		LOG(WARNING) << "Easylogging++ configuration file " << LOGGER_CONFIG_FILE << " was not found. Using default parameters.";
+		LOG(WARNING) << "Easylogging++ configuration file "<< LOGGER_CONFIG_FILE 
+            << " was not found. Using default parameters.";
 	}
 	el::Loggers::reconfigureAllLoggers(conf);
 }

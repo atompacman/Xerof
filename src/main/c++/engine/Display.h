@@ -40,10 +40,6 @@ private:
 	void actualFieldOfView(float i_ActualWidth, float i_ActualHeight, UINT* i_Values) const;
 };
 
-static Dimensions maxBufferDimensions() {
-    return MAP_DIMENSIONS * (UINT)TILE_SIZE[0];
-}
-
 static float correspondingAngle(Direction i_Dir) {
     assert(i_Dir != MIDDLE);
 

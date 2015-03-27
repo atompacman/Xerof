@@ -9,8 +9,10 @@ Mouse::Mouse():
 m_State(0),
 m_Zoom(1.0),
 m_Rotate(1.0),
-m_ScrollX(1.0),
-m_ScrollY(1.0)
+m_ScrollX(maxBufferDimensions().x / 2),
+m_ScrollY(maxBufferDimensions().y / 2),
+m_MaxScrollX(maxBufferDimensions().x),
+m_MaxScrollY(maxBufferDimensions().y)
 {
 	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");

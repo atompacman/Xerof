@@ -9,7 +9,7 @@ public:
 	float m_Zoom;
 	float m_Rotate;
 	float m_ScrollX, m_ScrollY;
-	float m_MaxScrollX, m_MaxScrollY;
+	const float m_MaxScrollX, m_MaxScrollY;
 
 	//CONSTRUCTOR/DESTRUCTOR
 	Mouse();

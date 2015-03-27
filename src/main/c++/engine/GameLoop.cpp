@@ -4,43 +4,37 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-GameLoop::GameLoop(Display* i_Disp, Mouse* i_Mouse, Keyboard* i_Key) :
-m_Disp(i_Disp),
-m_Mouse(i_Mouse),
-m_Keyboard(i_Key)
-{
-	i_Mouse->m_ScrollX = maxBufferDimensions().x / 2;
-	i_Mouse->m_ScrollY = maxBufferDimensions().y / 2;
-	i_Mouse->m_MaxScrollX = maxBufferDimensions().x;
-	i_Mouse->m_MaxScrollY = maxBufferDimensions().y;
+GameLoop::GameLoop():
+m_Mouse(),
+m_Keyboard(),
+m_Disp(&m_Mouse),
 
-	m_Queue = al_create_event_queue();
-	if (m_Queue == nullptr){
+m_Queue(al_create_event_queue()),
+m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
+
+m_CivCtrlrs(NULL),
+m_AIs(NULL),
+
+m_NumMoveProcs(0),
+m_MoveProcs(new MoveProcess*[NB_CIV * MAX_POPULATION])
+{
+	if (m_Queue == NULL){
 		FatalErrorDialog("Creation of event queue failed.");
 	}
-
-	m_ScreenRefresher = al_create_timer(1.0 / TARGET_FPS);
-	if (m_ScreenRefresher == nullptr){
+    if (m_ScreenRefresher == NULL){
 		FatalErrorDialog("Creation of timer for screen refreshing failed.");
 	}
 
-	al_register_event_source(m_Queue, al_get_keyboard_event_source());
-	al_register_event_source(m_Queue, al_get_mouse_event_source());
-	al_register_event_source(m_Queue, 
-        al_get_display_event_source(i_Disp->getWindow()));
-	al_register_event_source(m_Queue, 
-        al_get_timer_event_source(m_ScreenRefresher));
+	al_register_event_source(
+        m_Queue, al_get_keyboard_event_source());
+	al_register_event_source(
+        m_Queue, al_get_mouse_event_source());
+	al_register_event_source(
+        m_Queue, al_get_display_event_source(m_Disp.getWindow()));
+	al_register_event_source(
+        m_Queue, al_get_timer_event_source(m_ScreenRefresher));
 
 	initializeCivsAndAIs();
-
-	m_NumMoveProcs = 0;
-	m_MoveProcs = new MoveProcess*[NB_CIV * MAX_POPULATION];
-}
-
-GameLoop::~GameLoop()
-{
-	al_destroy_timer(m_ScreenRefresher);
-	al_destroy_event_queue(m_Queue);
 }
 
 void GameLoop::initializeCivsAndAIs()
@@ -54,7 +48,13 @@ void GameLoop::initializeCivsAndAIs()
 		m_CivCtrlrs[i] = civ;
 		m_AIs[i] = new AtomAI(civ);
 	}
-	m_Disp->setCivs(m_CivCtrlrs);
+	m_Disp.setCivs(m_CivCtrlrs);
+}
+
+GameLoop::~GameLoop()
+{
+    al_destroy_timer(m_ScreenRefresher);
+    al_destroy_event_queue(m_Queue);
 }
 
 
@@ -62,7 +62,12 @@ void GameLoop::initializeCivsAndAIs()
 //                                    START                                   //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool GameLoop::start()
+void GameLoop::run()
+{
+   GameLoop().startGame();
+}
+
+void GameLoop::startGame()
 {
 	al_start_timer(m_ScreenRefresher);
 
@@ -80,9 +85,7 @@ bool GameLoop::start()
 
 		if (currentFrame == frameForGameUpdate) {
 			endProcesses();
-			if (updateGame() == EXIT_FAILURE) {
-				return EXIT_FAILURE;
-			}
+            updateGame();
 			currentFrame = 0;
 		}
 
@@ -100,7 +103,7 @@ bool GameLoop::start()
 		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN :
 		case ALLEGRO_EVENT_MOUSE_BUTTON_UP :
 		case ALLEGRO_EVENT_MOUSE_AXES :
-			m_Mouse->handleMouseEvent(ev);
+			m_Mouse.handleMouseEvent(ev);
 			break;
 
 		case ALLEGRO_EVENT_TIMER:
@@ -108,7 +111,7 @@ bool GameLoop::start()
 			break;
 
 		case ALLEGRO_EVENT_DISPLAY_RESIZE:
-            m_Disp->resize();
+            m_Disp.resize();
 			refresh = true;
 			break;
 		}
@@ -118,7 +121,7 @@ bool GameLoop::start()
 
 			double time = al_get_time();
 
-			m_Disp->draw();
+			m_Disp.draw();
 			al_flip_display();
 
 			fps_accum++;
@@ -127,14 +130,13 @@ bool GameLoop::start()
 				fps_accum = 0;
 				fps_time = time;
 			}
-			m_Disp->setFPS(fps);
+			m_Disp.setFPS(fps);
 
 			refresh = false;
 
 			++currentFrame;
 		}
 	}
-	return EXIT_SUCCESS;
 }
 
 
@@ -142,12 +144,11 @@ bool GameLoop::start()
 //                                    UPDATE                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool GameLoop::updateGame()
+void GameLoop::updateGame()
 {
 	if (processAI() == EXIT_FAILURE) {
-		return EXIT_FAILURE;
+        FatalErrorDialog("Error processing AIs");
 	}
-	return EXIT_SUCCESS;
 }
 
 bool GameLoop::processAI()
@@ -188,9 +189,9 @@ bool GameLoop::processOrder(Human* io_Human, const Order& i_Order)
 	return EXIT_SUCCESS;
 }
 
-bool GameLoop::processMovingOrder(Human* i_Human,	
+bool GameLoop::processMovingOrder(Human*         i_Human,	
 	                              PossibleOrders i_Action, 
-                                  Direction i_Dir)
+                                  Direction      i_Dir)
 {
 	float tilePerTurn = i_Human->getMoveSpeed();
 	switch (i_Action) {
@@ -238,26 +239,21 @@ bool GameLoop::isOccupied(Coord i_Coord) const
 	return false;
 }
 
-
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//              UPDATE  MOVEMENTS              //
-//- - - - - - - - - - - - - - - - - - - - - - -//
-
 void GameLoop::updateMovements()
 {
-	for (int i = 0; i < m_NumMoveProcs; ++i) {
+	for (UINT i = 0; i < m_NumMoveProcs; ++i) {
 		m_MoveProcs[i]->nextIteration();
 	}
 }
 
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                   END                       //
-//- - - - - - - - - - - - - - - - - - - - - - -//
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     END                                    //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 void GameLoop::endProcesses()
 {
-	for (int i = 0; i < m_NumMoveProcs; ++i) {
+	for (UINT i = 0; i < m_NumMoveProcs; ++i) {
 		delete m_MoveProcs[i];
 	}
 	m_NumMoveProcs = 0;

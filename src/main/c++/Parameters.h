@@ -138,3 +138,7 @@ const float SECONDS_BETWEEN_AI_PROCESS = 1.0;
 // Random generator options
 const static bool RANDOM_SEED = false;
 const static unsigned int WORLD_GENERATION_SEED = 304;
+
+static Dimensions maxBufferDimensions() {
+    return MAP_DIMENSIONS * (UINT)TILE_SIZE[0];
+}
