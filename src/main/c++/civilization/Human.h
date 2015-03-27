@@ -25,7 +25,7 @@ public:
 	unsigned int getRangeOfSight() const;
 
 	// ASSET
-	virtual Asset assetFile() const { return APARATUS3; }
+	virtual AssetID assetFile() const { return APARATUS3; }
 
 private:
 	bool  m_IsReady;

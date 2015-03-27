@@ -39,7 +39,7 @@ bool Environment::isSolidLand() const
 //                                     ASSET                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Asset Environment::assetFile() const
+AssetID Environment::assetFile() const
 {
 	switch (m_Type) {
 	case GRASSLAND: return GRASSLAND_TILE_FILE;

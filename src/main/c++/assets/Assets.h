@@ -1,57 +1,105 @@
 #pragma once
+#include <iomanip>
 #include <string>
+#include "allegro5\allegro_font.h"
 #include "allegro5\bitmap.h"
 #include "allegro5\bitmap_io.h"
+#include "..\lib\easylogging++.h"
 #include "..\engine\internal\dialog\FatalErrorDialog.h"
 
-const int NB_ASSETS = 9;
+//-|-======================================================================---\\
+//-| ASSETS MANAGEMENT
+//-|
+//-| Load and desallocate assets from disk using a routing file (linking an 
+//-| AssetID to a path).
+//-|-======================================================================---//
 
-enum Asset
+// Important: AssetIDs must be in the same order than the keys in the assets
+// routing file.
+enum AssetID
 {
+    // Environment
 	GRASSLAND_TILE_FILE,
 	OCEAN_TILE_FILE,
 	PLAINS_TILE_FILE,
 	ROCKY_TILE_FILE,
 	TUNDRA_TILE_FILE,
 
+    // Caracters
 	ALPHA_TEST_PACMAN,
 	STICKMAN,
 	SELECTION,
-	APARATUS3
+	APARATUS3,
+
+    // Other
+    WINDOW_ICON
 };
 
-static ALLEGRO_BITMAP* loadBitmap(const char* i_FilePath)
-{
-	ALLEGRO_BITMAP* bitmap = al_load_bitmap(i_FilePath);
-	if (bitmap == nullptr) {
-		std::string msg = i_FilePath;
-		msg = "Failed to load asset at \"" + msg + "\".";
-		FatalErrorDialog(msg.c_str());
-	}
-	return bitmap;
-}
+// The location of the asset routing file
+static const char* ASSET_ROUTING_FILE = "assets/assets_routing.txt";
 
+// Assets that are not bitmaps
+static const char* GAME_FONT = "assets/font.tga";
+
+// The number of bitmap assets
+static UINT numAssets;
+
+// Load assets from disk
 static ALLEGRO_BITMAP** loadAssets()
 {
-	ALLEGRO_BITMAP** assets = new ALLEGRO_BITMAP*[NB_ASSETS];
+    LOG(DEBUG) << "Assets loading - Reading \"" << ASSET_ROUTING_FILE << "\"";
 
-	assets[GRASSLAND_TILE_FILE] = loadBitmap("assets/background/grassland.tga");
-	assets[OCEAN_TILE_FILE] = loadBitmap("assets/background/ocean.tga");
-	assets[PLAINS_TILE_FILE] = loadBitmap("assets/background/plains.tga");
-	assets[ROCKY_TILE_FILE] = loadBitmap("assets/background/rocky.tga");
-	assets[TUNDRA_TILE_FILE] = loadBitmap("assets/background/tundra.tga");
-	assets[ALPHA_TEST_PACMAN] = loadBitmap("assets/testalpha.tga");
-	assets[STICKMAN] = loadBitmap("assets/foreground/character/stickman.tga");
-	assets[SELECTION] = loadBitmap("assets/foreground/selection.tga");
-	assets[APARATUS3] = loadBitmap("assets/foreground/character/Aparatus3.tga");
+    std::ifstream fis(ASSET_ROUTING_FILE);
+    std::string name, path;
+    std::vector<ALLEGRO_BITMAP*> bitmapVec;
+    ALLEGRO_BITMAP* bitmap;
 
-	return assets;
+    while (!fis.eof()) {
+        fis >> name >> path >> path;
+        LOG(TRACE) << "Assets loading - " << std::setw(24) 
+            << std::left << name << " at " << path;
+
+        bitmap = al_load_bitmap(path.c_str());
+
+        if (bitmap == NULL) {
+            FatalErrorDialog(("Failed to load asset \"" + name
+                + "\" at \"" + path + "\".").c_str());
+        }
+        bitmapVec.push_back(bitmap);
+    }
+
+    numAssets = bitmapVec.size();
+    ALLEGRO_BITMAP** bitmaps = new ALLEGRO_BITMAP*[numAssets];
+    for (UINT i = 0; i < numAssets; ++i) {
+        bitmaps[i] = bitmapVec[i];
+    }
+
+    LOG(DEBUG) <<"Assets loading - Successfully loaded "<< numAssets <<" files";
+
+    return bitmaps;
 }
 
-static void destroyAssets(ALLEGRO_BITMAP** io_Assets)
+// Load game font
+static ALLEGRO_FONT* loadGameFont()
 {
-	for (int i = 0; i < NB_ASSETS; ++i) {
+    LOG(DEBUG) << "Assets loading - Loading game font at \""<< GAME_FONT<< "\"";
+
+    al_init_font_addon();
+    ALLEGRO_FONT* font(al_load_font(GAME_FONT, 0, 0));
+    if (font == NULL) {
+        LOG(WARNING) << "Asset loading - Could not load the game font";
+    }
+    return font;
+}
+
+// Desallocate assets from memory
+static void destroyAssets(ALLEGRO_BITMAP** io_Assets, ALLEGRO_FONT* io_Font)
+{
+    LOG(TRACE) << "Desallocation - Assets";
+    for (UINT i = 0; i < numAssets; ++i) {
 		al_destroy_bitmap(io_Assets[i]);
 	}
-	delete io_Assets;
+	delete[] io_Assets;
+
+    al_destroy_font(io_Font);
 }

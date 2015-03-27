@@ -10,29 +10,30 @@
 class Display
 {
 public:
-	ALLEGRO_DISPLAY* m_Window;
-	ALLEGRO_BITMAP** m_Assets;
-
 	//CONSTRUCTOR/DESTRUCTOR
 	Display(Mouse* i_Mouse);
 	~Display();
 
 	//DRAW
 	void draw() const;
+    void resize() const;
 
 	//SETTERS
 	void setCivs(CivController** i_Civ);
 	void setFPS(int i_FPS);
 
+    //GETTERS
+    ALLEGRO_DISPLAY* getWindow() const;
+
 private:
-	ALLEGRO_FONT*   m_GameFont;
-	CivController** m_Civs;
-	Mouse*          m_Mouse;
+    ALLEGRO_DISPLAY* m_Window;
+    ALLEGRO_BITMAP** m_Assets;
+	ALLEGRO_FONT*    m_GameFont;
+	CivController**  m_Civs;
+	Mouse*           m_Mouse;
 
 	//CONSTRUCTOR/DESTRUCTOR
-	bool createWindow();
-	void loadGameIcon();
-	void loadGameFont();
+    static ALLEGRO_DISPLAY* createWindow();
 	
 	//DRAW
 	int resolutionLevel() const;

@@ -26,8 +26,10 @@ m_Keyboard(i_Key)
 
 	al_register_event_source(m_Queue, al_get_keyboard_event_source());
 	al_register_event_source(m_Queue, al_get_mouse_event_source());
-	al_register_event_source(m_Queue, al_get_display_event_source(i_Disp->m_Window));
-	al_register_event_source(m_Queue, al_get_timer_event_source(m_ScreenRefresher));
+	al_register_event_source(m_Queue, 
+        al_get_display_event_source(i_Disp->getWindow()));
+	al_register_event_source(m_Queue, 
+        al_get_timer_event_source(m_ScreenRefresher));
 
 	initializeCivsAndAIs();
 
@@ -106,7 +108,7 @@ bool GameLoop::start()
 			break;
 
 		case ALLEGRO_EVENT_DISPLAY_RESIZE:
-			al_acknowledge_resize(m_Disp->m_Window);
+            m_Disp->resize();
 			refresh = true;
 			break;
 		}

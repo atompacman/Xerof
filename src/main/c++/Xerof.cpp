@@ -35,14 +35,8 @@ int main(int argc, char** argv)
 	s_Display = new Display(s_Mouse);
 	s_Keyboard = new Keyboard();
 
-	// Load assets
-	s_Display->m_Assets = loadAssets();
-
 	// Start the game loop
 	GameLoop(s_Display, s_Mouse, s_Keyboard).start();
-
-	// Free assets memory
-	destroyAssets(s_Display->m_Assets);
 
 	// Delete peripherals
 	delete s_Display;

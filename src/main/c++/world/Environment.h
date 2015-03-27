@@ -22,7 +22,7 @@ public:
 	bool isSolidLand() const;
 
 	// ASSET
-	Asset assetFile() const;
+	AssetID assetFile() const;
 
 	// OTHER
 	const char* toString() const;

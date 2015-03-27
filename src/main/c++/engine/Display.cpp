@@ -1,27 +1,27 @@
 #include "Display.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                          CONSTRUCTOR/DESCTRUCTOR                           //
+//                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Display::Display(Mouse* i_Mouse) :
+Display::Display(Mouse* i_Mouse):
+m_Window(createWindow()),
+m_Assets(loadAssets()),
+m_GameFont(loadGameFont()),
+m_Civs(NULL),
 m_Mouse(i_Mouse)
 {
-	if (!createWindow()){
-		FatalErrorDialog("Display creation failed.");
-	}
-
-	loadGameIcon();
-	loadGameFont();
+    al_set_display_icon(m_Window, m_Assets[WINDOW_ICON]);
 }
 
-bool Display::createWindow()
+ALLEGRO_DISPLAY* Display::createWindow()
 {
 	al_set_new_display_flags(DISPLAY_MODE);
 
 	int displayWidth, displayHeight;
 
 	if (AUTOMATIC_SCREEN_RESOLUTION) {
+        LOG(INFO) << "Automatic screen resolution selection";
 		ALLEGRO_DISPLAY_MODE bestRes;
 		al_get_display_mode(al_get_num_display_modes() - 1, &bestRes);
 		displayWidth = bestRes.width;
@@ -31,36 +31,24 @@ bool Display::createWindow()
 		displayWidth = RESOLUTION_WIDTH;
 		displayHeight = RESOLUATION_HEIGHT;
 	}
+    LOG(INFO) << "Creating window with resolution " 
+        << displayWidth << "x" << displayHeight;
 
-	m_Window = al_create_display(displayWidth, displayHeight);
+    ALLEGRO_DISPLAY* window = al_create_display(displayWidth, displayHeight);
 
-	al_set_window_title(m_Window, WINDOW_TITLE);
+    if (window == NULL){
+        FatalErrorDialog("Display creation failed.");
+    }
+    al_set_window_title(window, WINDOW_TITLE);
 
-	return m_Window != nullptr;
-}
-
-void Display::loadGameIcon()
-{
-	ALLEGRO_BITMAP* icon = al_load_bitmap("assets/icon.tga");
-	if (icon != nullptr) {
-		al_set_display_icon(m_Window, icon);
-	}
-	else {
-		LOG(WARNING) << "Could not load the game icon";
-	}
-}
-
-void Display::loadGameFont()
-{
-	al_init_font_addon();
-	if (al_load_font("assets/font.tga", 0, 0) == NULL) {
-		LOG(WARNING) << "Could not load the game font";
-	}
+    return window;
 }
 
 Display::~Display()
 {
-	al_destroy_display(m_Window);
+    destroyAssets(m_Assets, m_GameFont);
+    LOG(TRACE) << "Desallocation - Window";
+    al_destroy_display(m_Window);
 }
 
 
@@ -194,7 +182,7 @@ int Display::resolutionLevel() const
 
 void Display::actualFieldOfView(float i_ActualWidth, 
                                 float i_ActualHeight, 
-                                UINT*  i_Values) const
+                                UINT* i_Values) const
 {
 	float zoom = m_Mouse->m_Zoom;
 	float rotation = m_Mouse->m_Rotate;
@@ -221,6 +209,10 @@ void Display::actualFieldOfView(float i_ActualWidth,
 	i_Values[3] = bottomBound > MAP_DIMENSIONS.y ? MAP_DIMENSIONS.y : bottomBound;
 }
 
+void Display::resize() const
+{
+    al_acknowledge_resize(m_Window);
+}
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                  SETTERS                                   //
@@ -236,4 +228,14 @@ void Display::setFPS(int i_FPS)
 	char buff[100];
 	sprintf_s(buff, "%s (FPS: %d)", WINDOW_TITLE, i_FPS);
 	al_set_window_title(m_Window, buff);
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                  GETTERS                                   //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+ALLEGRO_DISPLAY* Display::getWindow() const
+{
+    return m_Window;
 }
