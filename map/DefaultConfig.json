@@ -1,0 +1,26 @@
+{
+	"XerofMapConfig": {
+		"MapDimensions": { 
+			"width":  300, 
+			"height": 200
+		},
+		"LandProportion":  			0.4,
+		"LandDispertion":  			0.2,
+		"LandCompactness": 			0.7,
+		"TundraTransitionWidth": 	8,
+		"OceanBordersWidth":		1,
+		"RockyZonesThickness":		4,
+		"TotalLandTypeProportions": {
+			"GRASSLAND": 0.4,
+			"PLAIN"	   : 0.15,
+			"ROCKY"	   : 0.15,
+			"TUNDRA"   : 0.3
+		},
+		"InitialSeedLandTypeProportions": {
+			"GRASSLAND": 0.4,
+			"PLAIN"	   : 0.15,
+			"ROCKY"	   : 0.15,
+			"TUNDRA"   : 0.3
+		}
+	}
+}
