@@ -8,3 +8,7 @@ FatalErrorDialog::FatalErrorDialog(const char* i_Msg)
 
 	LOG(FATAL) << i_Msg;
 }
+
+FatalErrorDialog::FatalErrorDialog(const std::string& i_Msg) :
+FatalErrorDialog(i_Msg.c_str())
+{}
