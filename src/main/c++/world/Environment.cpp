@@ -4,7 +4,7 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Environment::Environment(EnvType i_Type):
+Environment::Environment(EnvType i_Type) :
 m_Type(i_Type),
 m_Orien(Direction(nextRand(3)))
 {}
@@ -16,12 +16,12 @@ m_Orien(Direction(nextRand(3)))
 
 EnvType Environment::getType() const
 {
-	return m_Type;
+    return m_Type;
 }
 
 Direction Environment::getOrientation() const
 {
-	return m_Orien;
+    return m_Orien;
 }
 
 
@@ -31,7 +31,12 @@ Direction Environment::getOrientation() const
 
 bool Environment::isSolidLand() const
 {
-	return m_Type != LAKE && m_Type != OCEAN;
+    return isSolidLand(m_Type);
+}
+
+bool Environment::isSolidLand(EnvType i_Type)
+{
+    return i_Type != LAKE && i_Type != OCEAN;
 }
 
 
@@ -41,14 +46,14 @@ bool Environment::isSolidLand() const
 
 AssetID Environment::assetFile() const
 {
-	switch (m_Type) {
-	case GRASSLAND: return GRASSLAND_TILE_FILE;
-	case OCEAN:		return OCEAN_TILE_FILE;
-	case PLAIN:		return PLAINS_TILE_FILE;
-	case ROCKY:		return ROCKY_TILE_FILE;
-	case TUNDRA:	return TUNDRA_TILE_FILE;
-	}
-	return SELECTION;
+    switch (m_Type) {
+    case GRASSLAND: return GRASSLAND_TILE_FILE;
+    case OCEAN:		return OCEAN_TILE_FILE;
+    case PLAIN:		return PLAINS_TILE_FILE;
+    case ROCKY:		return ROCKY_TILE_FILE;
+    case TUNDRA:	return TUNDRA_TILE_FILE;
+    }
+    return SELECTION;
 }
 
 
@@ -58,12 +63,12 @@ AssetID Environment::assetFile() const
 
 const char* Environment::toString() const
 {
-	switch (m_Type) {
-	case GRASSLAND: return "GRASSLAND";
-	case OCEAN:		return "OCEAN";
-	case PLAIN:		return "PLAIN";
-	case ROCKY:		return "ROCKY";
-	case TUNDRA:	return "TUNDRA";
-	}
-	return "???";
+    switch (m_Type) {
+    case GRASSLAND: return "GRASSLAND";
+    case OCEAN:		return "OCEAN";
+    case PLAIN:		return "PLAIN";
+    case ROCKY:		return "ROCKY";
+    case TUNDRA:	return "TUNDRA";
+    }
+    return "???";
 }

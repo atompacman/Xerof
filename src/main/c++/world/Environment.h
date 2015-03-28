@@ -5,7 +5,21 @@
 
 enum EnvType
 {
-	GRASSLAND, LAKE, OCEAN, PLAIN, ROCKY, TUNDRA
+    GRASSLAND,
+    LAKE,
+    OCEAN,
+    PLAIN,
+    ROCKY,
+    TUNDRA
+};
+
+static const std::map<const char*, EnvType> ENV_TYPES = {
+    { "GRASSLAND",  GRASSLAND   },
+    { "LAKE",       LAKE        },
+    { "OCEAN",      OCEAN       },
+    { "PLAIN",      PLAIN       },
+    { "ROCKY",      ROCKY       },
+    { "TUNDRA",     TUNDRA      }
 };
 
 class Environment : public MapElement
@@ -20,6 +34,7 @@ public:
 
 	// STATUS
 	bool isSolidLand() const;
+    static bool isSolidLand(EnvType i_Type);
 
 	// ASSET
 	AssetID assetFile() const;
