@@ -1,36 +1,30 @@
 #pragma once
+#include <assert.h>
 #include <iomanip>
 #include "constraint\Clustering.h"
 #include "constraint\DistanceFromCenter.h"
 #include "constraint\EnvironmentIs.h"
 #include "Map2.h"
+#include "MapConfig.h"
 #include "..\utils\Random.h"
 
-class MapGenerator: public Map2
+class MapGenerator
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
-	MapGenerator();
-
 	// GENERATION
-	Map2* generate();
+	static void generate(Map2& o_Map, const MapConfig& i_Config);
 
 private:
 	// GENERATION
-	void fillWithOcean();
-	void placeInitialLandTiles();
-	void growLandmasses();
-	void generateEnvironment(EnvType      i_Type, 
-                             UINT         i_NumElem,
-		                     Constraint** i_Constr, 
-                             int          i_NumConstr, 
-                             const char*  i_TaskDesc);
-    void printProgress(const char* i_TaskDesc, UINT i_Progress);
+    static void fillWithOcean(Map2& io_Map);
+    static void placeInitialLandTiles(Map2& io_Map);
+    static void growLandmasses(Map2& io_Map);
+    static void generateEnvironment(Map2&        io_Map,
+                                    EnvType      i_Type,
+                                    UINT         i_NumElem,
+		                            Constraint** i_Constr, 
+                                    UINT         i_NumConstr, 
+                                    const char*  i_TaskDesc);
+    static Coord randTile();
 };
 
-static Coord randTile()
-{
-    int x = nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.x - 2 * OCEAN_MARGINS);
-    int y = nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.y - 2 * OCEAN_MARGINS);
-    return Coord(x, y);
-}

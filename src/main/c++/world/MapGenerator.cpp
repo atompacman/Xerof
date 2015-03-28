@@ -1,112 +1,88 @@
 #include "MapGenerator.h"
 
-Map2* Constraint::s_Map;
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                  GENERATION                                //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//           CONSTRUCTOR/DESCTRUCTOR           //
-//- - - - - - - - - - - - - - - - - - - - - - -//
-
-MapGenerator::MapGenerator()
-{
-	Constraint::setMap(this);
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = =//
-//                  GENERATION                 //
-//- - - - - - - - - - - - - - - - - - - - - - -//
-
-Map2* MapGenerator::generate()
+void MapGenerator::generate(Map2& o_Map, const MapConfig& i_Config)
 {
 	initWorldGeneratorSeed();
-	fillWithOcean();
-	placeInitialLandTiles();
-	growLandmasses();
-	return this;
+    fillWithOcean(o_Map);
+    placeInitialLandTiles(o_Map);
+    growLandmasses(o_Map);
 }
 
-void MapGenerator::fillWithOcean()
+void MapGenerator::fillWithOcean(Map2& io_Map)
 {
-	unsigned int tileCount = 0;
-	unsigned int progrIncr = 
-        (int)(PROGRESSION_INCREMENTS_PERC * (float)area(MAP_DIMENSIONS));
-	unsigned int countObjective = progrIncr;
-	unsigned int currPerc = PROGRESSION_INCREMENTS_PERC;
+    UINT numTiles(area(MAP_DIMENSIONS));
 
-	Coord coord;
-	for (coord.y = 0; coord.y < MAP_DIMENSIONS.y; ++coord.y) {
-		for (coord.x = 0; coord.x < MAP_DIMENSIONS.x; ++coord.x) {
-			Tile* tile = new Tile();
-			tile->setEnvironment(OCEAN);
-			m_Tiles[linearize(coord)] = tile;
-
-			++tileCount;
-			if (tileCount > countObjective) {
-				printProgress("Allocating tiles to memory", currPerc);
-				countObjective += progrIncr;
-				currPerc += PROGRESSION_INCREMENTS_PERC;
-			}
-		}
-	}
+    // For progression bar
+    UINT n(numTiles / PGI);
+    UINT progres(0);
+    //
+    for (UINT i(0); i < numTiles; ++i) {
+        io_Map.m_Tiles[i] = new Tile();
+        LOG_EVERY_N(n, DEBUG) << "World generation - Allocating tiles "
+            << "to memory [" << std::setw(3) << ++progres * PGI << "%]";
+    }
 }
 
-void MapGenerator::placeInitialLandTiles()
+void MapGenerator::placeInitialLandTiles(Map2& io_Map)
 {
-	unsigned int initialLandTilesToPlace
-		= area(MAP_DIMENSIONS) * LAND_PROPORTION_2 * INITIAL_LAND_TILES_2;
-	Constraint* constrs[] = {
-		new DistanceFromCenter(LAND_DISPERTION), 
-		new EnvironmentIs(OCEAN)
+    UINT initLandProportion(LAND_PROPORTION_2 * INITIAL_LAND_TILES_2);
+    UINT initLand2Place(area(MAP_DIMENSIONS) * initLandProportion);
+	Constraint* constrs[] {
+        new DistanceFromCenter(io_Map, LAND_DISPERTION),
+        new EnvironmentIs(io_Map, OCEAN)
 	};
-	generateEnvironment(GRASSLAND, initialLandTilesToPlace, 
+    generateEnvironment(io_Map, GRASSLAND, initLand2Place,
 		constrs, 2, "Placing initial land tiles");
 }
 
-void MapGenerator::growLandmasses()
+void MapGenerator::growLandmasses(Map2& io_Map)
 {
-	unsigned int landTilesToPlace = 
-        area(MAP_DIMENSIONS) * LAND_PROPORTION_2 * (1 - INITIAL_LAND_TILES_2);
-	Constraint* constrs[] = {
-		new DistanceFromCenter(LAND_DISPERTION),
-		new Clustering(GRASSLAND, LANDMASS_COMPACTNESS),
-		new EnvironmentIs(OCEAN)
+    UINT normalLandProportion(LAND_PROPORTION_2 * (1 - INITIAL_LAND_TILES_2));
+    UINT land2Place(area(MAP_DIMENSIONS) * normalLandProportion);
+	Constraint* constrs[] {
+        new DistanceFromCenter(io_Map, LAND_DISPERTION),
+        new Clustering(io_Map, GRASSLAND, LANDMASS_COMPACTNESS),
+        new EnvironmentIs(io_Map, OCEAN)
 	};
-	generateEnvironment(GRASSLAND, landTilesToPlace, 
+    generateEnvironment(io_Map, GRASSLAND, land2Place,
         constrs, 3, "Growing landmasses");
 }
 
-void MapGenerator::generateEnvironment(EnvType      i_Type,
+void MapGenerator::generateEnvironment(Map2&        io_Map, 
+                                       EnvType      i_Type,
                                        UINT         i_NumElem,
                                        Constraint** i_Constr,
-                                       int          i_NumConstr,
+                                       UINT         i_NumConstr,
                                        const char*  i_TaskDesc)
 {
-	UINT elemPlaced = 0;
-    UINT progrIncr = (int)(PROGRESSION_INCREMENTS_PERC*(float)i_NumElem);
-    UINT countObjective = progrIncr;
-    UINT currPerc = PROGRESSION_INCREMENTS_PERC;
-
+    // For progression bar
+    UINT n = i_NumElem / PGI;
+    UINT progres(0);
+    //
+    UINT elemPlaced(0);
+    
     while (elemPlaced < i_NumElem) {
 		Coord coord = randTile();
-		float totalProb = 100.0;
-        for (int i = 0; i < i_NumConstr; ++i) {
+		float totalProb(100.0);
+        for (UINT i = 0; i < i_NumConstr; ++i) {
             totalProb *= i_Constr[i]->getWeightFor(coord);
 		}
 		if (nextRand(100) < totalProb) {
-            m_Tiles[linearize(coord)]->setEnvironment(i_Type);
+            io_Map.m_Tiles[coord.x + coord.y * MAP_DIMENSIONS.x]->setEnvironment(i_Type);
 	
-			++elemPlaced;
-			if (elemPlaced > countObjective) {
-                printProgress(i_TaskDesc, currPerc);
-				countObjective += progrIncr;
-				currPerc += PROGRESSION_INCREMENTS_PERC;
-			}
+            LOG_EVERY_N(n, DEBUG) << "World generation - " << i_TaskDesc
+                << " [" << std::setw(3) << ++progres * PGI << "%]";
 		}
 	}
 }
 
-void MapGenerator::printProgress(const char* i_TaskDesc, unsigned int i_Progress)
+Coord MapGenerator::randTile()
 {
-    LOG(DEBUG) << "World generation -:- " << std::setw(10)
-        << i_TaskDesc << ": " << std::setw(3) << i_Progress << "%";
+    int x(nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.x - 2 * OCEAN_MARGINS));
+    int y(nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.y - 2 * OCEAN_MARGINS));
+    return Coord(x, y);
 }

@@ -6,7 +6,8 @@ class DistanceFromCenter: public Constraint
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    DistanceFromCenter(float i_Dispoertion) : 
+    DistanceFromCenter(const Map2& i_Map, float i_Dispoertion) :
+        Constraint(i_Map),
         m_Dispertion(i_Dispoertion) 
     {}
 

@@ -5,6 +5,7 @@
 			"height": 200
 		},
 		"LandProportion":  			0.4,
+		"InitLandProportion":		0.001,
 		"LandDispertion":  			0.2,
 		"LandCompactness": 			0.7,
 		"TundraTransitionWidth": 	8,

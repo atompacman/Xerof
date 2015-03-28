@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "easylogging++.h"
 #include "engine\GameLoop.h"
+//********************************
+#include "world\MapConfig.h"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -12,6 +14,9 @@ int main(int argc, char** argv)
 {
 	// Initialize easylogging++ library
 	initLoggingLibrary();
+
+    //********************************
+    MapConfig();
 
 	// Welcome message !
 	LOG(INFO) <<"======-=====-====-===-==-=- XEROF -=-==-===-====-=====-======";

@@ -5,18 +5,15 @@
 class Map2
 {
 public:
+    friend class MapGenerator;
+
 	// CONSTRUCTOR/DESTRUCTOR
 	Map2();
 	~Map2();
 
 	// GETTERS
-	const Tile* getTile(Coord i_Coord) const;
+	const Tile& getTile(Coord i_Coord) const;
 
-protected:
+private:
 	Tile** m_Tiles;
 };
-
-static UINT linearize(Coord i_Coord)
-{
-    return i_Coord.x + i_Coord.y * MAP_DIMENSIONS.x;
-}
