@@ -4,60 +4,69 @@
 //                                  GENERATION                                //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void MapGenerator::generate(Map2& o_Map, const MapConfig& i_Config)
+Map2*            MapGenerator::s_Map(NULL);
+const MapConfig* MapGenerator::s_Config(NULL);
+
+Map2& MapGenerator::generate(const MapConfig& i_Config)
 {
+    s_Map = new Map2(i_Config.m_Dim);
+    s_Config = &i_Config;
+
 	initWorldGeneratorSeed();
-    fillWithOcean(o_Map);
-    placeInitialLandTiles(o_Map);
-    growLandmasses(o_Map);
+    fillWithOcean();
+    placeInitialLandTiles();
+    growLandmasses();
+    
+    return *s_Map;
 }
 
-void MapGenerator::fillWithOcean(Map2& io_Map)
+void MapGenerator::fillWithOcean()
 {
-    UINT numTiles(area(MAP_DIMENSIONS));
-
     // For progression bar
-    UINT n(numTiles / PGI);
+    UINT n(s_Map->area() / PGI);
     UINT progres(0);
     //
-    for (UINT i(0); i < numTiles; ++i) {
-        io_Map.m_Tiles[i] = new Tile();
+    for (UINT i = 0; i < s_Map->area(); ++i) {
+        s_Map->m_Tiles[i] = new Tile();
         LOG_EVERY_N(n, DEBUG) << "World generation - Allocating tiles "
             << "to memory [" << std::setw(3) << ++progres * PGI << "%]";
     }
 }
 
-void MapGenerator::placeInitialLandTiles(Map2& io_Map)
+void MapGenerator::placeInitialLandTiles()
 {
-    UINT initLandProportion(LAND_PROPORTION_2 * INITIAL_LAND_TILES_2);
-    UINT initLand2Place(area(MAP_DIMENSIONS) * initLandProportion);
-	Constraint* constrs[] {
-        new DistanceFromCenter(io_Map, LAND_DISPERTION),
-        new EnvironmentIs(io_Map, OCEAN)
-	};
-    generateEnvironment(io_Map, GRASSLAND, initLand2Place,
-		constrs, 2, "Placing initial land tiles");
+    UINT initTiles(s_Map->area() * s_Config->m_LandProp * s_Config->m_InitProp);
+
+    for (EnvType envType : LAND_ENV_TYPES) {
+        UINT envTiles(initTiles*s_Config->m_InitLandProp.proportionOf(envType));
+        Constraint* constrs[] {
+            new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion),
+            new EnvironmentIs(*s_Map, OCEAN)
+        };
+        generateEnv(envType, envTiles, constrs, 2, "Placing initial tiles");
+    }
 }
 
-void MapGenerator::growLandmasses(Map2& io_Map)
+void MapGenerator::growLandmasses()
 {
-    UINT normalLandProportion(LAND_PROPORTION_2 * (1 - INITIAL_LAND_TILES_2));
-    UINT land2Place(area(MAP_DIMENSIONS) * normalLandProportion);
-	Constraint* constrs[] {
-        new DistanceFromCenter(io_Map, LAND_DISPERTION),
-        new Clustering(io_Map, GRASSLAND, LANDMASS_COMPACTNESS),
-        new EnvironmentIs(io_Map, OCEAN)
-	};
-    generateEnvironment(io_Map, GRASSLAND, land2Place,
-        constrs, 3, "Growing landmasses");
+    UINT tiles(s_Map->area() * s_Config->m_LandProp * (1-s_Config->m_InitProp));
+
+    for (EnvType envType : LAND_ENV_TYPES) {
+        UINT envTiles(tiles * s_Config->m_LandTypeProp.proportionOf(envType));
+        Constraint* constrs[] {
+            new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion),
+            new Clustering(*s_Map, envType, s_Config->m_LandCompactness),
+            new EnvironmentIs(*s_Map, OCEAN)
+        };
+        generateEnv(envType, envTiles, constrs, 2, "Growing landmasses");
+    }
 }
 
-void MapGenerator::generateEnvironment(Map2&        io_Map, 
-                                       EnvType      i_Type,
-                                       UINT         i_NumElem,
-                                       Constraint** i_Constr,
-                                       UINT         i_NumConstr,
-                                       const char*  i_TaskDesc)
+void MapGenerator::generateEnv(EnvType      i_Type,
+                               UINT         i_NumElem,
+                               Constraint** i_Constr,
+                               UINT         i_NumConstr,
+                               const char*  i_TaskDesc)
 {
     // For progression bar
     UINT n = i_NumElem / PGI;
@@ -66,23 +75,31 @@ void MapGenerator::generateEnvironment(Map2&        io_Map,
     UINT elemPlaced(0);
     
     while (elemPlaced < i_NumElem) {
-		Coord coord = randTile();
+		const Coord coord = randCoord();
 		float totalProb(100.0);
         for (UINT i = 0; i < i_NumConstr; ++i) {
             totalProb *= i_Constr[i]->getWeightFor(coord);
 		}
 		if (nextRand(100) < totalProb) {
-            io_Map.m_Tiles[coord.x + coord.y * MAP_DIMENSIONS.x]->setEnvironment(i_Type);
+            UINT tileNum = coord.x + coord.y * MAP_DIMENSIONS.x;
+            s_Map->m_Tiles[tileNum]->setEnvironment(i_Type);
 	
-            LOG_EVERY_N(n, DEBUG) << "World generation - " << i_TaskDesc
-                << " [" << std::setw(3) << ++progres * PGI << "%]";
+            LOG_EVERY_N(n, DEBUG) << "World generation - " 
+                << i_TaskDesc << " (" << ENV_NAMES[i_Type] 
+                << ")[" << std::setw(3) << ++progres * PGI << "%]";
 		}
 	}
+
+    // Delete constraints
+    for (UINT i = 0; i < i_NumConstr; ++i) {
+        delete i_Constr[i];
+    }
 }
 
-Coord MapGenerator::randTile()
+const Coord MapGenerator::randCoord()
 {
-    int x(nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.x - 2 * OCEAN_MARGINS));
-    int y(nextRand(OCEAN_MARGINS, MAP_DIMENSIONS.y - 2 * OCEAN_MARGINS));
+    UINT obw(s_Config->m_OceanBorderWidth);
+    int x(nextRand(obw, s_Config->m_Dim.x - 2 * obw));
+    int y(nextRand(obw, s_Config->m_Dim.y - 2 * obw));
     return Coord(x, y);
 }

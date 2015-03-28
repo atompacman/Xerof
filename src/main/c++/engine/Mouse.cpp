@@ -8,7 +8,7 @@
 Mouse::Mouse():
 m_State(0),
 m_Zoom(1.0),
-m_Rotate(1.0),
+m_Rotate(0),
 m_ScrollX(maxBufferDimensions().x / 2),
 m_ScrollY(maxBufferDimensions().y / 2),
 m_MaxScrollX(maxBufferDimensions().x),

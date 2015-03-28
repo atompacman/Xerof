@@ -8,12 +8,15 @@ public:
     friend class MapGenerator;
 
 	// CONSTRUCTOR/DESTRUCTOR
-	Map2();
+	Map2(Dimensions i_Dim);
 	~Map2();
 
 	// GETTERS
 	const Tile& getTile(Coord i_Coord) const;
+    Dimensions  dim() const;
+    UINT        area() const;
 
 private:
-	Tile** m_Tiles;
+    Dimensions m_Dim;
+	Tile**     m_Tiles;
 };

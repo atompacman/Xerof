@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 #include "MapElement.h"
 #include "..\civilization\Position.h"
 #include "..\utils\Random.h"
@@ -20,6 +21,22 @@ static const std::map<const char*, EnvType> ENV_TYPES = {
     { "PLAIN",      PLAIN       },
     { "ROCKY",      ROCKY       },
     { "TUNDRA",     TUNDRA      }
+};
+
+static const char* ENV_NAMES[] = {
+    "GRASSLAND",
+    "LAKE",
+    "OCEAN",
+    "PLAIN",
+    "ROCKY",
+    "TUNDRA"
+};
+
+static const std::list<EnvType> LAND_ENV_TYPES = {
+    GRASSLAND,
+    PLAIN,
+    ROCKY,
+    TUNDRA
 };
 
 class Environment : public MapElement

@@ -12,19 +12,21 @@ class MapGenerator
 {
 public:
 	// GENERATION
-	static void generate(Map2& o_Map, const MapConfig& i_Config);
+	static Map2& generate(const MapConfig& i_Config);
 
 private:
+    static Map2*            s_Map;
+    static const MapConfig* s_Config;
+
 	// GENERATION
-    static void fillWithOcean(Map2& io_Map);
-    static void placeInitialLandTiles(Map2& io_Map);
-    static void growLandmasses(Map2& io_Map);
-    static void generateEnvironment(Map2&        io_Map,
-                                    EnvType      i_Type,
-                                    UINT         i_NumElem,
-		                            Constraint** i_Constr, 
-                                    UINT         i_NumConstr, 
-                                    const char*  i_TaskDesc);
-    static Coord randTile();
+    static void fillWithOcean();
+    static void placeInitialLandTiles();
+    static void growLandmasses();
+    static void generateEnv(EnvType      i_Type,
+                            UINT         i_NumElem,
+		                    Constraint** i_Constr, 
+                            UINT         i_NumConstr, 
+                            const char*  i_TaskDesc);
+    static const Coord randCoord();
 };
 

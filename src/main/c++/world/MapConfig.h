@@ -30,20 +30,19 @@ static const char* LIMITS_ROOT_ELEM          = "XerofMapConfigLimits";
 static const char* MIN_MAP_SIZE_ELEM         = "MinimumMapSize";
 static const char* MAX_MAP_SIZE_ELEM         = "MaximumMapSize";
 
-
 class MapConfig
 {
 public:
     Dimensions      m_Dim;
     double          m_LandProp;
-    double          m_InitLandProp;
+    double          m_InitProp;
     double          m_LandDispertion;
     double          m_LandCompactness;
     UINT            m_RandTundraWidth;
     UINT            m_OceanBorderWidth;
     UINT            m_RockyZoneThickn;
-    LandProportions m_TotalProp;
-    LandProportions m_InitProp;
+    LandProportions m_LandTypeProp;
+    LandProportions m_InitLandProp;
 
     // CONSTRUCTOR/DESTRUCTOR
     MapConfig();

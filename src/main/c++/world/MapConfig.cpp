@@ -21,7 +21,7 @@ MapConfig::MapConfig(const char* i_ParamFile)
 
     // Read proportions parameters
     m_LandProp        = getNormDouble(root, LAND_PROPOR_ELEM);
-    m_InitLandProp    = getNormDouble(root, INIT_LAND_PROP_ELEM);
+    m_InitProp        = getNormDouble(root, INIT_LAND_PROP_ELEM);
     m_LandDispertion  = getNormDouble(root, LAND_DISPERS_ELEM);
     m_LandCompactness = getNormDouble(root, LAND_COMPACT_ELEM);
 
@@ -43,8 +43,8 @@ MapConfig::MapConfig(const char* i_ParamFile)
     m_RockyZoneThickn = getUINT(root, ROCKY_BORDERS_W_ELE);
 
     // Read land type proportions
-    m_TotalProp = LandProportions(getSubElem(root, TOTAL_LAND_TYPE_PROP_ELEM));
-    m_InitProp  = LandProportions(getSubElem(root, INIT_LAND_TYPE_PROP_ELEM));
+    m_LandTypeProp=LandProportions(getSubElem(root, TOTAL_LAND_TYPE_PROP_ELEM));
+    m_InitLandProp=LandProportions(getSubElem(root, INIT_LAND_TYPE_PROP_ELEM));
 }
 
 UINT MapConfig::readMapSizeElem(const Value& i_Root, const char* i_Elem)
