@@ -1,34 +1,44 @@
 #pragma once
+#include <stdlib.h>
 #include "..\utils\Elem2D.h"
 #include "..\world\World.h"
 
-class Human: public MapElement
+class Human : public MapElement
 {
 public:
-	Position m_Pos;
-
 	// CONSTRUCTOR/DESTRUCTOR
-    Human(Position i_Pos);
-
-	// SETTERS
-	void setReady();
-	void setBusy();
+    Human(const Position& i_StartingPos, const Map& i_Map);
 
 	// GETTERS
-	const Tile*** const getSurroundingTiles() const;
-	const Tile* const getTileInFront() const;
-	EnvType getEnvironnementInFront() const;
-	bool isReady() const;
+    const Position& getPos() const;
+    Position&       getPos();
+
+    // SURROUNDINGS
+    const Tile*** const getSurroundingTiles() const;
+    const Tile&         getTileInDir(Direction i_Dir) const;
+    const Tile&         getTileInFront() const;
+    EnvType             getEnvInFront() const;
+
+    // SETTERS
+    void setDir(Direction i_Dir);
+    void setReady();
+    void setBusy();
+
+    // STATE
+    bool isReady() const;
 
 	// STATS
 	float getMoveSpeed() const;
-	unsigned int getRangeOfSight() const;
+	UINT  getRangeOfSight() const;
 
 	// ASSET
 	virtual AssetID assetFile() const { return APARATUS3; }
 
 private:
-	bool  m_IsReady;
-	float m_MoveSpeed;
-	UINT  m_ROSight;
+    Position    m_Pos;
+	bool        m_IsReady;
+	float       m_MoveSpeed;
+	UINT        m_ROSight;
+
+    const Map&  m_Map;
 };

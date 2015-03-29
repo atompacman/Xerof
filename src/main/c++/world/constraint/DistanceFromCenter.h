@@ -6,21 +6,19 @@ class DistanceFromCenter: public Constraint
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    DistanceFromCenter(const Map2& i_Map, float i_Dispoertion) :
+    DistanceFromCenter(const Map& i_Map, double i_Dispertion) :
         Constraint(i_Map),
-        m_Dispertion(i_Dispoertion) 
+        m_Dispertion(i_Dispertion) 
     {}
 
 	// WEIGHT
-	float getWeightFor(Coord i_Coord) const
+    double getWeightFor(Coord i_Coord) const
 	{
-		float xMapRadius = MAP_DIMENSIONS.x / 2.0;
-		float yMapRadius = MAP_DIMENSIONS.y / 2.0;
-		float xWeight = 1 - abs((float)i_Coord.x - xMapRadius) / xMapRadius;
-		float yWeight = 1 - abs((float)i_Coord.y - yMapRadius) / yMapRadius;
-		return pow(xWeight * yWeight, m_Dispertion);
+        DCoord mapRadius = toDCoord(m_Map.dim()) * 0.5;
+        DCoord distToCenter = abs(toDCoord(i_Coord) - mapRadius) / mapRadius;
+        return pow((1 - distToCenter.x) * (1 - distToCenter.y), m_Dispertion);
 	}
 
 private:
-	float m_Dispertion;
+	double m_Dispertion;
 };

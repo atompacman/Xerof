@@ -4,38 +4,30 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-CivController::CivController(): 
-Civilization() 
+CivController::CivController(const World& i_World) :
+m_Civ(i_World.map()),
+m_AI(new AtomAI(m_Civ)),
+m_World(i_World)
 {}
+
+CivController::~CivController()
+{
+    delete m_AI;
+}
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                            DAWN OF CIVILIZATION                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-
 void CivController::placeFirstHuman()
 {
 	Coord startLoc;
 	do {
-		startLoc = randTile();
-    } while (!World::getInstance()->m_Map->getTile(startLoc)->isPassable());
+        startLoc = m_World.map().randCoord();
+    } while (!m_World.map().getTile(startLoc).isPassable());
 
-	addHuman(startLoc);
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                     ADD                                    //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-void CivController::addHuman(Coord i_Pos)
-{
-	assert(m_Pop < MAX_POPULATION);
-	assert(World::getInstance()->m_Map->getTile(i_Pos)->isPassable());
-
-    m_People[m_Pop] = new Human(Position(i_Pos, UP));
-	++m_Pop;
+    m_Civ.addHuman(startLoc);
 }
 
 
@@ -43,8 +35,17 @@ void CivController::addHuman(Coord i_Pos)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Human* CivController::getHuman(UINT i_ID)
+const Civilization& CivController::getCiv() const
 {
-    assert(i_ID < m_Pop);
-    return m_People[i_ID];
+    return m_Civ;
+}
+
+AI* CivController::getAI() const
+{
+    return m_AI;
+}
+
+Human& CivController::getHuman(UINT i_ID)
+{
+    return m_Civ.getHuman(i_ID);
 }

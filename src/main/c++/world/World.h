@@ -1,24 +1,17 @@
 #pragma once
 #include <assert.h>
 #include "Map.h"
+#include "MapGenerator.h"
 
 class World
 {
 public:
-	Map* m_Map;
+    // CONSTRUCTOR/DESTRUCTOR
+    World(const MapConfig& i_MapConfig);
 
-	// GET INSTANCE
-	const static World* getInstance() 
-	{
-		if (s_World == NULL) { 
-            s_World = new World(); 
-        }
-		return s_World;
-	}
+    // GETTERS
+    const Map& map() const;
 
 private:
-	static World* s_World;
-
-	// CONSTRUCTOR/DESTRUCTOR
-	World();
+    Map m_Map;
 };

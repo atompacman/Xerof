@@ -1,18 +1,18 @@
 #pragma once
 #include <math.h>
+#include "..\utils\FatalErrorDialog.h"
 #include "..\Parameters.h"
 
-class Mouse
+struct Mouse
 {
-public:
-	int  m_State;
-	float m_Zoom;
-	float m_Rotate;
-	float m_ScrollX, m_ScrollY;
-	const float m_MaxScrollX, m_MaxScrollY;
+	int         m_State;
+	double      m_Zoom;
+    double      m_Rotate;
+    DCoord      m_Pos;
+    const Coord m_MaxPos;
 
 	//CONSTRUCTOR/DESTRUCTOR
-	Mouse();
+	Mouse(Dimensions i_MapDim);
 
 	//EVENT HANDLING
 	void handleMouseEvent(const ALLEGRO_EVENT& i_Event);

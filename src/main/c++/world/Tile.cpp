@@ -11,7 +11,7 @@ m_Env(OCEAN)
 
 Tile::~Tile()
 {
-    for (int i = 0; i < 4; ++i) {
+    for (UINT i = 0; i < 4; ++i) {
         delete[] m_Objs[i];
     }
 	delete[] m_Objs;
@@ -24,14 +24,14 @@ Tile::~Tile()
 
 void Tile::setObject(Direction i_Dir, Object* i_Obj)
 {
-	assert(isDiagonalDirection(i_Dir));
+    assertDiagDir(i_Dir);
 	assert(!hasObject(i_Dir));
 	m_Objs[i_Dir - UPPER_LEFT] = i_Obj;
 }
 
 void Tile::setEnvironment(EnvType i_Type)
 {
-    m_Env = Environment(i_Type);
+    m_Env.setEnvType(i_Type);
 }
 
 
@@ -41,8 +41,8 @@ void Tile::setEnvironment(EnvType i_Type)
 
 void Tile::removeObject(Direction i_Dir)
 {
-	assert(isDiagonalDirection(i_Dir));
-	delete m_Objs[i_Dir - UPPER_LEFT];
+    assertDiagDir(i_Dir);
+    delete m_Objs[i_Dir - UPPER_RIGHT];
 }
 
 
@@ -53,7 +53,7 @@ void Tile::removeObject(Direction i_Dir)
 Object* Tile::getObject(Direction i_Dir) const
 {
 	assert(hasObject(i_Dir));
-	return m_Objs[i_Dir - UPPER_LEFT];
+    return m_Objs[i_Dir - UPPER_RIGHT];
 }
 
 const Environment& Tile::getEnvironment() const
@@ -68,14 +68,14 @@ const Environment& Tile::getEnvironment() const
 
 bool Tile::hasObject(Direction i_Dir) const
 {
-	assert(isDiagonalDirection(i_Dir));
-	return m_Objs[i_Dir - UPPER_LEFT] != nullptr;
+    assertDiagDir(i_Dir);
+    return m_Objs[i_Dir - UPPER_RIGHT] != NULL;
 }
 
 bool Tile::hasObject() const
 {
 	return hasObject(UPPER_LEFT) || hasObject(UPPER_RIGHT) || 
-		hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
+		   hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
 }
 
 

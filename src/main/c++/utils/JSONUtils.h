@@ -2,7 +2,7 @@
 #include "easylogging++.h"
 #include "rapidjson\document.h"
 #include "rapidjson\error\en.h"
-#include "..\engine\internal\dialog\FatalErrorDialog.h"
+#include "FatalErrorDialog.h"
 
 using namespace rapidjson;
 
@@ -61,22 +61,27 @@ static UINT getUINT(const Value& i_Value, const char* i_Elem)
     if (!subElem.IsUint()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
-            "\" value should be a positive integer";
+            "\" value should be an unsigned integer";
         FatalErrorDialog(ss.str());
     }
     return subElem.GetUint();
 }
 
-static double getNormDouble(const Value& i_Value, const char* i_Elem)
+static double getDouble(const Value& i_Value, const char* i_Elem)
 {
     const Value& subElem(getSubElem(i_Value, i_Elem));
-    if (!subElem.IsDouble()) {
+    if (!subElem.IsNumber()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
             "\" value should be a real number";
         FatalErrorDialog(ss.str());
     }
-    double value(subElem.GetDouble());
+    return subElem.GetDouble();
+}
+
+static double getNormDouble(const Value& i_Value, const char* i_Elem)
+{
+    double value(getDouble(i_Value, i_Elem));
     if (value < 0 || value > 1.0) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<

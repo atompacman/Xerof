@@ -4,7 +4,7 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-AtomAI::AtomAI(Civilization* i_Civ) : 
+AtomAI::AtomAI(const Civilization& i_Civ) :
 AI(i_Civ) 
 {}
 
@@ -13,12 +13,15 @@ AI(i_Civ)
 //                                GIVE ORDER                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Order AtomAI::giveOrder(Human& i_Human)
+Order AtomAI::giveOrder(const Human& i_Human)
 {
-    while (i_Human.getEnvironnementInFront() == OCEAN) {
-        i_Human.m_Pos.m_FacingDir = Direction((nextRand(8)) % 8);
-	}
-    return Order(WALK, i_Human.m_Pos.m_FacingDir);
+    UINT attempts(0);
+    Direction dir(i_Human.getPos().m_Dir);
+    while (!i_Human.getTileInDir(dir).isPassable() && attempts < 100) {
+        dir = randDirNoCenter();
+        ++attempts;
+    }
+    return Order(WALK, dir);
 }
 
 
@@ -33,8 +36,8 @@ void AtomAI::printSurroundingTiles(const Human& i_Human)
 
 	for (int y = 0; y < zoneLength; ++y) {
 		for (int x = 0; x < zoneLength; ++x) {
-			const char* name = tiles[x][y]->getEnvironment().toString();
-            LOG(TRACE) << std::setw(10) << name << "  ";
+            EnvType type = tiles[x][y]->getEnvironment().getType();
+            LOG(TRACE) << std::setw(10) << ENV_NAMES[type] << "  ";
 		}
 		LOG(TRACE) << '\n';
 	}

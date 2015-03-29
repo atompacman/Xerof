@@ -4,102 +4,115 @@
 //                                  GENERATION                                //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Map2*            MapGenerator::s_Map(NULL);
+Map*             MapGenerator::s_Map(NULL);
 const MapConfig* MapGenerator::s_Config(NULL);
 
-Map2& MapGenerator::generate(const MapConfig& i_Config)
+Map& MapGenerator::generate(const MapConfig& i_Config)
 {
-    s_Map = new Map2(i_Config.m_Dim);
+    s_Map = new Map(i_Config.m_Dim);
     s_Config = &i_Config;
 
-	initWorldGeneratorSeed();
-    fillWithOcean();
     placeInitialLandTiles();
     growLandmasses();
     
     return *s_Map;
 }
 
-void MapGenerator::fillWithOcean()
-{
-    // For progression bar
-    UINT n(s_Map->area() / PGI);
-    UINT progres(0);
-    //
-    for (UINT i = 0; i < s_Map->area(); ++i) {
-        s_Map->m_Tiles[i] = new Tile();
-        LOG_EVERY_N(n, DEBUG) << "World generation - Allocating tiles "
-            << "to memory [" << std::setw(3) << ++progres * PGI << "%]";
-    }
-}
-
 void MapGenerator::placeInitialLandTiles()
 {
+    // Compute how many initial tiles to place
     UINT initTiles(s_Map->area() * s_Config->m_LandProp * s_Config->m_InitProp);
 
+    // Set constrains that are common for all env. type
+    Constrs constrs(2);
+    constrs[0] = new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion);
+    constrs[1] = new EnvironmentIs(*s_Map, OCEAN);
+
     for (EnvType envType : LAND_ENV_TYPES) {
+        // Compute how many initial tiles to place for specific env. type
         UINT envTiles(initTiles*s_Config->m_InitLandProp.proportionOf(envType));
-        Constraint* constrs[] {
-            new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion),
-            new EnvironmentIs(*s_Map, OCEAN)
-        };
-        generateEnv(envType, envTiles, constrs, 2, "Placing initial tiles");
+
+        // Generate tiles for specific env. type
+        generateEnv(envType, envTiles, constrs, "Placing initial tiles");
     }
+
+    // Delete constraints that are common for all env. type
+    delete constrs[0];
+    delete constrs[1];
 }
 
 void MapGenerator::growLandmasses()
 {
+    // Compute how many tiles to place
     UINT tiles(s_Map->area() * s_Config->m_LandProp * (1-s_Config->m_InitProp));
 
+    // Set constrains that are common for all env. type
+    Constrs constrs(3);
+    constrs[0] = new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion);
+    constrs[1] = new EnvironmentIs(*s_Map, OCEAN);
+
+    // Generate tiles for each env. type
     for (EnvType envType : LAND_ENV_TYPES) {
+        // Compute how many tiles to place for specific env. type
         UINT envTiles(tiles * s_Config->m_LandTypeProp.proportionOf(envType));
-        Constraint* constrs[] {
-            new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion),
-            new Clustering(*s_Map, envType, s_Config->m_LandCompactness),
-            new EnvironmentIs(*s_Map, OCEAN)
-        };
-        generateEnv(envType, envTiles, constrs, 2, "Growing landmasses");
+
+        // Set constrains that are env. type specific
+        constrs[2] = new Clustering(*s_Map,envType,s_Config->m_LandCompactness);
+
+        // Generate tiles for specific env. type
+        generateEnv(envType, envTiles, constrs, "Growing landmasses");
+
+        // Delete constraints that are env. type specific
+        delete constrs[2];
     }
+
+    // Delete constraints that are common for all env. type
+    delete constrs[0];
+    delete constrs[1];
 }
 
-void MapGenerator::generateEnv(EnvType      i_Type,
-                               UINT         i_NumElem,
-                               Constraint** i_Constr,
-                               UINT         i_NumConstr,
-                               const char*  i_TaskDesc)
+void MapGenerator::generateEnv(EnvType        i_Type,
+                               UINT           i_NumElem,
+                               const Constrs& i_Constr,
+                               const char*    i_TaskDesc)
 {
-    // For progression bar
-    UINT n = i_NumElem / PGI;
-    UINT progres(0);
-    //
+    // Progress logging
+    std::stringstream ss;
+    ss << "World generation - "<< i_TaskDesc <<" (" << ENV_NAMES[i_Type] << ")";
+    std::string msg = ss.str();
+    ProgressLogger progressLogger(i_NumElem, msg);
+
     UINT elemPlaced(0);
     
+    // Loop until all needed tiles are placed
     while (elemPlaced < i_NumElem) {
-		const Coord coord = randCoord();
-		float totalProb(100.0);
-        for (UINT i = 0; i < i_NumConstr; ++i) {
-            totalProb *= i_Constr[i]->getWeightFor(coord);
+        // Generate a random coord
+		const Coord coord(randCoord());
+
+        // At first, the probability of placing the env. is 100 %
+		double totalProb(1.0);
+
+        // Each constraint will reduce this probability 
+        // (product of all constraint weights)
+        for (auto constraint : i_Constr) {
+            totalProb *= constraint->getWeightFor(coord);
 		}
-		if (nextRand(100) < totalProb) {
-            UINT tileNum = coord.x + coord.y * MAP_DIMENSIONS.x;
-            s_Map->m_Tiles[tileNum]->setEnvironment(i_Type);
-	
-            LOG_EVERY_N(n, DEBUG) << "World generation - " 
-                << i_TaskDesc << " (" << ENV_NAMES[i_Type] 
-                << ")[" << std::setw(3) << ++progres * PGI << "%]";
+
+        // Generate a probability
+		if (randProb() < totalProb) {
+            // Set the env.
+            UINT tileNum(coord.x + coord.y * s_Map->dim().x);
+            s_Map->m_Tiles[tileNum].setEnvironment(i_Type);
+            ++elemPlaced;
+            progressLogger.next();
 		}
 	}
-
-    // Delete constraints
-    for (UINT i = 0; i < i_NumConstr; ++i) {
-        delete i_Constr[i];
-    }
 }
 
 const Coord MapGenerator::randCoord()
 {
     UINT obw(s_Config->m_OceanBorderWidth);
-    int x(nextRand(obw, s_Config->m_Dim.x - 2 * obw));
-    int y(nextRand(obw, s_Config->m_Dim.y - 2 * obw));
+    int x(randUINT(obw, s_Config->m_Dim.x - 1 - 2 * obw));
+    int y(randUINT(obw, s_Config->m_Dim.y - 1 - 2 * obw));
     return Coord(x, y);
 }

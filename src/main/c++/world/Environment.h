@@ -49,15 +49,15 @@ public:
 	EnvType getType() const;
 	Direction getOrientation() const;
 
+    // SETTERS
+    void setEnvType(EnvType i_Type);
+
 	// STATUS
 	bool isSolidLand() const;
     static bool isSolidLand(EnvType i_Type);
 
 	// ASSET
 	AssetID assetFile() const;
-
-	// OTHER
-	const char* toString() const;
 
 private:
 	EnvType   m_Type;

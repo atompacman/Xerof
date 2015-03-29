@@ -6,7 +6,7 @@
 
 Environment::Environment(EnvType i_Type) :
 m_Type(i_Type),
-m_Orien(Direction(nextRand(3)))
+m_Orien(randBasicDir())
 {}
 
 
@@ -22,6 +22,17 @@ EnvType Environment::getType() const
 Direction Environment::getOrientation() const
 {
     return m_Orien;
+}
+
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   SETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+void Environment::setEnvType(EnvType i_Type)
+{
+    m_Type = i_Type;
 }
 
 
@@ -54,21 +65,4 @@ AssetID Environment::assetFile() const
     case TUNDRA:	return TUNDRA_TILE_FILE;
     }
     return SELECTION;
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                    OTHER                                   //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-const char* Environment::toString() const
-{
-    switch (m_Type) {
-    case GRASSLAND: return "GRASSLAND";
-    case OCEAN:		return "OCEAN";
-    case PLAIN:		return "PLAIN";
-    case ROCKY:		return "ROCKY";
-    case TUNDRA:	return "TUNDRA";
-    }
-    return "???";
 }

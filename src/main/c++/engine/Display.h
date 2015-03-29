@@ -11,11 +11,13 @@ class Display
 {
 public:
 	//CONSTRUCTOR/DESTRUCTOR
-	Display(Mouse* i_Mouse);
+    Display(const World&    i_World, 
+            const Mouse&    i_Mouse, 
+            CivController** i_Civs);
 	~Display();
 
 	//DRAW
-	void draw() const;
+	void draw();
     void resize() const;
 
 	//SETTERS
@@ -23,25 +25,33 @@ public:
 	void setFPS(int i_FPS);
 
     //GETTERS
-    ALLEGRO_DISPLAY* getWindow() const;
+    ALLEGRO_DISPLAY& getWindow() const;
 
 private:
-    ALLEGRO_DISPLAY* m_Window;
-    ALLEGRO_BITMAP** m_Assets;
-	ALLEGRO_FONT*    m_GameFont;
-	CivController**  m_Civs;
-	Mouse*           m_Mouse;
+    // Initialized outside
+    const World&    m_World;
+    const Mouse&    m_Mouse;
+    CivController** m_Civs;
+
+    // Initialized here
+    ALLEGRO_DISPLAY&  m_Window;
+    ALLEGRO_BITMAP**  m_Assets;
+	ALLEGRO_FONT&     m_GameFont;
+
+    // Tiles in screen
+    Coord m_ULtiles;
+    Coord m_LRtiles;
 
 	//CONSTRUCTOR/DESTRUCTOR
-    static ALLEGRO_DISPLAY* createWindow();
+    static ALLEGRO_DISPLAY& createWindow();
 	
 	//DRAW
-	int resolutionLevel() const;
-	void actualFieldOfView(float i_ActualWidth, float i_ActualHeight, UINT* i_Values) const;
+	int resolutionLevel();
+    void updateTilesToDisplay(DDimensions i_ScreenDim);
 };
 
 static float correspondingAngle(Direction i_Dir) {
-    assert(i_Dir != MIDDLE);
+    assertNonCenterDir(i_Dir);
 
     switch (i_Dir) {
     case UP:			return 0;

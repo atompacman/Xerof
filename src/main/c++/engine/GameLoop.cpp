@@ -5,19 +5,20 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 GameLoop::GameLoop():
-m_Mouse(),
+m_World(MapConfig()),
+m_CivCtrls(initCivCtrls()),
+
+m_Mouse(m_World.map().dim()),
 m_Keyboard(),
-m_Disp(&m_Mouse),
+m_Disp(m_World, m_Mouse, m_CivCtrls),
 
 m_Queue(al_create_event_queue()),
 m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
 
-m_CivCtrlrs(NULL),
-m_AIs(NULL),
-
 m_NumMoveProcs(0),
-m_MoveProcs(new MoveProcess*[NB_CIV * MAX_POPULATION])
+m_MoveProcs(new MoveProcess*[NB_CIV * CIV_MAX_POP])
 {
+    // Check if Allegro instances are correct
 	if (m_Queue == NULL){
 		FatalErrorDialog("Creation of event queue failed.");
 	}
@@ -25,34 +26,32 @@ m_MoveProcs(new MoveProcess*[NB_CIV * MAX_POPULATION])
 		FatalErrorDialog("Creation of timer for screen refreshing failed.");
 	}
 
+    // Register event sources
 	al_register_event_source(
         m_Queue, al_get_keyboard_event_source());
 	al_register_event_source(
         m_Queue, al_get_mouse_event_source());
 	al_register_event_source(
-        m_Queue, al_get_display_event_source(m_Disp.getWindow()));
+        m_Queue, al_get_display_event_source(&m_Disp.getWindow()));
 	al_register_event_source(
         m_Queue, al_get_timer_event_source(m_ScreenRefresher));
-
-	initializeCivsAndAIs();
 }
 
-void GameLoop::initializeCivsAndAIs()
+CivController** GameLoop::initCivCtrls()
 {
-	m_CivCtrlrs = new CivController*[NB_CIV];
-	m_AIs = new AI*[NB_CIV];
-
-	for (int i = 0; i < NB_CIV; ++i) {
-		CivController* civ = new CivController();
-		civ->placeFirstHuman();
-		m_CivCtrlrs[i] = civ;
-		m_AIs[i] = new AtomAI(civ);
-	}
-	m_Disp.setCivs(m_CivCtrlrs);
+    m_CivCtrls = new CivController*[NB_CIV];
+    for (int i = 0; i < NB_CIV; ++i) {
+        (m_CivCtrls[i] = new CivController(m_World))->placeFirstHuman();
+    }
+    return m_CivCtrls;
 }
 
 GameLoop::~GameLoop()
 {
+    for (int i = 0; i < NB_CIV; ++i) {
+        delete m_CivCtrls[i];
+    }
+    delete[] m_CivCtrls;
     al_destroy_timer(m_ScreenRefresher);
     al_destroy_event_queue(m_Queue);
 }
@@ -61,11 +60,6 @@ GameLoop::~GameLoop()
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                    START                                   //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-void GameLoop::run()
-{
-   GameLoop().startGame();
-}
 
 void GameLoop::startGame()
 {
@@ -146,79 +140,55 @@ void GameLoop::startGame()
 
 void GameLoop::updateGame()
 {
-	if (processAI() == EXIT_FAILURE) {
-        FatalErrorDialog("Error processing AIs");
-	}
+    processAI();
 }
 
-bool GameLoop::processAI()
+void GameLoop::processAI()
 {
-	for (int i = 0; i < NB_CIV; ++i) {
-		CivController* civ = m_CivCtrlrs[i];
-		AI* ai = m_AIs[i];
-		int civPop = civ->getPopulation();
-
-		for (int j = 0; j < civPop; ++j) {
-			Human* human = civ->getHuman(j);
-			if (!human->isReady()) {
+	for (UINT i = 0; i < NB_CIV; ++i) {
+        for (UINT j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j) {
+            Human& human = m_CivCtrls[i]->getHuman(j);
+            if (!human.isReady()) {
 				continue;
 			}
-			Order order = ai->giveOrder(*human);
-			if (processOrder(human, order) == EXIT_FAILURE) {
-				return EXIT_FAILURE;
-			}
+            processOrder(human, m_CivCtrls[i]->getAI()->giveOrder(human));
 		}
 	}
-	return EXIT_SUCCESS;
 }
 
-bool GameLoop::processOrder(Human* io_Human, const Order& i_Order)
+void GameLoop::processOrder(Human& io_Human, const Order& i_Order)
 {
-	PossibleOrders action = i_Order.getAction();
+	PossibleOrders action(i_Order.getAction());
 
 	switch (action) {
 	case WALK:
-		Direction direction = Direction(i_Order.getParams()[0]);
-		assert(direction != MIDDLE);
-		if (processMovingOrder(io_Human, action, direction)) {
-			return EXIT_FAILURE;
-		}
+        processMovingOrder(io_Human, action, Direction(i_Order.getParam(0)));
 		break;
 	}
-
-	return EXIT_SUCCESS;
 }
 
-bool GameLoop::processMovingOrder(Human*         i_Human,	
+void GameLoop::processMovingOrder(Human&         io_Human,
 	                              PossibleOrders i_Action, 
                                   Direction      i_Dir)
 {
-	float tilePerTurn = i_Human->getMoveSpeed();
-	switch (i_Action) {
-	case WALK: tilePerTurn; break;
-	}
+    assertNonCenterDir(i_Dir);
 
-    DCoord after = incrementedToDirection(i_Human->m_Pos.m_Coord, i_Dir);
-	Position dest = Position(after, i_Dir);
+    DCoord after(incrementedToDirection(io_Human.getPos().m_Coord, i_Dir));
+	Position dest(after, i_Dir);
 
-	if (verifyDestination(dest)) {
-		m_MoveProcs[m_NumMoveProcs] = new MoveProcess(i_Human, dest);
-		++m_NumMoveProcs;
-	}
-
-	return EXIT_SUCCESS;
+    if (verifyDestination(dest)) {
+        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(&io_Human, dest);
+        ++m_NumMoveProcs;
+    }
 }
 
 bool GameLoop::verifyDestination(const Position& i_Dest) const
 {
-	Map* map = World::getInstance()->m_Map;
-	Coord coord = Coord(i_Dest.m_Coord.x, i_Dest.m_Coord.y);
-	Tile* destTile = map->getTile(coord);
-	if (!destTile->isPassable()) {
+    if (!m_World.map().getTile(i_Dest.tileCoord()).isPassable()) {
 		LOG(WARNING) << "ERROR IN AI: Cannot move on water";
 		return false;
 	}
-	if (isOccupied(coord)) {
+    if (isOccupied(i_Dest.tileCoord())) {
 		LOG(WARNING) << "ERROR IN AI: Tile is already occupied";
 		return false;
 	}
@@ -227,11 +197,11 @@ bool GameLoop::verifyDestination(const Position& i_Dest) const
 
 bool GameLoop::isOccupied(Coord i_Coord) const
 {
-	for (int i = 0; i < NB_CIV; ++i) {
-		CivController* civ = m_CivCtrlrs[i];
-		for (unsigned int j = 0; j < civ->getPopulation(); ++j) {
-			Human* human = civ->getHuman(j);
-            if (human->m_Pos == Position(i_Coord, UP)) {
+	for (UINT i = 0; i < NB_CIV; ++i) {
+		const Civilization civ = m_CivCtrls[i]->getCiv();
+        for (UINT j = 0; j < civ.population(); ++j) {
+			Human human = civ.getHuman(j);
+            if (human.getPos() == Position(i_Coord, UP)) {
 				return true;
 			}
 		}
@@ -242,7 +212,7 @@ bool GameLoop::isOccupied(Coord i_Coord) const
 void GameLoop::updateMovements()
 {
 	for (UINT i = 0; i < m_NumMoveProcs; ++i) {
-		m_MoveProcs[i]->nextIteration();
+		m_MoveProcs[i]->nextIter();
 	}
 }
 

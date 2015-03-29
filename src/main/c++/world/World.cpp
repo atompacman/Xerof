@@ -1,13 +1,19 @@
 #include "World.h"
 
-World* World::s_World;
-
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-World::World()
+World::World(const MapConfig& i_MapConfig) :
+m_Map(MapGenerator::generate(i_MapConfig))
+{}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+const Map& World::map() const
 {
-	LOG(INFO) << "World generation -:- Generating world";
-	m_Map = new Map();
+    return m_Map;
 }

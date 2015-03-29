@@ -1,18 +1,15 @@
 #include "Mouse.h"
-#include "internal\dialog\FatalErrorDialog.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Mouse::Mouse():
+Mouse::Mouse(Dimensions i_MapDim) :
 m_State(0),
 m_Zoom(1.0),
 m_Rotate(0),
-m_ScrollX(maxBufferDimensions().x / 2),
-m_ScrollY(maxBufferDimensions().y / 2),
-m_MaxScrollX(maxBufferDimensions().x),
-m_MaxScrollY(maxBufferDimensions().y)
+m_Pos(toDCoord(i_MapDim * TILE_SIZE[0]) * 0.5),
+m_MaxPos(i_MapDim * TILE_SIZE[0])
 {
 	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");
@@ -35,26 +32,18 @@ void Mouse::handleMouseEvent(const ALLEGRO_EVENT& i_Event)
 		break;
 	case ALLEGRO_EVENT_MOUSE_AXES:
 		if (m_State == 1) {
-			float x = i_Event.mouse.dx / m_Zoom;
-			float y = i_Event.mouse.dy / m_Zoom;
-			m_ScrollX -= x * cos(m_Rotate) + y * sin(m_Rotate);
-			m_ScrollY -= y * cos(m_Rotate) - x * sin(m_Rotate);
-
-			m_ScrollX = m_ScrollX < 0 ? 0 : m_ScrollX;
-			m_ScrollX = m_ScrollX > m_MaxScrollX ? m_MaxScrollX : m_ScrollX;
-			m_ScrollY = m_ScrollY < 0 ? 0 : m_ScrollY;
-			m_ScrollY = m_ScrollY > m_MaxScrollY ? m_MaxScrollY : m_ScrollY;
+			double x = i_Event.mouse.dx / m_Zoom;
+            double y = i_Event.mouse.dy / m_Zoom;
+            m_Pos.x -= x * cos(m_Rotate) + y * sin(m_Rotate);
+            m_Pos.y -= y * cos(m_Rotate) - x * sin(m_Rotate);
+            m_Pos.x = max(0, min(m_Pos.x, m_MaxPos.x));
+            m_Pos.y = max(0, min(m_Pos.y, m_MaxPos.y));
 		}
 		if (m_State == 2) {
 			m_Rotate += i_Event.mouse.dx * 0.01;
 			m_Zoom -= i_Event.mouse.dy * 0.01 * m_Zoom;
 		}
 		m_Zoom += i_Event.mouse.dz * 0.1 * m_Zoom;
-		if (m_Zoom < MIN_ZOOM_SCALE) {
-			m_Zoom = MIN_ZOOM_SCALE;
-		}
-		if (m_Zoom > MAX_ZOOM_SCALE) {
-			m_Zoom = MAX_ZOOM_SCALE;
-		}
+        m_Zoom = max(MIN_ZOOM_SCALE, min(m_Zoom, MAX_ZOOM_SCALE));
 	}
 }

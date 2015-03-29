@@ -1,32 +1,34 @@
 #pragma once
-#include "..\Map2.h"
+#include "..\Map.h"
 #include "..\..\Parameters.h"
 
 class Constraint
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    Constraint(const Map2& i_Map) :
+    Constraint(const Map& i_Map) :
         m_Map(i_Map)
     {}
 
     // WEIGHT
-    virtual float getWeightFor(Coord i_Coord) const = 0;
+    virtual double getWeightFor(Coord i_Coord) const = 0;
 
 protected:
-    Map2 m_Map;
+    const Map& m_Map;
 
     // COUNT SURROUNDING
-    int countSurroundingEnvironOfType(Coord m_Coord, EnvType m_Type) const
+    UINT countSurroundingEnvironOfType(Coord m_Coord,EnvType m_Type) const
     {
-        int count = 0;
-        for (int y = -1; y <= 1; ++y) {
-            for (int x = -1; x <= 1; ++x) {
-                if (x == 0 && y == 0) {
+        UINT count(0);
+        Coord coord;
+        for (coord.y = max(0, m_Coord.y - 1);
+             coord.y < min(m_Coord.y + 2, m_Map.dim().y); ++coord.y) {
+            for (coord.x = max(0, m_Coord.x - 1);
+                 coord.x < min(m_Coord.x + 2, m_Map.dim().x); ++coord.x) {
+                if (coord == m_Coord) {
                     continue;
                 }
-                Tile tile = m_Map.getTile(Coord(m_Coord.x + x, m_Coord.y + y));
-                if (tile.getEnvironment().getType() == m_Type) {
+                if (m_Map.getTile(coord).getEnvironment().getType() == m_Type) {
                     ++count;
                 }
             }

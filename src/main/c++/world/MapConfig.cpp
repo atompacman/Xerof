@@ -19,11 +19,11 @@ MapConfig::MapConfig(const char* i_ParamFile)
     UINT height = readMapSizeElem(root, DIM_HEIGHT_SUB_ELEM);
     m_Dim = Dimensions(width, height);
 
-    // Read proportions parameters
+    // Read simple parameters
     m_LandProp        = getNormDouble(root, LAND_PROPOR_ELEM);
     m_InitProp        = getNormDouble(root, INIT_LAND_PROP_ELEM);
-    m_LandDispertion  = getNormDouble(root, LAND_DISPERS_ELEM);
-    m_LandCompactness = getNormDouble(root, LAND_COMPACT_ELEM);
+    m_LandDispertion  = getDouble(root, LAND_DISPERS_ELEM);
+    m_LandCompactness = getDouble(root, LAND_COMPACT_ELEM);
 
     // Read random tundra width
     m_RandTundraWidth = getUINT(root, TUNDRA_TRANS_W_ELEM);

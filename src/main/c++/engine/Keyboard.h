@@ -1,4 +1,5 @@
 #pragma once
+#include "..\utils\FatalErrorDialog.h"
 
 class Keyboard
 {

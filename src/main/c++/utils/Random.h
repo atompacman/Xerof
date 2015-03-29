@@ -2,25 +2,42 @@
 #include <assert.h>
 #include <ctime>
 #include <stdlib.h>
+#include <wtypes.h>
+#include "Direction.h"
 #include "..\Parameters.h"
 
-static void initWorldGeneratorSeed()
+static void initRandSeed()
 {
 	if (RANDOM_SEED) {
-		srand((unsigned int)time(NULL));
+		srand((UINT)time(NULL));
 	}
 	else {
 		srand(WORLD_GENERATION_SEED);
 	}
 }
 
-static int nextRand(int i_Min, int i_Max)
+static UINT randUINT(UINT i_Min, UINT i_Max)
 {
-	assert(i_Min <= i_Max && i_Max > 0);
+	assert(i_Min <= i_Max);
 	return rand() % (i_Max - i_Min + 1) + i_Min;
 }
 
-static int nextRand(int i_Max)
+static UINT randUINT(UINT i_Max)
 {
-	return nextRand(0, i_Max);
+	return randUINT(0, i_Max);
+}
+
+static double randProb()
+{
+    return (double)rand() / (RAND_MAX);
+}
+
+static Direction randBasicDir()
+{
+    return randUINT(LEFT);
+}
+
+static Direction randDirNoCenter()
+{
+    return randUINT(UPPER_LEFT);
 }

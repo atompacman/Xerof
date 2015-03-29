@@ -3,8 +3,10 @@ OCEAN_TILE_FILE			= assets/background/ocean.tga
 PLAINS_TILE_FILE		= assets/background/plains.tga
 ROCKY_TILE_FILE			= assets/background/rocky.tga
 TUNDRA_TILE_FILE 		= assets/background/tundra.tga
+
 ALPHA_TEST_PACMAN 		= assets/testalpha.tga
 STICKMAN 				= assets/foreground/character/stickman.tga
 SELECTION				= assets/foreground/selection.tga
 APARATUS3				= assets/foreground/character/Aparatus3.tga
+
 WINDOW_ICON				= assets/icon.tga

@@ -5,13 +5,13 @@ class EnvironmentIs: public Constraint
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    EnvironmentIs(const Map2& i_Map, EnvType i_Type) :
+    EnvironmentIs(const Map& i_Map, EnvType i_Type) :
         Constraint(i_Map),
         m_Type(i_Type) 
     {}
 
 	// WEIGHT
-	float getWeightFor(Coord m_Coord) const
+    double getWeightFor(Coord m_Coord) const
 	{
 		return m_Map.getTile(m_Coord).getEnvironment().getType() == m_Type;
 	}

@@ -3,41 +3,40 @@
 #include "..\ai\AtomAI.h"
 #include "Display.h"
 #include "Keyboard.h"
-#include "MoveProcess.h"
+#include "process\MoveProcess.h"
 
 class GameLoop
 {
 public:
+    // CONSTRUCTOR/DESTRUCTOR
+    GameLoop();
+    ~GameLoop();
+
 	// START
-	static void run();
+    void startGame();
 
 private:
+    World                m_World;
+    CivController**      m_CivCtrls;
+
     Mouse                m_Mouse;
     Keyboard             m_Keyboard;
     Display              m_Disp;
 
 	ALLEGRO_EVENT_QUEUE* m_Queue;
 	ALLEGRO_TIMER*       m_ScreenRefresher;
-
-	CivController**      m_CivCtrlrs;
-	AI**                 m_AIs;
 	
 	UINT                 m_NumMoveProcs;
 	MoveProcess**        m_MoveProcs;
 
     // CONSTRUCTOR/DESTRUCTOR
-    GameLoop();
-    void initializeCivsAndAIs();
-    ~GameLoop();
-
-    // START
-    void startGame();
+    CivController** initCivCtrls();
 
 	// UPDATE
 	void updateGame();
-	bool processAI();
-    bool processOrder(Human* io_Human, const Order& i_Order);
-    bool processMovingOrder(Human*         i_Human,
+	void processAI();
+    void processOrder(Human& io_Human, const Order& i_Order);
+    void processMovingOrder(Human&         io_Human,
                             PossibleOrders i_Action,
                             Direction      i_Dir);
     bool verifyDestination(const Position& i_Dest) const;

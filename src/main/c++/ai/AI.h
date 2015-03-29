@@ -7,11 +7,11 @@ class AI
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-	AI(Civilization* i_Civ);
+	AI(const Civilization& i_Civ);
 
 	// MOVE HUMAN
-	virtual Order giveOrder(Human& i_Human) = 0;
+	virtual Order giveOrder(const Human& i_Human) = 0;
 
 protected:
-	Civilization* m_Civ;
+	const Civilization& m_Civ;
 };

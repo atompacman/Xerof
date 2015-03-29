@@ -5,13 +5,13 @@
 #include "allegro5\bitmap.h"
 #include "allegro5\bitmap_io.h"
 #include "..\lib\easylogging++.h"
-#include "..\engine\internal\dialog\FatalErrorDialog.h"
+#include "..\utils\FatalErrorDialog.h"
 
 //-|-======================================================================---\\
 //-| ASSETS MANAGEMENT
 //-|
 //-| Load and desallocate assets from disk using a routing file (linking an 
-//-| AssetID to a path).
+//-| AssetID to a bitmap file).
 //-|-======================================================================---//
 
 // Important: AssetIDs must be in the same order than the keys in the assets
@@ -35,14 +35,14 @@ enum AssetID
     WINDOW_ICON
 };
 
+// The number of bitmap assets
+static UINT numAssets;
+
 // The location of the asset routing file
 static const char* ASSET_ROUTING_FILE = "assets/assets_routing.txt";
 
 // Assets that are not bitmaps
 static const char* GAME_FONT = "assets/font.tga";
-
-// The number of bitmap assets
-static UINT numAssets;
 
 // Load assets from disk
 static ALLEGRO_BITMAP** loadAssets()
@@ -80,7 +80,7 @@ static ALLEGRO_BITMAP** loadAssets()
 }
 
 // Load game font
-static ALLEGRO_FONT* loadGameFont()
+static ALLEGRO_FONT& loadGameFont()
 {
     LOG(DEBUG) << "Assets loading - Loading game font at \""<< GAME_FONT<< "\"";
 
@@ -89,11 +89,12 @@ static ALLEGRO_FONT* loadGameFont()
     if (font == NULL) {
         LOG(WARNING) << "Asset loading - Could not load the game font";
     }
-    return font;
+    return *font;
 }
 
 // Desallocate assets from memory
-static void destroyAssets(ALLEGRO_BITMAP** io_Assets, ALLEGRO_FONT* io_Font)
+static void destroyAssets(ALLEGRO_BITMAP** io_Assets, 
+                          ALLEGRO_FONT&    io_Font)
 {
     LOG(TRACE) << "Desallocation - Assets";
     for (UINT i = 0; i < numAssets; ++i) {
@@ -101,5 +102,5 @@ static void destroyAssets(ALLEGRO_BITMAP** io_Assets, ALLEGRO_FONT* io_Font)
 	}
 	delete[] io_Assets;
 
-    al_destroy_font(io_Font);
+    al_destroy_font(&io_Font);
 }

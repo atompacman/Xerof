@@ -4,12 +4,58 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Human::Human(Position i_Pos): 
-m_Pos(i_Pos),
+Human::Human(const Position& i_StartingPos, const Map& i_Map) :
+m_Pos(i_StartingPos),
 m_IsReady(true),
 m_MoveSpeed(1),
-m_ROSight(2)
+m_ROSight(2),
+
+m_Map(i_Map)
 {}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+const Position& Human::getPos() const
+{
+    return m_Pos;
+}
+
+Position& Human::getPos()
+{
+    return m_Pos;
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                 SURROUNDINGS                               //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+const Tile*** const Human::getSurroundingTiles() const
+{
+    Coord lowerLeft (max(0, m_Pos.m_Coord.x - m_ROSight), 
+                     max(0, m_Pos.m_Coord.y - m_ROSight));
+    Coord upperRight(min(m_Pos.m_Coord.x - m_ROSight, m_Map.dim().x - 1),
+                     min(m_Pos.m_Coord.y - m_ROSight, m_Map.dim().y - 1));
+    return m_Map.getTiles(lowerLeft, upperRight);
+}
+
+const Tile& Human::getTileInDir(Direction i_Dir) const
+{
+    return m_Map.getTile(incrementedToDirection(m_Pos.tileCoord(), i_Dir));
+}
+
+const Tile& Human::getTileInFront() const
+{
+    return getTileInDir(m_Pos.m_Dir);
+}
+
+EnvType Human::getEnvInFront() const
+{
+    return getTileInFront().getEnvironment().getType();
+}
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
@@ -18,61 +64,22 @@ m_ROSight(2)
 
 void Human::setReady()
 {
-	m_IsReady = true;
+    m_IsReady = true;
 }
 
 void Human::setBusy()
 {
-	m_IsReady = false;
+    m_IsReady = false;
 }
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                   GETTERS                                  //
+//                                     STATE                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-const Tile*** const Human::getSurroundingTiles() const
-{
-	UINT zoneSideLength = m_ROSight * 2 + 1;
-	const Tile*** surroundings = new const Tile**[zoneSideLength];
-	Map* map = World::getInstance()->m_Map;
-
-	Coord tileCoord;
-	Coord delta;
-
-	for (delta.x = 0; delta.x < zoneSideLength; ++delta.x) {
-		tileCoord.x = (int)m_Pos.m_Coord.x + delta.x - m_ROSight;
-		if (tileCoord.x <= 0 && tileCoord.x >= MAP_DIMENSIONS.x) {
-			continue;
-		}
-		surroundings[delta.x] = new const Tile*[zoneSideLength];
-
-		for (delta.y = 0; delta.y < zoneSideLength; ++delta.y) {
-			tileCoord.y = (int)m_Pos.m_Coord.y + delta.y - m_ROSight;
-			if (tileCoord.y <= 0 && tileCoord.y >= MAP_DIMENSIONS.y) {
-				continue;
-			}
-			surroundings[delta.x][delta.y] = map->getTile(tileCoord);
-		}
-	}
-	return surroundings;
-}
-
-const Tile* const Human::getTileInFront() const
-{
-    DCoord tileCoordF = incrementedToDirection(m_Pos.m_Coord,m_Pos.m_FacingDir);
-	Coord tileCoord = Coord(tileCoordF.x, tileCoordF.y);
-	return World::getInstance()->m_Map->getTile(tileCoord);
-}
-
-EnvType Human::getEnvironnementInFront() const
-{
-	return getTileInFront()->getEnvironment().getType();
-}
 
 bool Human::isReady() const
 {
-	return m_IsReady;
+    return m_IsReady;
 }
 
 
@@ -85,7 +92,7 @@ float Human::getMoveSpeed() const
 	return m_MoveSpeed;
 }
 
-unsigned int Human::getRangeOfSight() const
+UINT Human::getRangeOfSight() const
 {
 	return m_ROSight;
 }

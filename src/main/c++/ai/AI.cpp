@@ -4,6 +4,6 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-AI::AI(Civilization* i_Civ) :
+AI::AI(const Civilization& i_Civ) :
 m_Civ(i_Civ)
 {}

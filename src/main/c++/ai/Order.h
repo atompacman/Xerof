@@ -1,5 +1,6 @@
 #pragma once
-#include <stdarg.h>
+#include <assert.h>
+#include <wtypes.h>
 
 enum PossibleOrders
 {
@@ -17,9 +18,9 @@ public:
 
 	// GETTERS
     PossibleOrders getAction() const;
-    int* getParams() const;
+    int            getParam(UINT i_ID) const;
 
 private:
 	PossibleOrders m_Action;
-	int*           m_Params;
+	int            m_Params[3];
 };

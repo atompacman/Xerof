@@ -1,16 +1,17 @@
 #pragma once
-#include "..\civilization\Human.h"
+#include "HumanProcess.h"
 
-class MoveProcess
+class MoveProcess : public HumanProcess
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
     MoveProcess(Human* i_Human, const Position& i_Dest);
 
 	// NEXT ITERATION
-	void nextIteration();
+    virtual void nextIter();
 
 private:
-	Human* m_Human;
+    static const double s_ERROR;
+
 	DCoord m_Delta;
 };

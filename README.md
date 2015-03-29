@@ -10,7 +10,7 @@
       PATH=$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\bin;%PATH%
   - VC++ Directories/Include Directories <br>
       $(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)
-  - VC++ Directories/References Directories <br>
+  - VC++ Directories/Libraries Directories <br>
       $(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)
   - C/C++/General/Additional Include Directories <br>
       $(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;%(AdditionalIncludeDirectories) 
@@ -38,7 +38,10 @@ Ex.: LOG(INFO) << "Information";
 
 *** Do not log "FATAL" level messages. Instead, use this:
 FatalErrorDialog("Something important failed.");
-
+Or this:
+std::stringstream ss;
+ss << "Over " << 9000 << " nuggets";
+FatalErrorDialog(ss.str());
 
 ### Max line length
 The maximum length of lines of code is 80. Install this plugin to be able to add a guideline:

@@ -4,9 +4,6 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const char* LandProportions::ERROR_PREFIX 
-= "Invalid land type proportions element: ";
-
 LandProportions::LandProportions() :
 m_Props()
 {}

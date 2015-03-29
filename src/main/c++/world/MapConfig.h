@@ -6,10 +6,6 @@
 #include "..\utils\JSONUtils.h"
 #include "LandTypePropotions.h"
 
-// File paths
-static const char* DEFAULT_MAP_CONFIG        = "map/DefaultConfig.json";
-static const char* MAP_LIMITS                = "map/Limits.json";
-
 // JSON configuration file elements
 static const char* CONFIG_ROOT_ELEM          = "XerofMapConfig";
 static const char* DIM_ELEM                  = "MapDimensions";

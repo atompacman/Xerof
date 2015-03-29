@@ -16,14 +16,14 @@ int main(int argc, char** argv)
 	// Welcome message !
 	LOG(INFO) <<"======-=====-====-===-==-=- XEROF -=-==-===-====-=====-======";
 
-	// Create the world... nothing less
-	World::getInstance();
-
 	// Initialize Allegro5 library
 	initGameEngine();
 
+    // Initialize random seed
+    initRandSeed();
+
 	// Start the game loop
-    GameLoop::run();
+    GameLoop().startGame();
 
 	return EXIT_SUCCESS;
 }

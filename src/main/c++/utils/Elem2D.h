@@ -1,10 +1,13 @@
 #pragma once
 #include <assert.h>
+#include <math.h>
+#include <wtypes.h>
 #include "Direction.h"
 
-#define Coord       Elem2D<unsigned int>
+#define Coord       Elem2D<UINT>
 #define DCoord      Elem2D<double>
-#define Dimensions  Elem2D<unsigned int>
+#define Dimensions  Elem2D<UINT>
+#define DDimensions Elem2D<double>
 
 template <typename T>
 struct Elem2D
@@ -68,10 +71,35 @@ struct Elem2D
         return *this;
     }
 
+    bool operator< (const Elem2D<T>& i_Other) const
+    {
+        return x < i_Other.x && y < i_Other.y;
+    }
+    bool operator<=(const Elem2D<T>& i_Other) const
+    {
+        return x <= i_Other.x && y <= i_Other.y;
+    }
+    bool operator> (const Elem2D<T>& i_Other) const
+    {
+        return x > i_Other.x && y > i_Other.y;
+    }
+    bool operator>=(const Elem2D<T>& i_Other) const
+    {
+        return x >= i_Other.x && y >= i_Other.y;
+    }
+    bool operator==(const Elem2D<T>& i_Other) const
+    {
+        return x == i_Other.x && y == i_Other.y;
+    }
+    bool operator!=(const Elem2D<T>& i_Other) const
+    {
+        return x != i_Other.x || y != i_Other.y;
+    }
+
     // INCREMENT
     Elem2D<T>& incrementInDirection(Direction i_Dir)
     {
-        assert(i_Dir != MIDDLE);
+        assertNonCenterDir(i_Dir);
 
         switch (i_Dir) {
         case LEFT:			x -= 1;			break;
@@ -87,11 +115,6 @@ struct Elem2D
         return *this;
     }
 };
-
-static unsigned int area(Dimensions i_Dim)
-{
-    return i_Dim.x * i_Dim.y;
-}
 
 template <typename T>
 Elem2D<T> operator+(const Elem2D<T>& i_Elem, T i_Factor)
@@ -151,4 +174,19 @@ template <typename T>
 Elem2D<T> incrementedToDirection(const Elem2D<T>& i_Elem, Direction i_Dir)
 {
     return Elem2D<T>(i_Elem).incrementInDirection(i_Dir);
+}
+
+static DCoord abs(const DCoord& i_DCoord)
+{
+    return DCoord(abs(i_DCoord.x), abs(i_DCoord.y));
+}
+
+static Coord round(const DCoord& i_DCoord)
+{
+    return Coord((UINT)rint(i_DCoord.x), (UINT)rint(i_DCoord.y));
+}
+
+static DCoord toDCoord(const Coord& i_Coord)
+{
+    return DCoord(i_Coord.x, i_Coord.y);
 }
