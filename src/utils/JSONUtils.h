@@ -16,6 +16,8 @@
 
 using namespace rapidjson;
 
+#define ENV_TYPE_ELEM "EnvType"
+
 static Value& parseJSON(Document&   o_Doc,
                         const char* i_JSONFile,
                         const char* i_RootElemName)
@@ -58,7 +60,7 @@ static const Value& getSubElem(const Value& i_Value, const char* i_Elem)
 {
     if (!i_Value.HasMember(i_Elem)) {
         std::stringstream ss;
-        ss << "Invalid map configuration file: Missing \"" <<
+        ss << "Invalid JSON file: Missing \"" <<
             i_Elem << "\" element";
         FatalErrorDialog(ss.str());
     }
@@ -99,4 +101,31 @@ static double getNormDouble(const Value& i_Value, const char* i_Elem)
         FatalErrorDialog(ss.str());
     }
     return value;
+}
+
+static const char* getString(const Value& i_Value, const char* i_Elem)
+{
+    const Value& subElem(getSubElem(i_Value, i_Elem));
+    if (!subElem.IsString()) {
+        std::stringstream ss;
+        ss << "Parameter \"" << i_Elem <<
+            "\" value should be a string";
+        FatalErrorDialog(ss.str());
+    }
+    return subElem.GetString();
+}
+
+static const char* getEnvType(const Value& i_Value, const char* i_Elem)
+{
+    const char* envStr(getString(i_Value, i_Elem));
+    auto it(ENV_TYPES.find(getString(i_Value, ENV_TYPE_ELEM)));
+
+    if (it == ENV_TYPES.end()) { //TODO
+        std::stringstream ss;
+        ss << "Parameter \"" << i_Elem <<
+            "\" value should be a string";
+        FatalErrorDialog(ss.str());
+    }
+
+    return subElem.GetString();
 }

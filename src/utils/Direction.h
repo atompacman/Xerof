@@ -33,6 +33,13 @@ enum DiagonalDir
 
 #define CENTER 9
 
+static const std::map<const char*, BasicDir> CARDINAL_DIRS = {
+    { "NORTH",  UP    },
+    { "EAST",   RIGHT },
+    { "SOUTH",  DOWN  },
+    { "WEST",   LEFT  }
+};
+
 static void assertBasicDir(Direction i_Dir)
 {
     assert(i_Dir <= LEFT);
