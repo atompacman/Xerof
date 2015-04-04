@@ -33,8 +33,8 @@ public:
                                cannot be higher that the maximum");
         }
 
-        UINT zoneArea((i_Radius + 2) * (i_Radius + 2));
-        if (i_Max >= zoneArea) {
+        UINT zoneArea((1 + 2 * i_Radius) * (1 + 2 * i_Radius));
+        if (i_Max > zoneArea) {
             std::stringstream ss;
             ss << "Maximum num of neighbouring env. cannot be higher that the "
                 << "area of the zone around the center tile ("<< zoneArea <<")";

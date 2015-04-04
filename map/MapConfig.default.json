@@ -1,34 +1,36 @@
 {
 	"XerofMapGeneratorConfig": {
 		"Dimensions": { 
-			"Width":  300, 
-			"Height": 200
+			"Width":  200, 
+			"Height": 150
 		},
 		"InitialEnvType": "OCEAN",
 		"Borders": {
-			"WEST" : { "Width": 2, "EnvType": "OCEAN"  },
-			"EAST" : { "Width": 2, "EnvType": "OCEAN"  },
 			"NORTH": { "Width": 4, "EnvType": "TUNDRA" },
 			"SOUTH": { "Width": 4, "EnvType": "TUNDRA" }
 		},
 		"Phases": {
 			"Generate tundra on poles": {
 				"Quantity": { 
-					"Relative": 0.05
+					"Relative": 0.051
 				},
 				"EnvTypesProportions": {
 					"TUNDRA": 1
 				},
 				"Constraints": {
 					"AttractionTowardsPoles": {
-						"Strength": 0.5
+						"Strength": 4
+					},
+					"NeighbouringEnvAttraction": {
+						"Radius": 2,
+						"Strength": 0.8
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
 			},
 			"Place continent seeds": {
 				"Quantity": {
-					"Absolute": 7
+					"Relative": 0.001
 				},
 				"EnvTypesProportions": {
 					"GRASSLAND": 1
@@ -45,7 +47,7 @@
 			},
 			"Grow continents": {
 				"Quantity": { 
-					"Relative": 0.1 
+					"Relative": 0.3
 				},
 				"EnvTypesProportions": {
 					"GRASSLAND": 1
@@ -55,33 +57,58 @@
 						"EnvType": "OCEAN"
 					},
 					"AttractionTowardsCenter": {
-						"Strength": 0.2
+						"Strength": 1
 					},
-					"NeighbouringEnvAttraction": {
-						"Radius": 1,
-						"Strength": 0.01
+                    "NeighbouringEnvAttraction": {
+						"Strength": 2,
+                        "Radius": 1
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
 			},
-			"Place plains and mountains seeds": {
+			"Extends tundra on continents": {
 				"Quantity": { 
-					"Absolute": 30
+					"Relative": 0.007
 				},
 				"EnvTypesProportions": {
-					"PLAIN": 0.7,
-					"ROCKY": 0.3
+					"TUNDRA": 1
 				},
 				"Constraints": {
 					"EnvironmentIs": {
 						"EnvType": "GRASSLAND"
+					},
+                    "NeighbouringEnvLimits": {
+						"Min": 1,
+                        "Max": 8,
+                        "Radius": 1
+					},
+					"AttractionTowardsPoles": {
+						"Strength": 4
+					}
+				},
+				"MaxNumTriesBeforeSkipping": 0
+			},
+			"Place plains and mountain seeds": {
+				"Quantity": { 
+					"Relative": 0.001
+				},
+				"EnvTypesProportions": {
+					"PLAIN": 0.7,
+                    "ROCKY": 0.3
+				},
+				"Constraints": {
+					"EnvironmentIs": {
+						"EnvType": "GRASSLAND"
+					},
+					"AttractionTowardsEquator": {
+						"Strength": 4
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
 			},
 			"Grow plains": {
 				"Quantity": { 
-					"Relative": 0.05
+					"Relative": 0.07
 				},
 				"EnvTypesProportions": {
 					"PLAIN": 1
@@ -90,18 +117,22 @@
 					"EnvironmentIs": {
 						"EnvType": "GRASSLAND"
 					},
-					"AttractionTowardsEquator": {
-						"Strength": 0.6
+                    "NeighbouringEnvLimits": {
+						"Min": 1,
+                        "Max": 25,
+                        "Radius": 2
 					},
-					"NeighbouringEnvLimits": {
-						"Min": 0,
-						"Max": 3,
-						"Radius": 2
+                    "NeighbouringEnvAttraction": {
+						"Strength": 3,
+                        "Radius": 1
+					},
+					"AttractionTowardsEquator": {
+						"Strength": 4
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
 			},
-			"Grow mountain chains": {
+			"Create mountain chains": {
 				"Quantity": { 
 					"Relative": 0.02
 				},
@@ -110,13 +141,17 @@
 				},
 				"Constraints": {
 					"EnvironmentIsAmong": [
-						"GRASSLAND",
-						"PLAIN"
+						"GRASSLAND", 
+                        "PLAIN"
 					],
-					"NeighbouringEnvLimits": {
+                    "NeighbouringEnvLimits": {
 						"Min": 1,
-						"Max": 8,
-						"Radius": 3
+                        "Max": 3,
+                        "Radius": 2
+					},
+                    "NeighbouringEnvAttraction": {
+						"Strength": 4,
+                        "Radius": 1
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0

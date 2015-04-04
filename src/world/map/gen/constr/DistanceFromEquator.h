@@ -26,7 +26,7 @@ public:
     // WEIGHT
     double getSimpleWeightFor(Coord i_Coord) const
     {
-        return abs(((double)i_Coord.y - m_Equator) / m_Equator);
+        return abs(((double)i_Coord.y - m_Equator)) / m_Equator;
     }
 
 private:

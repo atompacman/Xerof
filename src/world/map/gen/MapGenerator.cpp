@@ -143,7 +143,7 @@ void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
         // Progress logging
         std::stringstream ss;
         ss << "World generation - " << i_Phase.m_Name << " - " 
-            << envCnstrnts.first << " [" << qty << " tiles]";
+            << ENV_NAMES[envCnstrnts.first] << " [" << qty << " tiles]";
         std::string msg = ss.str();
         ProgressLogger progressLogger(qty, msg);
 

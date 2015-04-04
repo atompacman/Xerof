@@ -29,12 +29,14 @@ public:
     UINT countNeighbourEnv(Coord i_Coord) const
     {
         UINT count(0);
-        Coord coord(max(0, i_Coord.x - m_Radius), max(0, i_Coord.y - m_Radius));
+        UINT begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
+        UINT begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
         UINT endX(min(i_Coord.x + m_Radius + 1, m_Map.dim().x));
         UINT endY(min(i_Coord.y + m_Radius + 1, m_Map.dim().y));
+        Coord coord;
 
-        for (; coord.y < endY; ++coord.y) {
-            for (; coord.x < endX; ++coord.x) {
+        for (coord.y = begY; coord.y < endY; ++coord.y) {
+            for (coord.x = begX; coord.x < endX; ++coord.x) {
                 if (coord == i_Coord) {
                     continue;
                 }
