@@ -23,7 +23,6 @@ public:
 
 	// GETTERS
 	const Tile&   getTile(Coord i_Coord) const;
-    const Tile*** getTiles(Coord i_LowerLeft, Coord i_UpperRight) const;
     Coord         randCoord() const;
 
     // STATUS
@@ -33,4 +32,7 @@ public:
 private:
     Dimensions m_Dim;
 	Tile*      m_Tiles;
+
+    // GETTERS
+    UINT linearize(Coord i_Coord) const;
 };

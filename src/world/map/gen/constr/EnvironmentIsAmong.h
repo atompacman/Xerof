@@ -1,29 +1,38 @@
 #pragma once
 
 //===========================================================================\\
+//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <set>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "Constraint.h"
 /*============================================================================||
-| Environment to replace is restricted to one type
+| Environment to replace must be in a list of environment
 |-----------------------------------------------------------------------------||
-| Binary selection
+| Simple isn't it ?
 \=============================================================================*/
 
-class EnvironmentIs: public Constraint
+class EnvironmentIsAmong : public Constraint
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    EnvironmentIs(const Map& i_Map, EnvType i_Type) :
+    EnvironmentIsAmong(const Map& i_Map) :
         Constraint(i_Map),
-        m_Type(i_Type) 
+        m_EnvTypes()
     {}
+
+    // ADD
+    void addEnv(EnvType i_EnvType)
+    {
+        m_EnvTypes.insert(i_EnvType);
+    }
 
 	// WEIGHT
     double getWeightFor(Coord i_Coord) const
 	{
-        return m_Map.getTile(i_Coord).getEnvironment().getType() == m_Type;
+        EnvType currEnv(m_Map.getTile(i_Coord).getEnvironment().getType());
+        return m_EnvTypes.find(currEnv) != m_EnvTypes.end();
 	}
 
 private:
-	EnvType m_Type;
+    std::set<EnvType> m_EnvTypes;
 };

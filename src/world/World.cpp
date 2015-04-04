@@ -4,8 +4,8 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-World::World(const MapConfig& i_MapConfig) :
-m_Map(MapGenerator::generate(i_MapConfig))
+World::World() :
+m_Map(MapGenerator::generate())
 {}
 
 

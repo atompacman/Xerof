@@ -72,7 +72,7 @@ const int BG_COLOR[] = { 0 , 0, 0 };
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 // Config file paths
-#define DEFAULT_MAP_CONFIG "map/DefaultConfig.json"
+#define DEFAULT_MAP_CONFIG "map/MapConfig.default.json"
 #define MAP_LIMITS         "map/Limits.json"
 
 

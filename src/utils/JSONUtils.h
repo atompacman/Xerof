@@ -1,6 +1,8 @@
 #pragma once
 
 //===========================================================================\\
+//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <string.h>
 //  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
 #include "easylogging++.h"
 #include "rapidjson\document.h"
@@ -15,6 +17,8 @@
 \=============================================================================*/
 
 using namespace rapidjson;
+
+#define ENV_TYPE_ELEM "EnvType"
 
 static Value& parseJSON(Document&   o_Doc,
                         const char* i_JSONFile,
@@ -54,20 +58,20 @@ static Value& parseJSON(Document&   o_Doc,
     return o_Doc[i_RootElemName];
 }
 
-static const Value& getSubElem(const Value& i_Value, const char* i_Elem)
+static const Value& parseSubElem(const Value& i_Value, const char* i_Elem)
 {
     if (!i_Value.HasMember(i_Elem)) {
         std::stringstream ss;
-        ss << "Invalid map configuration file: Missing \"" <<
+        ss << "Invalid JSON file: Missing \"" <<
             i_Elem << "\" element";
         FatalErrorDialog(ss.str());
     }
     return i_Value[i_Elem];
 }
 
-static UINT getUINT(const Value& i_Value, const char* i_Elem)
+static UINT parseUINT(const Value& i_Value, const char* i_Elem)
 {
-    const Value& subElem(getSubElem(i_Value, i_Elem));
+    const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsUint()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
@@ -77,9 +81,9 @@ static UINT getUINT(const Value& i_Value, const char* i_Elem)
     return subElem.GetUint();
 }
 
-static double getDouble(const Value& i_Value, const char* i_Elem)
+static double parseDouble(const Value& i_Value, const char* i_Elem)
 {
-    const Value& subElem(getSubElem(i_Value, i_Elem));
+    const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsNumber()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
@@ -89,9 +93,9 @@ static double getDouble(const Value& i_Value, const char* i_Elem)
     return subElem.GetDouble();
 }
 
-static double getNormDouble(const Value& i_Value, const char* i_Elem)
+static double parseNormDouble(const Value& i_Value, const char* i_Elem)
 {
-    double value(getDouble(i_Value, i_Elem));
+    double value(parseDouble(i_Value, i_Elem));
     if (value < 0 || value > 1.0) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
@@ -99,4 +103,31 @@ static double getNormDouble(const Value& i_Value, const char* i_Elem)
         FatalErrorDialog(ss.str());
     }
     return value;
+}
+
+static const char* parseString(const Value& i_Value, const char* i_Elem)
+{
+    const Value& subElem(parseSubElem(i_Value, i_Elem));
+    if (!subElem.IsString()) {
+        std::stringstream ss;
+        ss << "Parameter \"" << i_Elem << "\" value should be a string";
+        FatalErrorDialog(ss.str());
+    }
+    return subElem.GetString();
+}
+
+static EnvType parseEnvType(const Value& i_Value, const char* i_Elem)
+{
+    auto it(ENV_TYPES.find(parseString(i_Value, i_Elem)));
+    if (it == ENV_TYPES.end()) {
+        std::stringstream ss;
+        ss << "Parameter \"" << i_Elem << "\" is not a valid environment";
+        FatalErrorDialog(ss.str());
+    }
+    return it->second;
+}
+
+static EnvType parseEnvType(const Value& i_Value)
+{
+    return parseEnvType(i_Value, ENV_TYPE_ELEM);
 }

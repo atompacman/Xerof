@@ -3,6 +3,7 @@
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+#include <map>
 /*============================================================================||
 | Different types of direction
 |-----------------------------------------------------------------------------||
@@ -32,6 +33,13 @@ enum DiagonalDir
 };
 
 #define CENTER 9
+
+static const std::map<std::string, BasicDir> CARDINAL_DIRS = {
+    { "NORTH",  UP    },
+    { "EAST",   RIGHT },
+    { "SOUTH",  DOWN  },
+    { "WEST",   LEFT  }
+};
 
 static void assertBasicDir(Direction i_Dir)
 {

@@ -3,6 +3,7 @@
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <list>
+#include <string>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "..\src\engine\Assets.h"
 #include "MapElement.h"
@@ -24,7 +25,7 @@ enum EnvType
     TUNDRA
 };
 
-static const std::map<const char*, EnvType> ENV_TYPES = {
+static const std::map<std::string, EnvType> ENV_TYPES = {
     { "GRASSLAND",  GRASSLAND   },
     { "LAKE",       LAKE        },
     { "OCEAN",      OCEAN       },

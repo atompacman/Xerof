@@ -16,7 +16,7 @@ class World
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    World(const MapConfig& i_MapConfig);
+    World();
 
     // GETTERS
     const Map& map() const;

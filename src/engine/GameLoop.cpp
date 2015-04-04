@@ -5,7 +5,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 GameLoop::GameLoop():
-m_World(MapConfig()),
+m_World(),
 m_CivCtrls(initCivCtrls()),
 
 m_Mouse(m_World.map().dim(), TILE_SIZE[0]),
