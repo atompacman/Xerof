@@ -22,11 +22,10 @@ struct Border
     EnvType	 m_Env;
 
     // CONSTRUCTOR/DESTRUCTOR
-    Border(const char* i_Side, const rapidjson::Value& i_JSONElem) :
-        m_Side(BasicDir(-1))
+    Border(const char* i_Side, const rapidjson::Value& i_JSONElem)
     {
+        // Parse side
         auto it(CARDINAL_DIRS.find(i_Side));
-
         if (it == CARDINAL_DIRS.end()) {
             std::stringstream ss;
             ss << "\"" << i_Side << "\" is not a valid cardinal direction";
@@ -34,10 +33,11 @@ struct Border
         }
         m_Side = it->second;
 
-        // Read width
-        m_Width = getUINT(i_JSONElem, WIDTH_ELEM);
+        // Parse width
+        const Value& sideElem(parseSubElem(i_JSONElem, it->first.c_str()));
+        m_Width = parseUINT(sideElem, WIDTH_ELEM);
 
-        // Read env
-        m_Env = ENV_TYPES.at(getString(i_JSONElem, ENV_TYPE_ELEM));
+        // Parse env
+        m_Env = parseEnvType(sideElem);
     }
 };

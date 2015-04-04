@@ -33,15 +33,6 @@ Position& Human::getPos()
 //                                 SURROUNDINGS                               //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const Tile*** const Human::getSurroundingTiles() const
-{
-    Coord lowerLeft (max(0, m_Pos.m_Coord.x - m_ROSight), 
-                     max(0, m_Pos.m_Coord.y - m_ROSight));
-    Coord upperRight(min(m_Pos.m_Coord.x - m_ROSight, m_Map.dim().x - 1),
-                     min(m_Pos.m_Coord.y - m_ROSight, m_Map.dim().y - 1));
-    return m_Map.getTiles(lowerLeft, upperRight);
-}
-
 const Tile& Human::getTileInDir(Direction i_Dir) const
 {
     return m_Map.getTile(incrementedToDirection(m_Pos.tileCoord(), i_Dir));

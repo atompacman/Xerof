@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <vector>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "constr\Clustering.h"
 #include "constr\Constraint.h"
 #include "constr\DistanceFromCenter.h"
 #include "constr\EnvironmentIs.h"
@@ -16,28 +15,30 @@
 /*============================================================================||
 | Generates map
 |-----------------------------------------------------------------------------||
-| In constructions
+| Reads a configuration file that described a series of "phases" that consists
+| of a series of constraints to be applied to tiles selected at random in order
+| to model their probability of being place on the map.
 \=============================================================================*/
-
-typedef std::vector<const Constraint*> Constrs;
 
 class MapGenerator
 {
 public:
 	// GENERATION
-	static Map& generate(const MapConfig& i_Config);
+    static Map& generate();
+    static Map& generate(const char* i_MapConfigFile);
 
 private:
-    static Map*             s_Map;
-    static const MapConfig* s_Config;
+    // Temporary
+    static Map*       s_Map;
+    static MapConfig* s_Config;
+    static Coord      s_ULCorner;
+    static Coord      s_LRCorner;
 
 	// GENERATION
-    static void placeInitialLandTiles();
-    static void growLandmasses();
-    static void generateEnv(EnvType        i_Type,
-                            UINT           i_NumElem,
-                            const Constrs& i_Constr, 
-                            const char*    i_TaskDesc);
+    static void placeBorders();
+    static void fillWithInitEnv();
+    static void executeMapGenPhase(const Phase& i_Phase);
+
     static const Coord randCoord();
 };
 

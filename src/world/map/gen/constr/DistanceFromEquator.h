@@ -1,36 +1,35 @@
 #pragma once
 
 //===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
+//  | =   =   =   =   =   c=   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "ConstraintWithStrength.h"
 /*============================================================================//
-| A tile has more chance to spawn close or far from center of the map
+| A tile has more chance to spawn close or far from the equator
 |-----------------------------------------------------------------------------||
 | Parameters:
 |   - Direction: attaction / repulsion
 |   - Strength : how distance affect probabilities
 \=============================================================================*/
 
-class DistanceFromCenter : public ConstraintWithStrength
+class DistanceFromEquator : public ConstraintWithStrength
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
-    DistanceFromCenter(const Map& i_Map,
-                       double     i_Strength,
-                       bool       i_Attraction) :
+    // CONSTRUCTOR/DESTRUCTOR
+    DistanceFromEquator(const Map& i_Map, 
+                        double     i_Strength, 
+                        bool       i_Attraction) :
         Constraint(i_Map),
         ConstraintWithStrength(i_Map, i_Strength, i_Attraction),
-        m_MapCenter(toDCoord(m_Map.dim()) * 0.5)
+        m_Equator((double) i_Map.dim().y * 0.5)
     {}
 
-	// WEIGHT
+    // WEIGHT
     double getSimpleWeightFor(Coord i_Coord) const
-	{
-        DCoord distToCenter = abs(toDCoord(i_Coord) - m_MapCenter)/m_MapCenter;
-        return sqrt(distToCenter.x * distToCenter.x +
-            distToCenter.y + distToCenter.y);
-	}
+    {
+        return abs(((double)i_Coord.y - m_Equator) / m_Equator);
+    }
 
 private:
-    DCoord m_MapCenter;
+    double m_Equator;
 };
+

@@ -3,68 +3,61 @@
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+#include <list>
 #include <map>
 //  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
 #include "rapidjson\document.h"
 #include "rapidjson\error\en.h"
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "LandTypePropotions.h"
-#include <..\src\Parameters.h>
+#include "Border.h"
+#include "..\src\Parameters.h"
+#include "Phase.h"
 /*============================================================================||
 | MAP CONFIG FILE REPRESENTATION
 |-----------------------------------------------------------------------------||
 | Represents the content of a map generation configuration file.
 \=============================================================================*/
 
+using namespace rapidjson;
+
 // JSON configuration file elements
-static const char* CONFIG_ROOT_ELEM          = "XerofMapConfig";
-static const char* DIM_ELEM                  = "MapDimensions";
-static const char* DIM_WIDTH_SUB_ELEM        = "width";
-static const char* DIM_HEIGHT_SUB_ELEM       = "height";
-static const char* LAND_PROPOR_ELEM          = "LandProportion";
-static const char* INIT_LAND_PROP_ELEM       = "InitLandProportion";
-static const char* LAND_DISPERS_ELEM         = "LandDispertion";
-static const char* LAND_COMPACT_ELEM         = "LandCompactness";
-static const char* TUNDRA_TRANS_W_ELEM       = "TundraTransitionWidth";
-static const char* OCEAN_BORDERS_W_ELEM      = "OceanBordersWidth";
-static const char* ROCKY_BORDERS_W_ELE       = "RockyZonesThickness";
-static const char* TOTAL_LAND_TYPE_PROP_ELEM = "TotalLandTypeProportions";
-static const char* INIT_LAND_TYPE_PROP_ELEM  = "InitialSeedLandTypeProportions";
+#define CONFIG_ROOT_ELEM    "XerofMapGeneratorConfig"
+#define DIM_ELEM            "Dimensions"
+#define DIM_WIDTH_SUB_ELEM  "Width"
+#define DIM_HEIGHT_SUB_ELEM "Height"
+#define INIT_LAND_TYPE_ELEM "InitialEnvType"
+#define BORDERS_ELEM        "Borders"
+#define PHASES_ELEM         "Phases"
 
 // JSON configurations limits file elements
-static const char* LIMITS_ROOT_ELEM          = "XerofMapConfigLimits";
-static const char* MIN_MAP_SIZE_ELEM         = "MinimumMapSize";
-static const char* MAX_MAP_SIZE_ELEM         = "MaximumMapSize";
+#define LIMITS_ROOT_ELEM    "XerofMapConfigLimits"
+#define MIN_MAP_SIZE_ELEM   "MinimumMapSize"
+#define MAX_MAP_SIZE_ELEM   "MaximumMapSize"
+
+struct Limits
+{
+    UINT m_MinMapSize;
+    UINT m_MaxMapSize;
+};
 
 class MapConfig
 {
 public:
-    Dimensions      m_Dim;
-    double          m_LandProp;
-    double          m_InitProp;
-    double          m_LandDispertion;
-    double          m_LandCompactness;
-    UINT            m_RandTundraWidth;
-    UINT            m_OceanBorderWidth;
-    UINT            m_RockyZoneThickn;
-    LandProportions m_LandTypeProp;
-    LandProportions m_InitLandProp;
+    Dimensions 		  m_Dim;
+    EnvType			  m_InitEnvType;
+    std::list<Border> m_Borders;
+    std::list<Phase>  m_Phases;
 
     // CONSTRUCTOR/DESTRUCTOR
-    MapConfig();
     MapConfig(const char* i_ParamFile);
+    void buildConstraints(const Map& i_Map);
 
 private:
-    // CONSTRUCTOR/DESTRUCTOR
-    UINT readMapSizeElem(const Value& i_Root, const char* i_Elem);
+    // Temporary
+    Document m_Doc;
 
     // LOAD CONFIGURATION LIMITS
-    struct Limits
-    {
-        UINT m_MinMapSize;
-        UINT m_MaxMapSize;
-    };
     static const Limits s_ConfigLimits;
-
     static Limits loadConfigLimits();
 };
+

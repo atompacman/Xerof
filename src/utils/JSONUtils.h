@@ -1,6 +1,8 @@
 #pragma once
 
 //===========================================================================\\
+//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <string.h>
 //  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
 #include "easylogging++.h"
 #include "rapidjson\document.h"
@@ -56,7 +58,7 @@ static Value& parseJSON(Document&   o_Doc,
     return o_Doc[i_RootElemName];
 }
 
-static const Value& getSubElem(const Value& i_Value, const char* i_Elem)
+static const Value& parseSubElem(const Value& i_Value, const char* i_Elem)
 {
     if (!i_Value.HasMember(i_Elem)) {
         std::stringstream ss;
@@ -67,9 +69,9 @@ static const Value& getSubElem(const Value& i_Value, const char* i_Elem)
     return i_Value[i_Elem];
 }
 
-static UINT getUINT(const Value& i_Value, const char* i_Elem)
+static UINT parseUINT(const Value& i_Value, const char* i_Elem)
 {
-    const Value& subElem(getSubElem(i_Value, i_Elem));
+    const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsUint()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
@@ -79,9 +81,9 @@ static UINT getUINT(const Value& i_Value, const char* i_Elem)
     return subElem.GetUint();
 }
 
-static double getDouble(const Value& i_Value, const char* i_Elem)
+static double parseDouble(const Value& i_Value, const char* i_Elem)
 {
-    const Value& subElem(getSubElem(i_Value, i_Elem));
+    const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsNumber()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
@@ -91,9 +93,9 @@ static double getDouble(const Value& i_Value, const char* i_Elem)
     return subElem.GetDouble();
 }
 
-static double getNormDouble(const Value& i_Value, const char* i_Elem)
+static double parseNormDouble(const Value& i_Value, const char* i_Elem)
 {
-    double value(getDouble(i_Value, i_Elem));
+    double value(parseDouble(i_Value, i_Elem));
     if (value < 0 || value > 1.0) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem <<
@@ -103,29 +105,29 @@ static double getNormDouble(const Value& i_Value, const char* i_Elem)
     return value;
 }
 
-static const char* getString(const Value& i_Value, const char* i_Elem)
+static const char* parseString(const Value& i_Value, const char* i_Elem)
 {
-    const Value& subElem(getSubElem(i_Value, i_Elem));
+    const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsString()) {
         std::stringstream ss;
-        ss << "Parameter \"" << i_Elem <<
-            "\" value should be a string";
+        ss << "Parameter \"" << i_Elem << "\" value should be a string";
         FatalErrorDialog(ss.str());
     }
     return subElem.GetString();
 }
 
-static const char* getEnvType(const Value& i_Value, const char* i_Elem)
+static EnvType parseEnvType(const Value& i_Value, const char* i_Elem)
 {
-    const char* envStr(getString(i_Value, i_Elem));
-    auto it(ENV_TYPES.find(getString(i_Value, ENV_TYPE_ELEM)));
-
-    if (it == ENV_TYPES.end()) { //TODO
+    auto it(ENV_TYPES.find(parseString(i_Value, i_Elem)));
+    if (it == ENV_TYPES.end()) {
         std::stringstream ss;
-        ss << "Parameter \"" << i_Elem <<
-            "\" value should be a string";
+        ss << "Parameter \"" << i_Elem << "\" is not a valid environment";
         FatalErrorDialog(ss.str());
     }
+    return it->second;
+}
 
-    return subElem.GetString();
+static EnvType parseEnvType(const Value& i_Value)
+{
+    return parseEnvType(i_Value, ENV_TYPE_ELEM);
 }

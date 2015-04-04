@@ -4,115 +4,183 @@
 //                                  GENERATION                                //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Map*             MapGenerator::s_Map(NULL);
-const MapConfig* MapGenerator::s_Config(NULL);
+Map*       MapGenerator::s_Map      = NULL;
+MapConfig* MapGenerator::s_Config   = NULL;
+Coord      MapGenerator::s_ULCorner;
+Coord      MapGenerator::s_LRCorner;
 
-Map& MapGenerator::generate(const MapConfig& i_Config)
+Map& MapGenerator::generate()
 {
-    s_Map = new Map(i_Config.m_Dim);
-    s_Config = &i_Config;
+    return generate(DEFAULT_MAP_CONFIG);
+}
 
-    placeInitialLandTiles();
-    growLandmasses();
-    
+Map& MapGenerator::generate(const char* i_MapConfigFile)
+{
+    // Read config file
+    s_Config = new MapConfig(i_MapConfigFile);
+
+    // Initialized map with dimensions specified by the config file
+    s_Map = new Map(s_Config->m_Dim);
+
+    // Build map constraints from the config file
+    s_Config->buildConstraints(*s_Map);
+
+    // Initialize environments
+    placeBorders();
+
+    // Fill with initial environment
+    fillWithInitEnv();
+
+    // Execute map generation phases
+    for (const Phase& phase : s_Config->m_Phases) {
+        executeMapGenPhase(phase);
+    }
+
+    // Delete map config
+    delete s_Config;
+
     return *s_Map;
 }
 
-void MapGenerator::placeInitialLandTiles()
+void MapGenerator::placeBorders()
 {
-    // Compute how many initial tiles to place
-    UINT initTiles(s_Map->area() * s_Config->m_LandProp * s_Config->m_InitProp);
+    // Zone that will be filled by the initial env 
+    // (borders may reduce this space)
+    s_ULCorner = Coord(0, 0);
+    s_LRCorner = Coord(s_Map->m_Dim);
 
-    // Set constrains that are common for all env. type
-    Constrs constrs(2);
-    constrs[0] = new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion);
-    constrs[1] = new EnvironmentIs(*s_Map, OCEAN);
+    // Borders overlap each other (the last one has the priority)
+    for (Border border : s_Config->m_Borders) {
+        // Adjust generation zone
+        switch (border.m_Side) {
+        case UP:    s_ULCorner.y = border.m_Width; break;
+        case DOWN:  s_LRCorner.y = s_Map->m_Dim.y - border.m_Width; break;
+        case LEFT:  s_ULCorner.x = border.m_Width; break;
+        case RIGHT: s_LRCorner.x = s_Map->m_Dim.x - border.m_Width; break;
+        }
 
-    for (EnvType envType : LAND_ENV_TYPES) {
-        // Compute how many initial tiles to place for specific env. type
-        UINT envTiles(initTiles*s_Config->m_InitLandProp.proportionOf(envType));
+        // Skip ocean borders because tiles are ocean at initialization
+        if (border.m_Env == OCEAN) {
+            // Tiles are already ocean
+            continue;
+        }
 
-        // Generate tiles for specific env. type
-        generateEnv(envType, envTiles, constrs, "Placing initial tiles");
+        // Generate borders
+        Coord coord;
+        switch (border.m_Side) {
+        case UP:
+            if (border.m_Width > s_Map->m_Dim.y * 0.5) {
+                FatalErrorDialog("North border cannot be \
+                                  larger than half of the map");
+            }
+            for (UINT i = 0; i < border.m_Width * s_Map->m_Dim.x; ++i) {
+                s_Map->m_Tiles[i].setEnvironment(border.m_Env);
+            }
+            break;
+        case DOWN:
+            if (border.m_Width > s_Map->m_Dim.y * 0.5) {
+                FatalErrorDialog("South border cannot be \
+                                  larger than half of the map");
+            }
+            for (UINT i(s_Map->m_Dim.x * s_Map->m_Dim.y - 
+                border.m_Width * s_Map->m_Dim.x); 
+                i < s_Map->m_Dim.x * s_Map->m_Dim.y; ++i) {
+                s_Map->m_Tiles[i].setEnvironment(border.m_Env);
+            }
+            break;
+        case LEFT:
+            if (border.m_Width > s_Map->m_Dim.x * 0.5) {
+                FatalErrorDialog("West border cannot be \
+                                  larger than half of the map");
+            }
+            for (coord.y = 0; coord.y < s_Map->m_Dim.y; ++coord.y) {
+                for (coord.x = 0; coord.x < border.m_Width; ++coord.x) {
+                    s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
+                        setEnvironment(border.m_Env);
+                }
+            }
+            break;
+        case RIGHT:
+            if (border.m_Width > s_Map->m_Dim.x * 0.5) {
+                FatalErrorDialog("East border cannot be \
+                                  larger than half of the map");
+            }
+            UINT dimX(s_Map->m_Dim.x);
+            for (coord.y = 0; coord.y < s_Map->m_Dim.y; ++coord.y) {
+                for (coord.x = dimX - border.m_Width; coord.x<dimX; ++coord.x) {
+                    s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
+                        setEnvironment(border.m_Env);
+                }
+            }
+            break;
+        }
     }
-
-    // Delete constraints that are common for all env. type
-    delete constrs[0];
-    delete constrs[1];
 }
 
-void MapGenerator::growLandmasses()
+void MapGenerator::fillWithInitEnv()
 {
-    // Compute how many tiles to place
-    UINT tiles(s_Map->area() * s_Config->m_LandProp * (1-s_Config->m_InitProp));
-
-    // Set constrains that are common for all env. type
-    Constrs constrs(3);
-    constrs[0] = new DistanceFromCenter(*s_Map, s_Config->m_LandDispertion);
-    constrs[1] = new EnvironmentIs(*s_Map, OCEAN);
-
-    // Generate tiles for each env. type
-    for (EnvType envType : LAND_ENV_TYPES) {
-        // Compute how many tiles to place for specific env. type
-        UINT envTiles(tiles * s_Config->m_LandTypeProp.proportionOf(envType));
-
-        // Set constrains that are env. type specific
-        constrs[2] = new Clustering(*s_Map,envType,s_Config->m_LandCompactness);
-
-        // Generate tiles for specific env. type
-        generateEnv(envType, envTiles, constrs, "Growing landmasses");
-
-        // Delete constraints that are env. type specific
-        delete constrs[2];
+    if (s_Config->m_InitEnvType == OCEAN) {
+        // Tiles are already ocean
+        return;
     }
 
-    // Delete constraints that are common for all env. type
-    delete constrs[0];
-    delete constrs[1];
+    Coord coord;
+    for (coord.y = s_ULCorner.y; coord.y < s_LRCorner.y; ++coord.y) {
+        for (coord.x = s_ULCorner.x; coord.x < s_LRCorner.x; ++coord.x) {
+            s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
+                setEnvironment(s_Config->m_InitEnvType);
+        }
+    }
 }
 
-void MapGenerator::generateEnv(EnvType        i_Type,
-                               UINT           i_NumElem,
-                               const Constrs& i_Constr,
-                               const char*    i_TaskDesc)
+void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
 {
-    // Progress logging
-    std::stringstream ss;
-    ss << "World generation - "<< i_TaskDesc <<" (" << ENV_NAMES[i_Type] << ")";
-    std::string msg = ss.str();
-    ProgressLogger progressLogger(i_NumElem, msg);
+    for (const auto& envCnstrnts : i_Phase.m_Cnstrts) {
+        UINT qty(envCnstrnts.second.first);
+        UINT placed(0);
+        UINT tries(0);
 
-    UINT elemPlaced(0);
-    
-    // Loop until all needed tiles are placed
-    while (elemPlaced < i_NumElem) {
-        // Generate a random coord
-		const Coord coord(randCoord());
+        // Progress logging
+        std::stringstream ss;
+        ss << "World generation - " << i_Phase.m_Name << " - " 
+            << envCnstrnts.first << " [" << qty << " tiles]";
+        std::string msg = ss.str();
+        ProgressLogger progressLogger(qty, msg);
 
-        // At first, the probability of placing the env. is 100 %
-		double totalProb(1.0);
+        // Loop until all needed tiles are placed
+        while (placed < qty) {
+            // Generate a random coord
+            const Coord coord(randCoord());
 
-        // Each constraint will reduce this probability 
-        // (product of all constraint weights)
-        for (auto constraint : i_Constr) {
-            totalProb *= constraint->getWeightFor(coord);
-		}
+            // At first, the probability of placing the env. is 100 %
+            double totalProb(1.0);
 
-        // Generate a probability
-		if (randProb() < totalProb) {
-            // Set the env.
-            UINT tileNum(coord.x + coord.y * s_Map->dim().x);
-            s_Map->m_Tiles[tileNum].setEnvironment(i_Type);
-            ++elemPlaced;
-            progressLogger.next();
-		}
-	}
+            // Each constraint will reduce this probability 
+            // (product of all constraint weights)
+            for (const auto& constraint : envCnstrnts.second.second) {
+                totalProb *= constraint->getWeightFor(coord);
+            }
+
+            // Generate a probability
+            if (randProb() < totalProb) {
+                // Set the env.
+                s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x]
+                    .setEnvironment(envCnstrnts.first);
+                ++placed;
+                progressLogger.next();
+            }
+            else if (++tries > i_Phase.m_MaxTries) {
+                LOG(ERROR) << "Maximum number of tries reached."
+                           << " Skipping phase for this environent.";
+                break;
+            }
+        }
+    }
 }
 
 const Coord MapGenerator::randCoord()
 {
-    UINT obw(s_Config->m_OceanBorderWidth);
-    int x(randUINT(obw, s_Config->m_Dim.x - 1 - 2 * obw));
-    int y(randUINT(obw, s_Config->m_Dim.y - 1 - 2 * obw));
+    UINT x(randUINT(s_ULCorner.x, s_LRCorner.x - 1));
+    UINT y(randUINT(s_ULCorner.y, s_LRCorner.y - 1));
     return Coord(x, y);
 }

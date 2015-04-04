@@ -22,27 +22,17 @@ Map::~Map()
 const Tile& Map::getTile(Coord i_Coord) const
 {
     assert(i_Coord < m_Dim);
-    return m_Tiles[i_Coord.x + i_Coord.y * m_Dim.x];
-}
-
-const Tile*** Map::getTiles(Coord i_UpperLeft, Coord i_LowerRight) const
-{
-    assert(i_UpperLeft < i_LowerRight);
-
-    const Tile*** tiles = new const Tile**[i_LowerRight.y - i_UpperLeft.y];
-
-    for (UINT y = 0; y < i_LowerRight.y - i_UpperLeft.y; ++y) {
-        tiles[y] = new const Tile*[i_LowerRight.x - i_UpperLeft.x];
-        for (UINT x = 0; x < i_LowerRight.x - i_UpperLeft.x; ++x) {
-            tiles[y][x] = &m_Tiles[y * m_Dim.x + x];
-        }
-    }
-    return tiles;
+    return m_Tiles[linearize(i_Coord)];
 }
 
 Coord Map::randCoord() const
 {
     return Coord(randUINT(m_Dim.x - 1), randUINT(m_Dim.y - 1));
+}
+
+UINT Map::linearize(Coord i_Coord) const
+{
+    return i_Coord.x + i_Coord.y * m_Dim.x;
 }
 
 

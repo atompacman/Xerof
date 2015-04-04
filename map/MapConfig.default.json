@@ -6,17 +6,17 @@
 		},
 		"InitialEnvType": "OCEAN",
 		"Borders": {
-			"West" : { "Width": 2, "EnvType": "OCEAN"  },
-			"East" : { "Width": 2, "EnvType": "OCEAN"  },
-			"North": { "Width": 4, "EnvType": "TUNDRA" },
-			"South": { "Width": 4, "EnvType": "TUNDRA" }
+			"WEST" : { "Width": 2, "EnvType": "OCEAN"  },
+			"EAST" : { "Width": 2, "EnvType": "OCEAN"  },
+			"NORTH": { "Width": 4, "EnvType": "TUNDRA" },
+			"SOUTH": { "Width": 4, "EnvType": "TUNDRA" }
 		},
 		"Phases": {
 			"Generate tundra on poles": {
 				"Quantity": { 
 					"Relative": 0.05
 				},
-				"EnvTypesProp": {
+				"EnvTypesProportions": {
 					"TUNDRA": 1
 				},
 				"Constraints": {
@@ -30,7 +30,7 @@
 				"Quantity": {
 					"Absolute": 7
 				},
-				"EnvTypesProp": {
+				"EnvTypesProportions": {
 					"GRASSLAND": 1
 				},
 				"Constraints": {
@@ -45,9 +45,9 @@
 			},
 			"Grow continents": {
 				"Quantity": { 
-					"Relative": 0.4 
+					"Relative": 0.1 
 				},
-				"EnvTypesProp": {
+				"EnvTypesProportions": {
 					"GRASSLAND": 1
 				},
 				"Constraints": {
@@ -55,12 +55,11 @@
 						"EnvType": "OCEAN"
 					},
 					"AttractionTowardsCenter": {
-						"Strength": 0.3
+						"Strength": 0.2
 					},
-					"Attraction": {
-						"Min": 1,
-						"Max": 8,
-						"Strength": 0.5
+					"NeighbouringEnvAttraction": {
+						"Radius": 1,
+						"Strength": 0.01
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
@@ -69,7 +68,7 @@
 				"Quantity": { 
 					"Absolute": 30
 				},
-				"EnvTypesProp": {
+				"EnvTypesProportions": {
 					"PLAIN": 0.7,
 					"ROCKY": 0.3
 				},
@@ -84,7 +83,7 @@
 				"Quantity": { 
 					"Relative": 0.05
 				},
-				"EnvTypesProp": {
+				"EnvTypesProportions": {
 					"PLAIN": 1
 				},
 				"Constraints": {
@@ -94,10 +93,10 @@
 					"AttractionTowardsEquator": {
 						"Strength": 0.6
 					},
-					"Attraction": {
-						"Min": 1,
-						"Max": 6,
-						"Strength": 2
+					"NeighbouringEnvLimits": {
+						"Min": 0,
+						"Max": 3,
+						"Radius": 2
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
@@ -106,7 +105,7 @@
 				"Quantity": { 
 					"Relative": 0.02
 				},
-				"EnvTypesProp": {
+				"EnvTypesProportions": {
 					"ROCKY": 1
 				},
 				"Constraints": {
@@ -114,10 +113,10 @@
 						"GRASSLAND",
 						"PLAIN"
 					],
-					"Attraction": {
+					"NeighbouringEnvLimits": {
 						"Min": 1,
-						"Max": 4,
-						"Strength": 3
+						"Max": 8,
+						"Radius": 3
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
@@ -125,8 +124,3 @@
 		}
 	}
 }
-
-
-
-
-
