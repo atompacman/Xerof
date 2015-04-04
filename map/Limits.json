@@ -1,0 +1,6 @@
+{
+	"XerofMapConfigLimits": {
+		"MinimumMapSize": 5,
+		"MaximumMapSize": 5000
+	}
+}
