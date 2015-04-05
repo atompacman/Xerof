@@ -31,6 +31,10 @@ public:
     void handleButtonReleased(const ALLEGRO_EVENT& i_Event);
     void handleCursorMoved(const ALLEGRO_EVENT& i_Event);
 
+    // SELECTED TILE
+    Coord getSelectedTile() const;
+    bool  hasSelectedTile() const;
+
 private:
     // The camera controlled by the mouse
     Camera&     m_Camera;
@@ -39,9 +43,9 @@ private:
     MouseState  m_State;
 
     // Last clicked tile
-    bool        m_HasTileSelected;
+    bool        m_HasSelectedTile;
     Coord       m_ClickedTile;
 
 	// EVENT HANDLING
-    void saveClickedTile(UINT i_x, UINT i_y);
+    Coord computeSelectedTile(UINT i_x, UINT i_y) const;
 };
