@@ -12,9 +12,9 @@ m_Env(OCEAN)
 Tile::~Tile()
 {
     for (UINT i = 0; i < 4; ++i) {
-        delete[] m_Objs[i];
+        //delete[] m_Objs[i];
     }
-	delete[] m_Objs;
+	//delete[] m_Objs;
 }
 
 

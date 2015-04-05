@@ -5,10 +5,10 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 Display::Display(const World&    i_World,
-                 const Mouse&    i_Mouse,
+                 Camera&         io_Camera,
                  CivController** i_Civs) :
 m_World(i_World),
-m_Mouse(i_Mouse),
+m_Camera(io_Camera),
 m_Civs(i_Civs),
 
 m_Window(createWindow()),
@@ -62,64 +62,41 @@ Display::~Display()
 
 void Display::draw()
 {
-    // Get resolution level from mouse zooming
-	int resLvl = resolutionLevel();
+    // Apply camera transformation on map
+    m_Camera.applyTransform(getWindowSize());
 
-    // Create empty transform
-	ALLEGRO_TRANSFORM transform;
-	al_identity_transform(&transform);
-
-    // Camera translation
-    al_translate_transform(&transform, 
-                           -m_Mouse.m_Pos.x * RESOLU_FRACTION[resLvl], 
-                           -m_Mouse.m_Pos.y * RESOLU_FRACTION[resLvl]);
-	
-    // Camera rotation
-	al_rotate_transform(&transform, m_Mouse.m_Rotate);
-
-    // Camera zoom
-    al_scale_transform(&transform, 
-                       m_Mouse.m_Zoom * RESOLU_FACTOR[resLvl], 
-                       m_Mouse.m_Zoom * RESOLU_FACTOR[resLvl]);
-
-    // Center camera
-    DCoord screenDim(al_get_display_width(&m_Window), 
-                     al_get_display_height(&m_Window));
-    al_translate_transform(&transform, screenDim.x * 0.5, screenDim.y * 0.5);
-	
-    // Apply transform
-	al_use_transform(&transform);
+    // Compute which tiles to display
+    m_Camera.updateVisibleTiles(getWindowSize());
+    Coord visibleUL(m_Camera.getVisibleTilesULCorner());
+    Coord visibleLR(m_Camera.getVisibleTilesLRCorner());
 
     // Clear buffer to background color
-	al_clear_to_color(al_map_rgb(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
-	
-    // Compute which tiles to display
-    updateTilesToDisplay(screenDim);
+    al_clear_to_color(al_map_rgb(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
+
+    // Get variables
+    double tileSize(m_Camera.getTileSize());
+    UINT tileBitmapSize(m_Camera.getTileBitmapSize());
+    UINT tileSizeOnScreen(m_Camera.getTileSizeOnScreen());
+    Coord textureULCorner(m_Camera.getTextureULCorner());
+    Coord pixelOnMap = visibleUL * (UINT) tileSize;
+    Coord tileCoord;
 
     // Activate deferred drawing
     al_hold_bitmap_drawing(true);
 
-    // Compute variables
-    double tileSize = TILE_SIZE[resLvl];
-    UINT tileSizeOnBitmap = tileSize + 2 * TILE_GRADIENT_SIZE[resLvl];
-    UINT tileSizeOnScreen = tileSize + 
-        2 * TILE_GRADIENT_SIZE[resLvl] * ALPHA_OVERLAPPING[resLvl];
-    Coord pixelOnMap = m_ULtiles * TILE_SIZE[resLvl];
-    Coord tileCoord;
-
     // Draw visible tiles
-    for (tileCoord.y = m_ULtiles.y; tileCoord.y < m_LRtiles.y; ++tileCoord.y) {
-        for (tileCoord.x=m_ULtiles.x; tileCoord.x < m_LRtiles.x;++tileCoord.x) {
+    for (tileCoord.y = visibleUL.y; tileCoord.y < visibleLR.y; ++tileCoord.y) {
+        for (tileCoord.x = visibleUL.x; tileCoord.x<visibleLR.x; ++tileCoord.x){
             // Get environment
             Environment env(m_World.map().getTile(tileCoord).getEnvironment());
 
             // Draw bitmap on screen
 			al_draw_scaled_bitmap(
                 m_Assets[env.assetFile()],
-				TEXTURE_UL_CORNERS[resLvl].x,
-                TEXTURE_UL_CORNERS[resLvl].y,
-				tileSizeOnBitmap,
-				tileSizeOnBitmap,
+                textureULCorner.x,
+                textureULCorner.y,
+				tileBitmapSize,
+				tileBitmapSize,
 				pixelOnMap.x,
 				pixelOnMap.y,
 				tileSizeOnScreen,
@@ -129,7 +106,7 @@ void Display::draw()
             // Increment pixels
             pixelOnMap.x += tileSize;
 		}
-        pixelOnMap.x = m_ULtiles.x * tileSize;
+        pixelOnMap.x = visibleUL.x * tileSize;
         pixelOnMap.y += tileSize;
 	}
 
@@ -144,14 +121,14 @@ void Display::draw()
             // Create caracter sub-bitmap
 			ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
 				m_Assets[human.assetFile()],
-                TEXTURE_UL_CORNERS[resLvl].x,
-                TEXTURE_UL_CORNERS[resLvl].y,
-				tileSizeOnBitmap,
-				tileSizeOnBitmap);
+                textureULCorner.x,
+                textureULCorner.y,
+				tileBitmapSize,
+				tileBitmapSize);
 
             // Draw it rotated
-            double scaling = (double)tileSizeOnScreen/(double)tileSizeOnBitmap;
-			float halfTileSizeOnBitmap = tileSizeOnBitmap * 0.5;
+            double scaling = (double)tileSizeOnScreen/(double)tileBitmapSize;
+			float halfTileSizeOnBitmap = tileBitmapSize * 0.5;
 			float halfTileSizeOnScreen = tileSizeOnScreen * 0.5;
 			al_draw_scaled_rotated_bitmap(
 				subBitmap,
@@ -165,14 +142,14 @@ void Display::draw()
 				0);
 
             // Compute location of selection box
-            pixelOnMap = round(human.getPos().m_Coord) * TILE_SIZE[resLvl];
+            pixelOnMap = round(human.getPos().m_Coord) * (UINT) tileSize;
 
 			al_draw_scaled_bitmap(
 				m_Assets[SELECTION],
-                TEXTURE_UL_CORNERS[resLvl].x,
-                TEXTURE_UL_CORNERS[resLvl].y,
-				tileSizeOnBitmap,
-				tileSizeOnBitmap,
+                textureULCorner.x,
+                textureULCorner.y,
+				tileBitmapSize,
+				tileBitmapSize,
 				pixelOnMap.x,
 				pixelOnMap.y,
 				tileSizeOnScreen,
@@ -182,47 +159,13 @@ void Display::draw()
 	}
     // Release drawing
 	al_hold_bitmap_drawing(false);
-
-    // Apply transforms
-	al_identity_transform(&transform);
-	al_use_transform(&transform);
 }
 
-int Display::resolutionLevel()
-{
-    if      (m_Mouse.m_Zoom > 0.5)	 { return 0; }
-    else if (m_Mouse.m_Zoom > 0.25)  { return 1; }
-    else if (m_Mouse.m_Zoom > 0.125) { return 2; }
-	else						     { return 3; }
-}
-
-void Display::updateTilesToDisplay(DDimensions i_ScreenDim)
-{
-    double tilePerPxl = 1 / (TILE_SIZE[0] * m_Mouse.m_Zoom);
-    DDimensions halfNumTiles(i_ScreenDim * tilePerPxl * 0.5);
-
-    double absCosRot = abs(cos(m_Mouse.m_Rotate));
-    double absSinRot = abs(sin(m_Mouse.m_Rotate));
-
-    DDimensions halfGoodNumTiles(
-        absCosRot * halfNumTiles.x + absSinRot * halfNumTiles.y,
-        absSinRot * halfNumTiles.x + absCosRot * halfNumTiles.y);
-
-    DDimensions currTiles(m_Mouse.m_Pos * m_Mouse.m_Zoom * tilePerPxl);
-
-    DDimensions upperLeft  = currTiles - halfGoodNumTiles - 1.0;
-    DDimensions lowerRight = currTiles + halfGoodNumTiles + 1.0;
-
-    m_ULtiles.x = max(0, upperLeft.x);
-    m_ULtiles.y = max(0, upperLeft.y);
-    m_LRtiles.x = min(lowerRight.x, m_World.map().dim().x);
-    m_LRtiles.y = min(lowerRight.y, m_World.map().dim().y);
-}
-
-void Display::resize() const
+void Display::resize()
 {
     al_acknowledge_resize(&m_Window);
 }
+
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                  SETTERS                                   //
@@ -243,4 +186,10 @@ void Display::setFPS(int i_FPS)
 ALLEGRO_DISPLAY& Display::getWindow() const
 {
     return m_Window;
+}
+
+Coord Display::getWindowSize() const
+{
+    return Coord(al_get_display_width(&m_Window), 
+                 al_get_display_height(&m_Window));
 }

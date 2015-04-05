@@ -8,9 +8,10 @@ GameLoop::GameLoop():
 m_World(),
 m_CivCtrls(initCivCtrls()),
 
-m_Mouse(m_World.map().dim(), TILE_SIZE[0]),
+m_Camera(m_World.map().dim()),
+m_Mouse(m_Camera),
 m_Keyboard(),
-m_Disp(m_World, m_Mouse, m_CivCtrls),
+m_Disp(m_World, m_Camera, m_CivCtrls),
 
 m_Queue(al_create_event_queue()),
 m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
@@ -94,10 +95,19 @@ void GameLoop::startGame()
 			}
 			break;
 
+        // When there is a click
 		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN :
+            m_Mouse.handleButtonPressed(ev);
+            break;
+
+        // When a button is released
 		case ALLEGRO_EVENT_MOUSE_BUTTON_UP :
+            m_Mouse.handleButtonReleased(ev);
+            break;
+
+        // When cursor is moved
 		case ALLEGRO_EVENT_MOUSE_AXES :
-			m_Mouse.handleMouseEvent(ev);
+            m_Mouse.handleCursorMoved(ev);
 			break;
 
 		case ALLEGRO_EVENT_TIMER:
