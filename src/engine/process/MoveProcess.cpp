@@ -6,7 +6,7 @@
 
 const double MoveProcess::s_ERROR = 1.0 / (TARGET_FPS * 2.0);
 
-MoveProcess::MoveProcess(Human* i_Human, const Position& i_Dest) :
+MoveProcess::MoveProcess(HumanInfo& i_Human, const Position& i_Dest) :
 HumanProcess(i_Human),
 m_Delta((i_Dest.m_Coord - m_Human.getPos().m_Coord) / TARGET_FPS)
 {

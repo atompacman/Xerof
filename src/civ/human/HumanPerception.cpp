@@ -1,11 +1,12 @@
-#include "Civilization.h"
+#include "HumanPerception.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Civilization::Civilization() :
-m_People()
+HumanPerception::HumanPerception(const HumanInfo& i_Info, const Map& i_Map) :
+m_Info(i_Info),
+m_Map(i_Map)
 {}
 
 
@@ -13,22 +14,28 @@ m_People()
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const HumanInfo& Civilization::getHuman(UINT i_ID) const
+const HumanInfo& HumanPerception::infos() const
 {
-    return m_People.at(i_ID);
-}
-
-HumanInfo& Civilization::getHuman(UINT i_ID)
-{
-    return m_People.at(i_ID);
+    return m_Info;
 }
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                    STATUS                                  //
+//                                 SURROUNDINGS                               //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-UINT Civilization::population() const
+const Tile& HumanPerception::getTileInDir(Direction i_Dir) const
 {
-    return m_People.size();
+    return m_Map.getTile(incrementedToDirection(
+        m_Info.m_Pos.tileCoord(), i_Dir));
+}
+
+const Tile& HumanPerception::getTileInFront() const
+{
+    return getTileInDir(m_Info.m_Pos.m_Dir);
+}
+
+EnvType HumanPerception::getEnvInFront() const
+{
+    return getTileInFront().getEnvironment().getType();
 }

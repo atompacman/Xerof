@@ -23,10 +23,13 @@ public:
 	// DAWN OF CIVILIZATION
 	void placeFirstHuman();
 
+    // ADD
+    void addHuman(Coord i_Pos);
+
 	// GETTERS
     const Civilization& getCiv() const;
+    Civilization&       getCiv();
     AI*                 getAI() const;
-    Human&              getHuman(UINT i_ID);
 
 private:
     Civilization m_Civ;

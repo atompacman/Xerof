@@ -16,7 +16,7 @@ class MoveProcess : public HumanProcess
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    MoveProcess(Human* i_Human, const Position& i_Dest);
+    MoveProcess(HumanInfo& i_Human, const Position& i_Dest);
 
 	// NEXT ITERATION
     virtual void nextIter();

@@ -157,16 +157,17 @@ void GameLoop::processAI()
 {
 	for (UINT i = 0; i < NB_CIV; ++i) {
         for (UINT j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j) {
-            Human& human = m_CivCtrls[i]->getHuman(j);
+            HumanInfo& human = m_CivCtrls[i]->getCiv().getHuman(j);
             if (!human.isReady()) {
 				continue;
 			}
-            processOrder(human, m_CivCtrls[i]->getAI()->giveOrder(human));
+            HumanPerception persep(human, m_World.map());
+            processOrder(human, m_CivCtrls[i]->getAI()->giveOrder(persep));
 		}
 	}
 }
 
-void GameLoop::processOrder(Human& io_Human, const Order& i_Order)
+void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
 {
 	PossibleOrders action(i_Order.getAction());
 
@@ -177,7 +178,7 @@ void GameLoop::processOrder(Human& io_Human, const Order& i_Order)
 	}
 }
 
-void GameLoop::processMovingOrder(Human&         io_Human,
+void GameLoop::processMovingOrder(HumanInfo&     io_Human,
 	                              PossibleOrders i_Action, 
                                   Direction      i_Dir)
 {
@@ -187,7 +188,7 @@ void GameLoop::processMovingOrder(Human&         io_Human,
 	Position dest(after, i_Dir);
 
     if (verifyDestination(dest)) {
-        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(&io_Human, dest);
+        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(io_Human, dest);
         ++m_NumMoveProcs;
     }
 }
@@ -210,7 +211,7 @@ bool GameLoop::isOccupied(Coord i_Coord) const
 	for (UINT i = 0; i < NB_CIV; ++i) {
 		const Civilization civ = m_CivCtrls[i]->getCiv();
         for (UINT j = 0; j < civ.population(); ++j) {
-			Human human = civ.getHuman(j);
+            const HumanInfo human = civ.getHuman(j);
             if (human.getPos() == Position(i_Coord, UP)) {
 				return true;
 			}

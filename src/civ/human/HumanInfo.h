@@ -1,36 +1,29 @@
 #pragma once
 
 //===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
-#include <stdlib.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
+#include "..\..\engine\Assets.h"
 #include "Position.h"
-#include "..\..\world\map\Map.h"
+#include "..\..\world\map\tile\MapElement.h"
 /*============================================================================||
-| Human entities
+| Data related to a single human entity
 |-----------------------------------------------------------------------------||
-| For now, they can look around, they have stats and an asset file... to be
-| improved.
+| Is basically a data container
 \=============================================================================*/
 
-class Human : public MapElement
+class HumanInfo : public MapElement
 {
+    friend class HumanPerception;
+
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    Human(const Position& i_StartingPos, const Map& i_Map);
+    HumanInfo(const Position& i_StartingPos);
 
 	// GETTERS
     const Position& getPos() const;
     Position&       getPos();
 
-    // SURROUNDINGS
-    const Tile*** const getSurroundingTiles() const;
-    const Tile&         getTileInDir(Direction i_Dir) const;
-    const Tile&         getTileInFront() const;
-    EnvType             getEnvInFront() const;
-
     // SETTERS
-    void setDir(Direction i_Dir);
     void setReady();
     void setBusy();
 
@@ -45,10 +38,8 @@ public:
 	virtual AssetID assetFile() const { return APARATUS3; }
 
 private:
-    Position    m_Pos;
-	bool        m_IsReady;
-	float       m_MoveSpeed;
-	UINT        m_ROSight;
-
-    const Map&  m_Map;
+    Position m_Pos;
+	bool     m_IsReady;
+	float    m_MoveSpeed;
+	UINT     m_ROSight;
 };

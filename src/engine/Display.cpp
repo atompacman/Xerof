@@ -114,7 +114,7 @@ void Display::draw()
 	for (UINT i = 0; i < NB_CIV; ++i) {
         const Civilization civ(m_Civs[i]->getCiv());
         for (UINT j = 0; j < civ.population(); ++j) {
-            Human human = civ.getHuman(j);
+            const HumanInfo human = civ.getHuman(j);
             DCoord pxlPos = human.getPos().m_Coord * tileSize;
 			float angle = correspondingAngle(human.getPos().m_Dir);
 
