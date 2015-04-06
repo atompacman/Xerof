@@ -2,10 +2,13 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <list>
 #include <math.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "Camera.h"
 #include "..\utils\FatalErrorDialog.h"
+#include "..\civ\human\HumanInfo.h"
+#include "..\world\map\Map.h"
 /*============================================================================||
 | Variables about the camera controller by the mouse
 |-----------------------------------------------------------------------------||
@@ -13,6 +16,8 @@
 | - Hold right button to zoom and rotate camera
 | - Wheel to zoom
 \=============================================================================*/
+
+#define MAX_MOVE_EVENT_FOR_CLICK 10
 
 enum MouseState {
     IDLE, 
@@ -24,27 +29,35 @@ class Mouse
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    Mouse(Camera& io_Camera);
+    Mouse(Map& i_Map);
 
     // EVENT HANDLING
     void handleButtonPressed(const ALLEGRO_EVENT& i_Event);
     void handleButtonReleased(const ALLEGRO_EVENT& i_Event);
     void handleCursorMoved(const ALLEGRO_EVENT& i_Event);
 
-    // SELECTED TILE
-    Coord getSelectedTile() const;
-    bool  hasSelectedTile() const;
+    // GETTERS
+    const Camera& getCamera() const;
+    Camera&       getCamera();
 
 private:
     // The camera controlled by the mouse
-    Camera&     m_Camera;
+    Camera m_Camera;
+
+    // Selected human
+    HumanInfo* m_SelHuman;
 
     // Current pressed button (or no button pressed)
-    MouseState  m_State;
+    MouseState m_State;
+
+    // Used for selection clicks
+    UINT m_MoveEventsSincePressed;
 
     // Last clicked tile
-    bool        m_HasSelectedTile;
-    Coord       m_ClickedTile;
+    Coord m_ClickedTile;
+
+    // Map reference
+    Map& m_Map;
 
 	// EVENT HANDLING
     Coord computeSelectedTile(UINT i_x, UINT i_y) const;

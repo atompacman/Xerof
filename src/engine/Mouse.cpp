@@ -4,11 +4,13 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Mouse::Mouse(Camera& io_Camera) :
-m_Camera(io_Camera),
+Mouse::Mouse(Map& i_Map) :
+m_Camera(i_Map.dim()),
+m_SelHuman(NULL),
 m_State(IDLE),
-m_HasSelectedTile(false),
-m_ClickedTile(0,0)
+m_MoveEventsSincePressed(0),
+m_ClickedTile(0,0),
+m_Map(i_Map)
 {
 	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");
@@ -27,16 +29,47 @@ void Mouse::handleButtonPressed(const ALLEGRO_EVENT& i_Event)
 
     // Save the clicked tile on map
     m_ClickedTile = computeSelectedTile(i_Event.mouse.x, i_Event.mouse.y);
+
+    // Reset the number of move events since this current event
+    m_MoveEventsSincePressed = 0;
 }
 
 void Mouse::handleButtonReleased(const ALLEGRO_EVENT& i_Event)
 {
-    // If cursor stayed on the same tile than at the time of the click, the
-    // tile is selected
-    m_HasSelectedTile = m_State == LEFT_BUTTON_PRESSED &&
-        m_ClickedTile == computeSelectedTile(i_Event.mouse.x,i_Event.mouse.y) &&
-        m_ClickedTile.x < m_Camera.m_MaxPos.x / TILE_SIZE[0] &&
-        m_ClickedTile.y < m_Camera.m_MaxPos.y / TILE_SIZE[0];
+    // Do a selection only if mouse has not moved much since pressing
+    if (m_State == LEFT_BUTTON_PRESSED && 
+        m_MoveEventsSincePressed < MAX_MOVE_EVENT_FOR_CLICK) {
+
+        // If clicked tile is on the map
+        if (m_ClickedTile < (m_Camera.m_MaxPos / TILE_SIZE[0])) {
+
+            HumanInfo* currSelect(m_Map.getTile(m_ClickedTile).getHuman());
+
+            // If there is no human on the new tile
+            if (currSelect == NULL) {
+                // Clear previous selection
+                if (m_SelHuman != NULL) {
+                    m_SelHuman->unselect();
+                }
+            }
+            else {
+                // If it was already selected, unselect him, else select him
+                if (currSelect->isSelected()) {
+                    currSelect->unselect();
+                }
+                else {
+                    currSelect->select();
+                    m_SelHuman = currSelect;
+                }
+            }
+        }
+        else {
+            // Clear previous selection
+            if (m_SelHuman != NULL) {
+                m_SelHuman->unselect();
+            }
+        }
+    }
 
     // Reset mouse state to idle
     m_State = IDLE;
@@ -61,6 +94,8 @@ void Mouse::handleCursorMoved(const ALLEGRO_EVENT& i_Event)
     if (i_Event.mouse.dz != 0) {
         m_Camera.scrollwheelZoom(i_Event.mouse.dz);
     }
+
+    ++m_MoveEventsSincePressed;
 }
 
 Coord Mouse::computeSelectedTile(UINT i_x, UINT i_y) const
@@ -81,15 +116,15 @@ Coord Mouse::computeSelectedTile(UINT i_x, UINT i_y) const
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                SELECTED TILE                               //
+//                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Coord Mouse::getSelectedTile() const
+const Camera& Mouse::getCamera() const
 {
-    return m_ClickedTile;
+    return m_Camera;
 }
 
-bool Mouse::hasSelectedTile() const
+Camera& Mouse::getCamera()
 {
-    return m_HasSelectedTile;
+    return m_Camera;
 }

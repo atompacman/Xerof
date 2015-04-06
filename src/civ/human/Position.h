@@ -12,9 +12,6 @@
 struct Position
 {
 public:
-    DCoord    m_Coord;
-    Direction m_Dir;
-
 	// CONSTRUCTOR/DESTRUCTOR
     Position(Coord  i_Coord);
     Position(DCoord i_Coord);
@@ -22,6 +19,8 @@ public:
 	Position(DCoord i_Coord, Direction i_FacingDir);
 
     // GETTERS
+    DCoord    coord() const;
+    Direction facingDir() const;
     Coord     tileCoord() const;
 
     // SETTERS
@@ -31,4 +30,8 @@ public:
 
 	// OPERATORS
 	bool operator==(const Position& i_Other) const;
+
+private:
+    DCoord    m_Coord;
+    Direction m_Dir;
 };

@@ -32,7 +32,7 @@ const Tile& HumanPerception::getTileInDir(Direction i_Dir) const
 
 const Tile& HumanPerception::getTileInFront() const
 {
-    return getTileInDir(m_Info.m_Pos.m_Dir);
+    return getTileInDir(m_Info.m_Pos.facingDir());
 }
 
 EnvType HumanPerception::getEnvInFront() const

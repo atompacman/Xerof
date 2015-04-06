@@ -17,7 +17,7 @@ class CivController
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    CivController(const World& i_World);
+    CivController(World& i_World);
     ~CivController();
 
 	// DAWN OF CIVILIZATION
@@ -35,5 +35,5 @@ private:
     Civilization m_Civ;
     AI*          m_AI;
 
-    const World& m_World;
+    World& m_World;
 };

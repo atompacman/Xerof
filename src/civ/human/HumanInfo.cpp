@@ -7,6 +7,7 @@
 HumanInfo::HumanInfo(const Position& i_StartingPos) :
 m_Pos(i_StartingPos),
 m_IsReady(true),
+m_IsSelected(false),
 m_MoveSpeed(1),
 m_ROSight(2)
 {}
@@ -41,6 +42,16 @@ void HumanInfo::setBusy()
     m_IsReady = false;
 }
 
+void HumanInfo::select()
+{
+    m_IsSelected = true;
+}
+
+void HumanInfo::unselect()
+{
+    m_IsSelected = false;
+}
+
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                     STATE                                  //
@@ -49,6 +60,11 @@ void HumanInfo::setBusy()
 bool HumanInfo::isReady() const
 {
     return m_IsReady;
+}
+
+bool HumanInfo::isSelected() const
+{
+    return m_IsSelected;
 }
 
 

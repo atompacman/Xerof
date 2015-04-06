@@ -8,10 +8,9 @@ GameLoop::GameLoop():
 m_World(),
 m_CivCtrls(initCivCtrls()),
 
-m_Camera(m_World.map().dim()),
-m_Mouse(m_Camera),
+m_Mouse(m_World.map()),
 m_Keyboard(),
-m_Disp(m_World, m_Camera, m_CivCtrls),
+m_Disp(m_World, m_Mouse.getCamera()),
 
 m_Queue(al_create_event_queue()),
 m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
@@ -125,9 +124,19 @@ void GameLoop::startGame()
 
 			double time = al_get_time();
 
+            // Apply camera transformation on map
+            m_Mouse.getCamera().applyTransform(m_Disp.getWindowSize());
+
+            // Compute which tiles to display
+            m_Mouse.getCamera().updateVisibleTiles(m_Disp.getWindowSize());
+
+            // Draw frame
 			m_Disp.draw();
+
+            // Display frame
 			al_flip_display();
 
+            // Update FPS
 			fps_accum++;
 			if (time - fps_time >= 1) {
 				fps = fps_accum;
@@ -136,6 +145,7 @@ void GameLoop::startGame()
 			}
 			m_Disp.setFPS(fps);
 
+            // Don't refresh until asked
 			refresh = false;
 
 			++currentFrame;
@@ -184,11 +194,13 @@ void GameLoop::processMovingOrder(HumanInfo&     io_Human,
 {
     assertNonCenterDir(i_Dir);
 
-    DCoord after(incrementedToDirection(io_Human.getPos().m_Coord, i_Dir));
+    DCoord after(incrementedToDirection(io_Human.getPos().coord(), i_Dir));
 	Position dest(after, i_Dir);
 
     if (verifyDestination(dest)) {
-        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(io_Human, dest);
+        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(io_Human, 
+                                                      dest, 
+                                                      m_World.map());
         ++m_NumMoveProcs;
     }
 }

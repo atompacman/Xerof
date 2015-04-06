@@ -4,7 +4,7 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-CivController::CivController(const World& i_World) :
+CivController::CivController(World& i_World) :
 m_Civ(),
 m_AI(new AtomAI()),
 m_World(i_World)
@@ -37,9 +37,20 @@ void CivController::placeFirstHuman()
 
 void CivController::addHuman(Coord i_Pos)
 {
+    // Assert max pop is not reached
     assert(m_Civ.m_People.size() < CIV_MAX_POP);
-    assert(m_World.map().getTile(i_Pos).isPassable());
+
+    // Get tile where human will be
+    Tile& tile(m_World.map().getTile(i_Pos));
+
+    // Assert it is human-passable
+    assert(tile.isPassable());
+
+    // Add it to the civ
     m_Civ.m_People.emplace_back(Position(i_Pos));
+
+    // Add a reference in the map
+    tile.setHuman(&m_Civ.m_People.back());
 }
 
 

@@ -49,7 +49,7 @@ public:
     Coord getVisibleTilesLRCorner() const;
     UINT  getTileSize() const;
     UINT  getTileBitmapSize() const;
-    UINT  getTileSizeOnScreen() const;
+    UINT  getOverlapTileSize() const;
     Coord getTextureULCorner() const;
 
 private:

@@ -20,9 +20,8 @@ class Display
 {
 public:
 	//CONSTRUCTOR/DESTRUCTOR
-    Display(const World&    i_World, 
-            Camera&         io_Camera,
-            CivController** i_Civs);
+    Display(const World&     i_World, 
+            const Camera&    i_Camera);
 	~Display();
 
 	//DRAW
@@ -39,9 +38,8 @@ public:
 
 private:
     // Initialized outside
-    const World&    m_World;
-    Camera&         m_Camera;
-    CivController** m_Civs;
+    const World&     m_World;
+    const Camera&    m_Camera;
 
     // Initialized here
     ALLEGRO_DISPLAY&  m_Window;
@@ -50,6 +48,10 @@ private:
 
 	//CONSTRUCTOR/DESTRUCTOR
     static ALLEGRO_DISPLAY& createWindow();
+
+    // DRAW
+    void drawEnvironment();
+    void drawHumans();
 };
 
 static float correspondingAngle(Direction i_Dir) {

@@ -74,7 +74,7 @@ void Camera::updateVisibleTiles(Coord i_WinSize)
     DDimensions currTiles(m_Pos * m_Zoom * tilePerPxl);
 
     DDimensions upperLeft = currTiles - halfGoodNumTiles - 1.0;
-    DDimensions lowerRight = currTiles + halfGoodNumTiles + 1.0;
+    DDimensions lowerRight = currTiles + halfGoodNumTiles + 2.0;
 
     m_ULtiles.x = max(0, upperLeft.x);
     m_ULtiles.y = max(0, upperLeft.y);
@@ -130,7 +130,7 @@ UINT Camera::getTileBitmapSize() const
     return TILE_SIZE[resLvl] + 2 * TILE_GRADIENT_SIZE[resLvl];
 }
 
-UINT Camera::getTileSizeOnScreen() const
+UINT Camera::getOverlapTileSize() const
 {
     UINT resLvl(resolutionLvl());
     return TILE_SIZE[resLvl] + 2 * 

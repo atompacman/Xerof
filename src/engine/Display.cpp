@@ -4,12 +4,10 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Display::Display(const World&    i_World,
-                 Camera&         io_Camera,
-                 CivController** i_Civs) :
+Display::Display(const World&  i_World,
+                 const Camera& i_Camera) :
 m_World(i_World),
-m_Camera(io_Camera),
-m_Civs(i_Civs),
+m_Camera(i_Camera),
 
 m_Window(createWindow()),
 m_Assets(loadAssets()),
@@ -62,103 +60,110 @@ Display::~Display()
 
 void Display::draw()
 {
-    // Apply camera transformation on map
-    m_Camera.applyTransform(getWindowSize());
-
-    // Compute which tiles to display
-    m_Camera.updateVisibleTiles(getWindowSize());
-    Coord visibleUL(m_Camera.getVisibleTilesULCorner());
-    Coord visibleLR(m_Camera.getVisibleTilesLRCorner());
-
     // Clear buffer to background color
     al_clear_to_color(al_map_rgb(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
-
-    // Get variables
-    double tileSize(m_Camera.getTileSize());
-    UINT tileBitmapSize(m_Camera.getTileBitmapSize());
-    UINT tileSizeOnScreen(m_Camera.getTileSizeOnScreen());
-    Coord textureULCorner(m_Camera.getTextureULCorner());
-    Coord pixelOnMap = visibleUL * (UINT) tileSize;
-    Coord tileCoord;
 
     // Activate deferred drawing
     al_hold_bitmap_drawing(true);
 
-    // Draw visible tiles
-    for (tileCoord.y = visibleUL.y; tileCoord.y < visibleLR.y; ++tileCoord.y) {
-        for (tileCoord.x = visibleUL.x; tileCoord.x<visibleLR.x; ++tileCoord.x){
-            // Get environment
-            Environment env(m_World.map().getTile(tileCoord).getEnvironment());
+    // Draw
+    drawEnvironment();
+    drawHumans();
 
-            // Draw bitmap on screen
-			al_draw_scaled_bitmap(
-                m_Assets[env.assetFile()],
-                textureULCorner.x,
-                textureULCorner.y,
-				tileBitmapSize,
-				tileBitmapSize,
-				pixelOnMap.x,
-				pixelOnMap.y,
-				tileSizeOnScreen,
-				tileSizeOnScreen,
-                env.getOrientation());
-
-            // Increment pixels
-            pixelOnMap.x += tileSize;
-		}
-        pixelOnMap.x = visibleUL.x * tileSize;
-        pixelOnMap.y += tileSize;
-	}
-
-    // Draw caracters and selection box
-	for (UINT i = 0; i < NB_CIV; ++i) {
-        const Civilization civ(m_Civs[i]->getCiv());
-        for (UINT j = 0; j < civ.population(); ++j) {
-            const HumanInfo human = civ.getHuman(j);
-            DCoord pxlPos = human.getPos().m_Coord * tileSize;
-			float angle = correspondingAngle(human.getPos().m_Dir);
-
-            // Create caracter sub-bitmap
-			ALLEGRO_BITMAP* subBitmap = al_create_sub_bitmap(
-				m_Assets[human.assetFile()],
-                textureULCorner.x,
-                textureULCorner.y,
-				tileBitmapSize,
-				tileBitmapSize);
-
-            // Draw it rotated
-            double scaling = (double)tileSizeOnScreen/(double)tileBitmapSize;
-			float halfTileSizeOnBitmap = tileBitmapSize * 0.5;
-			float halfTileSizeOnScreen = tileSizeOnScreen * 0.5;
-			al_draw_scaled_rotated_bitmap(
-				subBitmap,
-				halfTileSizeOnBitmap,
-				halfTileSizeOnBitmap,
-				pxlPos.x + halfTileSizeOnScreen,
-				pxlPos.y + halfTileSizeOnScreen,
-				scaling,
-				scaling,
-				angle,
-				0);
-
-            // Compute location of selection box
-            pixelOnMap = round(human.getPos().m_Coord) * (UINT) tileSize;
-
-			al_draw_scaled_bitmap(
-				m_Assets[SELECTION],
-                textureULCorner.x,
-                textureULCorner.y,
-				tileBitmapSize,
-				tileBitmapSize,
-				pixelOnMap.x,
-				pixelOnMap.y,
-				tileSizeOnScreen,
-				tileSizeOnScreen,
-				DOWN);
-		}
-	}
     // Release drawing
 	al_hold_bitmap_drawing(false);
+}
+
+void Display::drawEnvironment()
+{
+    Coord tileCoord;
+
+    // Draw visible tiles
+    for (tileCoord.y = m_Camera.getVisibleTilesULCorner().y; 
+         tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;    ++tileCoord.y) {
+        for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x; 
+             tileCoord.x < m_Camera.getVisibleTilesLRCorner().x;++tileCoord.x) {
+            
+            // Get tile
+            const Tile tile(m_World.map().getTile(tileCoord));
+
+            // Get environment
+            Environment env(tile.getEnvironment());
+
+            // Draw environment bitmap on screen
+            al_draw_scaled_bitmap(
+                m_Assets[env.assetFile()],
+                m_Camera.getTextureULCorner().x,
+                m_Camera.getTextureULCorner().y,
+                m_Camera.getTileBitmapSize(),
+                m_Camera.getTileBitmapSize(),
+                tileCoord.x * m_Camera.getTileSize(),
+                tileCoord.y * m_Camera.getTileSize(),
+                m_Camera.getOverlapTileSize(),
+                m_Camera.getOverlapTileSize(),
+                env.getOrientation());
+        }
+    }
+}
+
+void Display::drawHumans()
+{
+    Coord tileCoord;
+    double humanScaling = (double)m_Camera.getOverlapTileSize() /
+        (double)m_Camera.getTileBitmapSize();
+
+    UINT toCenterHuman = (m_Camera.getOverlapTileSize() - 
+        m_Camera.getTileSize()) * 0.5;
+
+    // Draw visible tiles
+    for (tileCoord.y = m_Camera.getVisibleTilesULCorner().y;
+         tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;    ++tileCoord.y) {
+        for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x;
+             tileCoord.x < m_Camera.getVisibleTilesLRCorner().x;++tileCoord.x) {
+
+            // Get human on tile
+            const HumanInfo* human(m_World.map().getTile(tileCoord).getHuman());
+
+            if (human != NULL) {
+                // Create caracter sub-bitmap
+                ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
+                    m_Assets[human->assetFile()],
+                    m_Camera.getTextureULCorner().x,
+                    m_Camera.getTextureULCorner().y,
+                    m_Camera.getTileBitmapSize(),
+                    m_Camera.getTileBitmapSize()));
+
+                // Draw rotated human bitmap
+                al_draw_scaled_rotated_bitmap(
+                    subBitmap,
+                    m_Camera.getTileBitmapSize() * 0.5,
+                    m_Camera.getTileBitmapSize() * 0.5,
+                    human->getPos().coord().x * m_Camera.getTileSize()
+                        + toCenterHuman,
+                    human->getPos().coord().y * m_Camera.getTileSize()
+                        + toCenterHuman,
+                    humanScaling,
+                    humanScaling,
+                    correspondingAngle(human->getPos().facingDir()),
+                    0);
+
+                // Draw selection box
+                if (human->isSelected()) {
+                    al_draw_scaled_bitmap(
+                        m_Assets[SELECTION],
+                        m_Camera.getTextureULCorner().x,
+                        m_Camera.getTextureULCorner().y,
+                        m_Camera.getTileBitmapSize(),
+                        m_Camera.getTileBitmapSize(),
+                        human->getPos().tileCoord().x * m_Camera.getTileSize(),
+                        human->getPos().tileCoord().y * m_Camera.getTileSize(),
+                        m_Camera.getOverlapTileSize(),
+                        m_Camera.getOverlapTileSize(),
+                        DOWN);
+                }
+            }
+        }
+    }
 }
 
 void Display::resize()

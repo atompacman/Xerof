@@ -26,9 +26,12 @@ public:
     // SETTERS
     void setReady();
     void setBusy();
+    void select();
+    void unselect();
 
     // STATE
     bool isReady() const;
+    bool isSelected() const;
 
 	// STATS
 	float getMoveSpeed() const;
@@ -40,6 +43,7 @@ public:
 private:
     Position m_Pos;
 	bool     m_IsReady;
+    bool     m_IsSelected;
 	float    m_MoveSpeed;
 	UINT     m_ROSight;
 };
