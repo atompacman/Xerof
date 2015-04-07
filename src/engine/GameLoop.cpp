@@ -8,9 +8,9 @@ GameLoop::GameLoop():
 m_World(),
 m_CivCtrls(initCivCtrls()),
 
-m_Mouse(m_World.map().dim(), TILE_SIZE[0]),
+m_Mouse(m_World.map()),
 m_Keyboard(),
-m_Disp(m_World, m_Mouse, m_CivCtrls),
+m_Disp(m_World, m_Mouse.getCamera()),
 
 m_Queue(al_create_event_queue()),
 m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
@@ -94,10 +94,19 @@ void GameLoop::startGame()
 			}
 			break;
 
+        // When there is a click
 		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN :
+            m_Mouse.handleButtonPressed(ev);
+            break;
+
+        // When a button is released
 		case ALLEGRO_EVENT_MOUSE_BUTTON_UP :
+            m_Mouse.handleButtonReleased(ev);
+            break;
+
+        // When cursor is moved
 		case ALLEGRO_EVENT_MOUSE_AXES :
-			m_Mouse.handleMouseEvent(ev);
+            m_Mouse.handleCursorMoved(ev);
 			break;
 
 		case ALLEGRO_EVENT_TIMER:
@@ -115,9 +124,19 @@ void GameLoop::startGame()
 
 			double time = al_get_time();
 
+            // Apply camera transformation on map
+            m_Mouse.getCamera().applyTransform(m_Disp.getWindowSize());
+
+            // Compute which tiles to display
+            m_Mouse.getCamera().updateVisibleTiles(m_Disp.getWindowSize());
+
+            // Draw frame
 			m_Disp.draw();
+
+            // Display frame
 			al_flip_display();
 
+            // Update FPS
 			fps_accum++;
 			if (time - fps_time >= 1) {
 				fps = fps_accum;
@@ -126,6 +145,7 @@ void GameLoop::startGame()
 			}
 			m_Disp.setFPS(fps);
 
+            // Don't refresh until asked
 			refresh = false;
 
 			++currentFrame;
@@ -147,16 +167,17 @@ void GameLoop::processAI()
 {
 	for (UINT i = 0; i < NB_CIV; ++i) {
         for (UINT j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j) {
-            Human& human = m_CivCtrls[i]->getHuman(j);
+            HumanInfo& human = m_CivCtrls[i]->getCiv().getHuman(j);
             if (!human.isReady()) {
 				continue;
 			}
-            processOrder(human, m_CivCtrls[i]->getAI()->giveOrder(human));
+            HumanPerception persep(human, m_World.map());
+            processOrder(human, m_CivCtrls[i]->getAI()->giveOrder(persep));
 		}
 	}
 }
 
-void GameLoop::processOrder(Human& io_Human, const Order& i_Order)
+void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
 {
 	PossibleOrders action(i_Order.getAction());
 
@@ -167,17 +188,19 @@ void GameLoop::processOrder(Human& io_Human, const Order& i_Order)
 	}
 }
 
-void GameLoop::processMovingOrder(Human&         io_Human,
+void GameLoop::processMovingOrder(HumanInfo&     io_Human,
 	                              PossibleOrders i_Action, 
                                   Direction      i_Dir)
 {
     assertNonCenterDir(i_Dir);
 
-    DCoord after(incrementedToDirection(io_Human.getPos().m_Coord, i_Dir));
+    DCoord after(incrementedToDirection(io_Human.getPos().coord(), i_Dir));
 	Position dest(after, i_Dir);
 
     if (verifyDestination(dest)) {
-        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(&io_Human, dest);
+        m_MoveProcs[m_NumMoveProcs] = new MoveProcess(io_Human, 
+                                                      dest, 
+                                                      m_World.map());
         ++m_NumMoveProcs;
     }
 }
@@ -200,7 +223,7 @@ bool GameLoop::isOccupied(Coord i_Coord) const
 	for (UINT i = 0; i < NB_CIV; ++i) {
 		const Civilization civ = m_CivCtrls[i]->getCiv();
         for (UINT j = 0; j < civ.population(); ++j) {
-			Human human = civ.getHuman(j);
+            const HumanInfo human = civ.getHuman(j);
             if (human.getPos() == Position(i_Coord, UP)) {
 				return true;
 			}

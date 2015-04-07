@@ -4,8 +4,8 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-CivController::CivController(const World& i_World) :
-m_Civ(i_World.map()),
+CivController::CivController(World& i_World) :
+m_Civ(),
 m_AI(new AtomAI()),
 m_World(i_World)
 {}
@@ -27,7 +27,30 @@ void CivController::placeFirstHuman()
         startLoc = m_World.map().randCoord();
     } while (!m_World.map().getTile(startLoc).isPassable());
 
-    m_Civ.addHuman(startLoc);
+    addHuman(startLoc);
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     ADD                                    //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+void CivController::addHuman(Coord i_Pos)
+{
+    // Assert max pop is not reached
+    assert(m_Civ.m_People.size() < CIV_MAX_POP);
+
+    // Get tile where human will be
+    Tile& tile(m_World.map().getTile(i_Pos));
+
+    // Assert it is human-passable
+    assert(tile.isPassable());
+
+    // Add it to the civ
+    m_Civ.m_People.emplace_back(Position(i_Pos));
+
+    // Add a reference in the map
+    tile.setHuman(&m_Civ.m_People.back());
 }
 
 
@@ -40,12 +63,12 @@ const Civilization& CivController::getCiv() const
     return m_Civ;
 }
 
+Civilization& CivController::getCiv()
+{
+    return m_Civ;
+}
+
 AI* CivController::getAI() const
 {
     return m_AI;
-}
-
-Human& CivController::getHuman(UINT i_ID)
-{
-    return m_Civ.getHuman(i_ID);
 }

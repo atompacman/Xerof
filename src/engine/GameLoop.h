@@ -44,8 +44,8 @@ private:
 	// UPDATE
 	void updateGame();
 	void processAI();
-    void processOrder(Human& io_Human, const Order& i_Order);
-    void processMovingOrder(Human&         io_Human,
+    void processOrder(HumanInfo& io_Human, const Order& i_Order);
+    void processMovingOrder(HumanInfo&     io_Human,
                             PossibleOrders i_Action,
                             Direction      i_Dir);
     bool verifyDestination(const Position& i_Dest) const;

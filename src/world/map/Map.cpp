@@ -25,6 +25,12 @@ const Tile& Map::getTile(Coord i_Coord) const
     return m_Tiles[linearize(i_Coord)];
 }
 
+Tile& Map::getTile(Coord i_Coord)
+{
+    assert(i_Coord < m_Dim);
+    return m_Tiles[linearize(i_Coord)];
+}
+
 Coord Map::randCoord() const
 {
     return Coord(randUINT(m_Dim.x - 1), randUINT(m_Dim.y - 1));

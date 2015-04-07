@@ -2,7 +2,7 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\civ\human\Human.h"
+#include "..\..\civ\human\HumanInfo.h"
 #include "Process.h"
 /*============================================================================||
 | All processes involving a Human
@@ -14,13 +14,13 @@ class HumanProcess : public Process
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    HumanProcess(Human* i_Human) :
-        m_Human(*i_Human)
+    HumanProcess(HumanInfo& i_Human) :
+        m_Human(i_Human)
     {}
 
 	// NEXT ITERATION
 	virtual void nextIter() = 0;
 
 protected:
-    Human& m_Human;
+    HumanInfo& m_Human;
 };

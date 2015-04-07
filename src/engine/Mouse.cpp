@@ -4,12 +4,13 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Mouse::Mouse(Dimensions i_MapDim, UINT i_TileSize) :
-m_State(0),
-m_Zoom(1.0),
-m_Rotate(0),
-m_Pos(toDCoord(i_MapDim * i_TileSize) * 0.5),
-m_MaxPos(i_MapDim * i_TileSize)
+Mouse::Mouse(Map& i_Map) :
+m_Camera(i_Map.dim()),
+m_SelHuman(NULL),
+m_State(IDLE),
+m_MoveEventsSincePressed(0),
+m_ClickedTile(0,0),
+m_Map(i_Map)
 {
 	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");
@@ -21,29 +22,109 @@ m_MaxPos(i_MapDim * i_TileSize)
 //                               EVENT HANDLING                               //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Mouse::handleMouseEvent(const ALLEGRO_EVENT& i_Event)
+void Mouse::handleButtonPressed(const ALLEGRO_EVENT& i_Event)
 {
-	switch (i_Event.type) {
-	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-		m_State = i_Event.mouse.button;
-		break;
-	case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-		m_State = 0;
-		break;
-	case ALLEGRO_EVENT_MOUSE_AXES:
-		if (m_State == 1) {
-			double x = i_Event.mouse.dx / m_Zoom;
-            double y = i_Event.mouse.dy / m_Zoom;
-            m_Pos.x -= x * cos(m_Rotate) + y * sin(m_Rotate);
-            m_Pos.y -= y * cos(m_Rotate) - x * sin(m_Rotate);
-            m_Pos.x = max(0, min(m_Pos.x, m_MaxPos.x));
-            m_Pos.y = max(0, min(m_Pos.y, m_MaxPos.y));
-		}
-		if (m_State == 2) {
-			m_Rotate += i_Event.mouse.dx * 0.01;
-			m_Zoom -= i_Event.mouse.dy * 0.01 * m_Zoom;
-		}
-		m_Zoom += i_Event.mouse.dz * 0.1 * m_Zoom;
-        m_Zoom = max(MIN_ZOOM_SCALE, min(m_Zoom, MAX_ZOOM_SCALE));
-	}
+    // Save what button was pressed
+    m_State = MouseState(i_Event.mouse.button);
+
+    // Save the clicked tile on map
+    m_ClickedTile = computeSelectedTile(i_Event.mouse.x, i_Event.mouse.y);
+
+    // Reset the number of move events since this current event
+    m_MoveEventsSincePressed = 0;
+}
+
+void Mouse::handleButtonReleased(const ALLEGRO_EVENT& i_Event)
+{
+    // Do a selection only if mouse has not moved much since pressing
+    if (m_State == LEFT_BUTTON_PRESSED && 
+        m_MoveEventsSincePressed < MAX_MOVE_EVENT_FOR_CLICK) {
+
+        // If clicked tile is on the map
+        if (m_ClickedTile < (m_Camera.m_MaxPos / TILE_SIZE[0])) {
+
+            HumanInfo* currSelect(m_Map.getTile(m_ClickedTile).getHuman());
+
+            // If there is no human on the new tile
+            if (currSelect == NULL) {
+                // Clear previous selection
+                if (m_SelHuman != NULL) {
+                    m_SelHuman->unselect();
+                }
+            }
+            else {
+                // If it was already selected, unselect him, else select him
+                if (currSelect->isSelected()) {
+                    currSelect->unselect();
+                }
+                else {
+                    currSelect->select();
+                    m_SelHuman = currSelect;
+                }
+            }
+        }
+        else {
+            // Clear previous selection
+            if (m_SelHuman != NULL) {
+                m_SelHuman->unselect();
+            }
+        }
+    }
+
+    // Reset mouse state to idle
+    m_State = IDLE;
+}
+
+void Mouse::handleCursorMoved(const ALLEGRO_EVENT& i_Event)
+{
+    switch (m_State) {
+    case LEFT_BUTTON_PRESSED:
+        m_Camera.translate(DCoord(i_Event.mouse.dx, i_Event.mouse.dy));
+        break;
+
+    case RIGHT_BUTTON_PRESSED:
+        m_Camera.rotateAndZoom(DCoord(i_Event.mouse.dx, i_Event.mouse.dy));
+        break;
+
+    default:
+        break;
+    }
+
+    // Scrollwheel zoom
+    if (i_Event.mouse.dz != 0) {
+        m_Camera.scrollwheelZoom(i_Event.mouse.dz);
+    }
+
+    ++m_MoveEventsSincePressed;
+}
+
+Coord Mouse::computeSelectedTile(UINT i_x, UINT i_y) const
+{
+    // Invert camera transform
+    ALLEGRO_TRANSFORM copy(m_Camera.m_Transform);
+    al_invert_transform(&copy);
+
+    // Apply matrix
+    Coord selectedTile(copy.m[0][0] * i_x + copy.m[1][0] * i_y + copy.m[3][0],
+                       copy.m[0][1] * i_x + copy.m[1][1] * i_y + copy.m[3][1]);
+
+    // Divide by tile length
+    selectedTile /= m_Camera.getTileSize();
+
+    return selectedTile;
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+const Camera& Mouse::getCamera() const
+{
+    return m_Camera;
+}
+
+Camera& Mouse::getCamera()
+{
+    return m_Camera;
 }

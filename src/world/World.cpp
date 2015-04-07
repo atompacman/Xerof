@@ -17,3 +17,8 @@ const Map& World::map() const
 {
     return m_Map;
 }
+
+Map& World::map()
+{
+    return m_Map;
+}

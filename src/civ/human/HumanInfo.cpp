@@ -1,16 +1,15 @@
-#include "Human.h"
+#include "HumanInfo.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Human::Human(const Position& i_StartingPos, const Map& i_Map) :
+HumanInfo::HumanInfo(const Position& i_StartingPos) :
 m_Pos(i_StartingPos),
 m_IsReady(true),
+m_IsSelected(false),
 m_MoveSpeed(1),
-m_ROSight(2),
-
-m_Map(i_Map)
+m_ROSight(2)
 {}
 
 
@@ -18,34 +17,14 @@ m_Map(i_Map)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const Position& Human::getPos() const
+const Position& HumanInfo::getPos() const
 {
     return m_Pos;
 }
 
-Position& Human::getPos()
+Position& HumanInfo::getPos()
 {
     return m_Pos;
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                 SURROUNDINGS                               //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-const Tile& Human::getTileInDir(Direction i_Dir) const
-{
-    return m_Map.getTile(incrementedToDirection(m_Pos.tileCoord(), i_Dir));
-}
-
-const Tile& Human::getTileInFront() const
-{
-    return getTileInDir(m_Pos.m_Dir);
-}
-
-EnvType Human::getEnvInFront() const
-{
-    return getTileInFront().getEnvironment().getType();
 }
 
 
@@ -53,14 +32,24 @@ EnvType Human::getEnvInFront() const
 //                                   SETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Human::setReady()
+void HumanInfo::setReady()
 {
     m_IsReady = true;
 }
 
-void Human::setBusy()
+void HumanInfo::setBusy()
 {
     m_IsReady = false;
+}
+
+void HumanInfo::select()
+{
+    m_IsSelected = true;
+}
+
+void HumanInfo::unselect()
+{
+    m_IsSelected = false;
 }
 
 
@@ -68,9 +57,14 @@ void Human::setBusy()
 //                                     STATE                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool Human::isReady() const
+bool HumanInfo::isReady() const
 {
     return m_IsReady;
+}
+
+bool HumanInfo::isSelected() const
+{
+    return m_IsSelected;
 }
 
 
@@ -78,12 +72,12 @@ bool Human::isReady() const
 //                                     STATS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-float Human::getMoveSpeed() const
+float HumanInfo::getMoveSpeed() const
 {
-	return m_MoveSpeed;
+    return m_MoveSpeed;
 }
 
-UINT Human::getRangeOfSight() const
+UINT HumanInfo::getRangeOfSight() const
 {
-	return m_ROSight;
+    return m_ROSight;
 }
