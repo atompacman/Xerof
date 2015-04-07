@@ -4,15 +4,13 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const double MoveProcess::s_ERROR = 0.5 / TARGET_FPS;
+const double MoveProcess::s_ERROR = 1.0 / (TARGET_FPS * 2.0);
 
-MoveProcess::MoveProcess(HumanInfo& i_Human,const Position& i_Dest, Map& i_Map):
+MoveProcess::MoveProcess(Human* i_Human, const Position& i_Dest) :
 HumanProcess(i_Human),
-m_Dest(i_Dest),
-m_Delta((i_Dest.coord() - m_Human.getPos().coord()) / TARGET_FPS),
-m_Map(i_Map)
+m_Delta((i_Dest.m_Coord - m_Human.getPos().m_Coord) / TARGET_FPS)
 {
-    m_Human.getPos().setDir(i_Dest.facingDir());
+    m_Human.getPos().setDir(i_Dest.m_Dir);
 }
 
 
@@ -22,21 +20,21 @@ m_Map(i_Map)
 
 void MoveProcess::nextIter()
 {
-    // Get current position
-    Position& pos(m_Human.getPos());
-
-    // Remove human from current tile
-    m_Map.getTile(pos.tileCoord()).setHuman(NULL);
-
     // Increment position in facing direction
+    Position& pos(m_Human.getPos());
     pos.incremCoord(m_Delta);
 
-    // If position is really close to destination, set position to destination
-    if (abs(pos.coord().x - m_Dest.coord().x) < s_ERROR &&
-        abs(pos.coord().y - m_Dest.coord().y) < s_ERROR) {
-        pos.setCoord(m_Dest.coord());
-    }
+    // If the position is really close to be right on a tile intersection,
+    // set position to be on this intersection
+    DCoord corrected(pos.m_Coord);
+    double x = pos.m_Coord.x;
+    double y = pos.m_Coord.y;
 
-    // Set human on (possibly) new tile
-    m_Map.getTile(pos.tileCoord()).setHuman(&m_Human);
+    if (abs(x - rint(x)) < s_ERROR) {
+        corrected.x = rint(x);
+	}
+    if (abs(y - rint(y)) < s_ERROR) {
+        corrected.y = rint(y);
+	}
+    pos.setCoord(corrected);
 }

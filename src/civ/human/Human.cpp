@@ -1,15 +1,16 @@
-#include "HumanInfo.h"
+#include "Human.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-HumanInfo::HumanInfo(const Position& i_StartingPos) :
+Human::Human(const Position& i_StartingPos, const Map& i_Map) :
 m_Pos(i_StartingPos),
 m_IsReady(true),
-m_IsSelected(false),
 m_MoveSpeed(1),
-m_ROSight(2)
+m_ROSight(2),
+
+m_Map(i_Map)
 {}
 
 
@@ -17,14 +18,34 @@ m_ROSight(2)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const Position& HumanInfo::getPos() const
+const Position& Human::getPos() const
 {
     return m_Pos;
 }
 
-Position& HumanInfo::getPos()
+Position& Human::getPos()
 {
     return m_Pos;
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                 SURROUNDINGS                               //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+const Tile& Human::getTileInDir(Direction i_Dir) const
+{
+    return m_Map.getTile(incrementedToDirection(m_Pos.tileCoord(), i_Dir));
+}
+
+const Tile& Human::getTileInFront() const
+{
+    return getTileInDir(m_Pos.m_Dir);
+}
+
+EnvType Human::getEnvInFront() const
+{
+    return getTileInFront().getEnvironment().getType();
 }
 
 
@@ -32,24 +53,14 @@ Position& HumanInfo::getPos()
 //                                   SETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void HumanInfo::setReady()
+void Human::setReady()
 {
     m_IsReady = true;
 }
 
-void HumanInfo::setBusy()
+void Human::setBusy()
 {
     m_IsReady = false;
-}
-
-void HumanInfo::select()
-{
-    m_IsSelected = true;
-}
-
-void HumanInfo::unselect()
-{
-    m_IsSelected = false;
 }
 
 
@@ -57,14 +68,9 @@ void HumanInfo::unselect()
 //                                     STATE                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool HumanInfo::isReady() const
+bool Human::isReady() const
 {
     return m_IsReady;
-}
-
-bool HumanInfo::isSelected() const
-{
-    return m_IsSelected;
 }
 
 
@@ -72,12 +78,12 @@ bool HumanInfo::isSelected() const
 //                                     STATS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-float HumanInfo::getMoveSpeed() const
+float Human::getMoveSpeed() const
 {
-    return m_MoveSpeed;
+	return m_MoveSpeed;
 }
 
-UINT HumanInfo::getRangeOfSight() const
+UINT Human::getRangeOfSight() const
 {
-    return m_ROSight;
+	return m_ROSight;
 }

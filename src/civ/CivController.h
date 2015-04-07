@@ -17,23 +17,20 @@ class CivController
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    CivController(World& i_World);
+    CivController(const World& i_World);
     ~CivController();
 
 	// DAWN OF CIVILIZATION
 	void placeFirstHuman();
 
-    // ADD
-    void addHuman(Coord i_Pos);
-
 	// GETTERS
     const Civilization& getCiv() const;
-    Civilization&       getCiv();
     AI*                 getAI() const;
+    Human&              getHuman(UINT i_ID);
 
 private:
     Civilization m_Civ;
     AI*          m_AI;
 
-    World& m_World;
+    const World& m_World;
 };

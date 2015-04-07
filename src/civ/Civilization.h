@@ -4,9 +4,8 @@
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <vector>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "human\HumanInfo.h"
-#include "..\world\map\Map.h"
 #include "..\Parameters.h"
+#include "human\Human.h"
 /*============================================================================||
 | A group of humans
 |-----------------------------------------------------------------------------||
@@ -15,19 +14,22 @@
 
 class Civilization
 {
-    friend class CivController;
-
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    Civilization();
+    Civilization(const Map& i_Map);
 
 	// GETTERS
-	const HumanInfo& getHuman(UINT i_ID) const;
-    HumanInfo&       getHuman(UINT i_ID);
+	const Human& getHuman(UINT i_ID) const;
+    Human&       getHuman(UINT i_ID);
+
+    // ADD
+    void addHuman(Coord i_Pos);
 
 	// STATUS
 	UINT population() const;
 
 private:
-	std::vector<HumanInfo> m_People;
+	std::vector<Human> m_People;
+
+    const Map&         m_Map;
 };
