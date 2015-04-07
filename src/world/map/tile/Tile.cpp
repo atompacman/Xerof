@@ -4,17 +4,18 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Tile::Tile():
+Tile::Tile() :
+m_Env(OCEAN),
 m_Objs(new Object*[4]),
-m_Env(OCEAN)
+m_Human(NULL)
 {}
 
 Tile::~Tile()
 {
     for (UINT i = 0; i < 4; ++i) {
-        delete[] m_Objs[i];
+        //delete[] m_Objs[i];
     }
-	delete[] m_Objs;
+	//delete[] m_Objs;
 }
 
 
@@ -34,6 +35,11 @@ void Tile::setEnvironment(EnvType i_Type)
     m_Env.setEnvType(i_Type);
 }
 
+void Tile::setHuman(HumanInfo* i_Human)
+{
+    m_Human = i_Human;
+}
+
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                    REMOVE                                  //
@@ -50,15 +56,25 @@ void Tile::removeObject(Direction i_Dir)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Object* Tile::getObject(Direction i_Dir) const
-{
-	assert(hasObject(i_Dir));
-    return m_Objs[i_Dir - UPPER_RIGHT];
-}
-
 const Environment& Tile::getEnvironment() const
 {
 	return m_Env;
+}
+
+Object* Tile::getObject(Direction i_Dir) const
+{
+    assert(hasObject(i_Dir));
+    return m_Objs[i_Dir - UPPER_RIGHT];
+}
+
+const HumanInfo* Tile::getHuman() const
+{
+    return m_Human;
+}
+
+HumanInfo* Tile::getHuman()
+{
+    return m_Human;
 }
 
 
@@ -76,6 +92,11 @@ bool Tile::hasObject() const
 {
 	return hasObject(UPPER_LEFT) || hasObject(UPPER_RIGHT) || 
 		   hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
+}
+
+bool Tile::hasHuman() const
+{
+    return m_Human != NULL;
 }
 
 

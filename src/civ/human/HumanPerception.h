@@ -2,27 +2,29 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "HumanProcess.h"
+#include "HumanInfo.h"
 #include "..\..\world\map\Map.h"
 /*============================================================================||
-| A movement than occurs over many frames
+| The perception of the world from the perspective of a human
 |-----------------------------------------------------------------------------||
-| Title says it all
+| Used by AIs
 \=============================================================================*/
 
-class MoveProcess : public HumanProcess
+class HumanPerception
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    MoveProcess(HumanInfo& i_Human, const Position& i_Dest, Map& i_Map);
+    HumanPerception(const HumanInfo& i_Info, const Map& i_Map);
 
-	// NEXT ITERATION
-    virtual void nextIter();
+	// GETTERS
+    const HumanInfo& infos() const;
+
+    // SURROUNDINGS
+    const Tile&         getTileInDir(Direction i_Dir) const;
+    const Tile&         getTileInFront() const;
+    EnvType             getEnvInFront() const;
 
 private:
-    static const double s_ERROR;
-
-    Position m_Dest;
-	DCoord   m_Delta;
-    Map&     m_Map;
+    const HumanInfo& m_Info;
+    const Map&       m_Map;
 };
