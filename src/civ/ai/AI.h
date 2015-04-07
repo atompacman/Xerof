@@ -2,7 +2,7 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\human\HumanPerception.h"
+#include "..\Civilization.h"
 #include "Order.h"
 /*============================================================================||
 | Abstract class setting the framwork for AIs
@@ -15,5 +15,5 @@ class AI
 {
 public:
 	// MOVE HUMAN
-    virtual Order giveOrder(const HumanPerception& i_HP) = 0;
+	virtual Order giveOrder(const Human& i_Human) = 0;
 };

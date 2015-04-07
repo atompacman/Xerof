@@ -5,8 +5,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 Position::Position(Coord i_Coord) :
-Position(DCoord((double) i_Coord.x + 0.5, 
-                (double) i_Coord.y + 0.5), randDirNoCenter())
+Position(DCoord(i_Coord.x, i_Coord.y), randDirNoCenter())
 {}
 
 Position::Position(DCoord i_Coord) :
@@ -14,8 +13,7 @@ Position(i_Coord, randDirNoCenter())
 {}
 
 Position::Position(Coord i_Coord, Direction i_FacingDir) :
-Position(DCoord((double) i_Coord.x + 0.5,
-                (double) i_Coord.y + 0.5), i_FacingDir)
+Position(DCoord(i_Coord.x, i_Coord.y), i_FacingDir)
 {}
 
 Position::Position(DCoord i_Coord, Direction i_FacingDir):
@@ -29,16 +27,6 @@ m_Dir(i_FacingDir)
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-DCoord Position::coord() const
-{
-    return m_Coord;
-}
-
-Direction Position::facingDir() const
-{
-    return m_Dir;
-}
 
 Coord Position::tileCoord() const
 {

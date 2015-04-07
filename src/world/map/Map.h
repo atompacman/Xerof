@@ -3,6 +3,7 @@
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "tile\Tile.h"
 /*============================================================================||
@@ -22,7 +23,6 @@ public:
 
 	// GETTERS
 	const Tile&   getTile(Coord i_Coord) const;
-    Tile&         getTile(Coord i_Coord);
     Coord         randCoord() const;
 
     // STATUS

@@ -2,63 +2,29 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
-#include <list>
 #include <math.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Camera.h"
 #include "..\utils\FatalErrorDialog.h"
-#include "..\civ\human\HumanInfo.h"
-#include "..\world\map\Map.h"
+#include "..\Parameters.h"
 /*============================================================================||
 | Variables about the camera controller by the mouse
 |-----------------------------------------------------------------------------||
 | - Hold left button to move camera
-| - Hold right button to zoom and rotate camera
+| - Hold right button to zoom
 | - Wheel to zoom
 \=============================================================================*/
 
-#define MAX_MOVE_EVENT_FOR_CLICK 10
-
-enum MouseState {
-    IDLE, 
-    LEFT_BUTTON_PRESSED, 
-    RIGHT_BUTTON_PRESSED
-};
-
-class Mouse
+struct Mouse
 {
-public:
-    // CONSTRUCTOR/DESTRUCTOR
-    Mouse(Map& i_Map);
+	int         m_State;
+	double      m_Zoom;
+    double      m_Rotate;
+    DCoord      m_Pos;
+    const Coord m_MaxPos;
 
-    // EVENT HANDLING
-    void handleButtonPressed(const ALLEGRO_EVENT& i_Event);
-    void handleButtonReleased(const ALLEGRO_EVENT& i_Event);
-    void handleCursorMoved(const ALLEGRO_EVENT& i_Event);
+	//CONSTRUCTOR/DESTRUCTOR
+    Mouse(Dimensions i_MapDim, UINT i_TileSize);
 
-    // GETTERS
-    const Camera& getCamera() const;
-    Camera&       getCamera();
-
-private:
-    // The camera controlled by the mouse
-    Camera m_Camera;
-
-    // Selected human
-    HumanInfo* m_SelHuman;
-
-    // Current pressed button (or no button pressed)
-    MouseState m_State;
-
-    // Used for selection clicks
-    UINT m_MoveEventsSincePressed;
-
-    // Last clicked tile
-    Coord m_ClickedTile;
-
-    // Map reference
-    Map& m_Map;
-
-	// EVENT HANDLING
-    Coord computeSelectedTile(UINT i_x, UINT i_y) const;
+	//EVENT HANDLING
+	void handleMouseEvent(const ALLEGRO_EVENT& i_Event);
 };
