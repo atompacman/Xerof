@@ -3,6 +3,8 @@
 #include "easylogging++.h"
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "engine\GameLoop.h"
+#include "civ\human\RangeOfSight.h"
+#include <iosfwd>
 /*============================================================================||
 | Main entry point of the game
 |-----------------------------------------------------------------------------||

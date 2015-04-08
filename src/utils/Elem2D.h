@@ -18,6 +18,7 @@
 
 #define Coord       Elem2D<UINT>
 #define DCoord      Elem2D<double>
+#define SCoord      Elem2D<int>
 #define Dimensions  Elem2D<UINT>
 #define DDimensions Elem2D<double>
 
