@@ -3,8 +3,10 @@
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "..\..\engine\Assets.h"
-#include "Position.h"
 #include "..\..\world\map\tile\MapElement.h"
+#include "MapKnowledge.h"
+#include "Position.h"
+#include "RangeOfSight.h"
 /*============================================================================||
 | Data related to a single human entity
 |-----------------------------------------------------------------------------||
@@ -17,11 +19,12 @@ class HumanInfo : public MapElement
 
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    HumanInfo(const Position& i_StartingPos);
+    HumanInfo(const Position& i_StartingPos, Dimensions i_MapDim);
 
 	// GETTERS
-    const Position& getPos() const;
-    Position&       getPos();
+    const Position&     getPos() const;
+    Position&           getPos();
+    const MapKnowledge& getMapKnowledge() const;
 
     // SETTERS
     void setReady();
@@ -33,17 +36,20 @@ public:
     bool isReady() const;
     bool isSelected() const;
 
+    // DISCOVER SURROUNDING TILES
+    void discoverSurroundingTiles();
+
 	// STATS
 	float getMoveSpeed() const;
-	UINT  getRangeOfSight() const;
 
 	// ASSET
 	virtual AssetID assetFile() const { return APARATUS3; }
 
 private:
-    Position m_Pos;
-	bool     m_IsReady;
-    bool     m_IsSelected;
-	float    m_MoveSpeed;
-	UINT     m_ROSight;
+    Position      m_Pos;
+	bool          m_IsReady;
+    bool          m_IsSelected;
+	float         m_MoveSpeed;
+    RangeOfSight* m_ROS;
+    MapKnowledge  m_MapKnow;
 };

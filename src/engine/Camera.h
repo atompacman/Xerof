@@ -52,6 +52,9 @@ public:
     UINT  getOverlapTileSize() const;
     Coord getTextureULCorner() const;
 
+    // SETTERS
+    void setPosition(DCoord i_Tile);
+
 private:
     // Current position on the untransformed map (zoom level 1, no rotation)
     DCoord m_Pos;

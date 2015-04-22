@@ -47,7 +47,7 @@ Coord Position::tileCoord() const
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                   GETTERS                                  //
+//                                   SETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 void Position::setCoord(DCoord i_Coord)
@@ -55,7 +55,7 @@ void Position::setCoord(DCoord i_Coord)
     m_Coord = i_Coord;
 }
 
-void Position::incremCoord(DCoord i_Delta)
+void Position::moveForward(DCoord i_Delta)
 {
     m_Coord += i_Delta;
 }
@@ -63,6 +63,16 @@ void Position::incremCoord(DCoord i_Delta)
 void Position::setDir(Direction i_Dir)
 {
     m_Dir = i_Dir;
+}
+
+void Position::setX(double i_X)
+{
+    m_Coord.x = i_X;
+}
+
+void Position::setY(double i_Y)
+{
+    m_Coord.y = i_Y;
 }
 
 

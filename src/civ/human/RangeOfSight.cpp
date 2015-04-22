@@ -32,6 +32,7 @@ RangeOfSight::ROSModel::ROSModel(std::ifstream& io_File)
     for (int y(0); y < m_LRCorner.y - m_ULCorner.y; ++y) {
         m_Tiles[y] = new bool[m_LRCorner.x - m_ULCorner.x];
     }
+    m_Dim = toCoord(m_LRCorner - m_ULCorner);
 
     // Read model
     readModel(io_File);
@@ -107,4 +108,19 @@ RangeOfSight::ROSModel::~ROSModel()
         delete[] m_Tiles[y];
     }
     delete[] m_Tiles;
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   GETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+const RangeOfSight::ROSModel& RangeOfSight::getStraigthModel() const
+{
+    return m_StraigthModel;
+}
+
+const RangeOfSight::ROSModel& RangeOfSight::getDiagonalModel() const
+{
+    return m_DiagonalModel;
 }

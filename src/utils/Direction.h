@@ -41,17 +41,32 @@ static const std::map<std::string, BasicDir> CARDINAL_DIRS = {
     { "WEST",   LEFT  }
 };
 
+static bool isBasicDir(Direction i_Dir)
+{
+    return i_Dir <= LEFT;
+}
+
+static bool isDiagonal(Direction i_Dir)
+{
+    return UPPER_RIGHT <= i_Dir && i_Dir <= UPPER_LEFT;
+}
+
+static bool isNonCenterDir(Direction i_Dir)
+{
+    return i_Dir < CENTER;
+}
+
 static void assertBasicDir(Direction i_Dir)
 {
-    assert(i_Dir <= LEFT);
+    assert(isBasicDir(i_Dir));
 }
 
 static void assertDiagDir(Direction i_Dir)
 {
-    assert(UPPER_RIGHT <= i_Dir && i_Dir <= UPPER_LEFT);
+    assert(isDiagonal(i_Dir));
 }
 
 static void assertNonCenterDir(Direction i_Dir)
 {
-    assert(i_Dir < CENTER);
+    assert(isNonCenterDir(i_Dir));
 }

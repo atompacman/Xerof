@@ -25,7 +25,7 @@ public:
 	~Display();
 
 	//DRAW
-	void draw();
+	void draw(const MapKnowledge* i_MapKnow);
     void resize();
 
 	//SETTERS
@@ -50,8 +50,8 @@ private:
     static ALLEGRO_DISPLAY& createWindow();
 
     // DRAW
-    void drawEnvironment();
-    void drawHumans();
+    void drawEnvironment(const MapKnowledge* i_MapKnow);
+    void drawHumans(const MapKnowledge* i_MapKnow);
 };
 
 static float correspondingAngle(Direction i_Dir) {

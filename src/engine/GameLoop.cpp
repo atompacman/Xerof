@@ -1,5 +1,7 @@
 #include "GameLoop.h"
 
+FullMapKnowledge GameLoop::s_FullMapKnow = FullMapKnowledge();
+
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -35,6 +37,9 @@ m_MoveProcs(new MoveProcess*[NB_CIV * CIV_MAX_POP])
         m_Queue, al_get_display_event_source(&m_Disp.getWindow()));
 	al_register_event_source(
         m_Queue, al_get_timer_event_source(m_ScreenRefresher));
+
+    // Set camera on first human of first civ
+    m_Mouse.setSelectedHuman(&m_CivCtrls[0]->getCiv().getHuman(0));
 }
 
 CivController** GameLoop::initCivCtrls()
@@ -65,8 +70,8 @@ void GameLoop::startGame()
 {
 	al_start_timer(m_ScreenRefresher);
 
-	int currentFrame = 0;
 	int frameForGameUpdate = TARGET_FPS * SECONDS_BETWEEN_AI_PROCESS;
+    int currentFrame = frameForGameUpdate;
 
 	bool exitGame = false;
 	bool refresh = true;
@@ -131,7 +136,12 @@ void GameLoop::startGame()
             m_Mouse.getCamera().updateVisibleTiles(m_Disp.getWindowSize());
 
             // Draw frame
-			m_Disp.draw();
+            if (m_Mouse.hasSelectedHuman()) {
+                m_Disp.draw(&m_Mouse.getSelectedHuman().getMapKnowledge());
+            }
+            else {
+                m_Disp.draw(&s_FullMapKnow);
+            }
 
             // Display frame
 			al_flip_display();
@@ -221,9 +231,9 @@ bool GameLoop::verifyDestination(const Position& i_Dest) const
 bool GameLoop::isOccupied(Coord i_Coord) const
 {
 	for (UINT i = 0; i < NB_CIV; ++i) {
-		const Civilization civ = m_CivCtrls[i]->getCiv();
+		const Civilization& civ = m_CivCtrls[i]->getCiv();
         for (UINT j = 0; j < civ.population(); ++j) {
-            const HumanInfo human = civ.getHuman(j);
+            const HumanInfo& human = civ.getHuman(j);
             if (human.getPos() == Position(i_Coord, UP)) {
 				return true;
 			}

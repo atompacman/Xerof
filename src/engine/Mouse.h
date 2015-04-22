@@ -37,8 +37,15 @@ public:
     void handleCursorMoved(const ALLEGRO_EVENT& i_Event);
 
     // GETTERS
-    const Camera& getCamera() const;
-    Camera&       getCamera();
+    const Camera&    getCamera() const;
+    Camera&          getCamera();
+    const HumanInfo& getSelectedHuman() const;
+
+    // SETTERS
+    void setSelectedHuman(HumanInfo* i_Human);
+
+    // STATE
+    bool hasSelectedHuman() const;
 
 private:
     // The camera controlled by the mouse
@@ -61,4 +68,5 @@ private:
 
 	// EVENT HANDLING
     Coord computeSelectedTile(UINT i_x, UINT i_y) const;
+    void clearSelection();
 };

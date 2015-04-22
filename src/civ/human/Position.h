@@ -25,8 +25,10 @@ public:
 
     // SETTERS
     void setCoord(DCoord i_Coord);
-    void incremCoord(DCoord i_Delta);
+    void moveForward(DCoord i_Delta);
     void setDir(Direction i_Dir);
+    void setX(double i_X);
+    void setY(double i_Y);
 
 	// OPERATORS
 	bool operator==(const Position& i_Other) const;

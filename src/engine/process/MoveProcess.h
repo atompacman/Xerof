@@ -20,9 +20,10 @@ public:
     virtual void nextIter();
 
 private:
-    static const double s_ERROR;
+    static const double s_DELTA;
 
-    Position m_Dest;
-	DCoord   m_Delta;
-    Map&     m_Map;
+    Coord  m_InitTile;
+    Coord  m_DestTile;
+	DCoord m_Delta;
+    Map&   m_Map;
 };

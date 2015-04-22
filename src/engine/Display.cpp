@@ -58,7 +58,7 @@ Display::~Display()
 //                                    DRAW                                    //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Display::draw()
+void Display::draw(const MapKnowledge* i_MapKnow)
 {
     // Clear buffer to background color
     al_clear_to_color(al_map_rgb(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
@@ -67,23 +67,28 @@ void Display::draw()
     al_hold_bitmap_drawing(true);
 
     // Draw
-    drawEnvironment();
-    drawHumans();
+    drawEnvironment(i_MapKnow);
+    drawHumans(i_MapKnow);
 
     // Release drawing
 	al_hold_bitmap_drawing(false);
 }
 
-void Display::drawEnvironment()
+void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
 {
     Coord tileCoord;
 
     // Draw visible tiles
-    for (tileCoord.y = m_Camera.getVisibleTilesULCorner().y; 
-         tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;    ++tileCoord.y) {
+    for (    tileCoord.y = m_Camera.getVisibleTilesULCorner().y; 
+             tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;++tileCoord.y) {
         for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x; 
              tileCoord.x < m_Camera.getVisibleTilesLRCorner().x;++tileCoord.x) {
             
+            // Check if tile is known by the selected character
+            if (!i_MapKnow->isKnown(tileCoord)) {
+                continue;
+            }
+
             // Get tile
             const Tile tile(m_World.map().getTile(tileCoord));
 
@@ -106,7 +111,7 @@ void Display::drawEnvironment()
     }
 }
 
-void Display::drawHumans()
+void Display::drawHumans(const MapKnowledge* i_MapKnow)
 {
     Coord tileCoord;
     double humanScaling = (double)m_Camera.getOverlapTileSize() /
@@ -116,10 +121,15 @@ void Display::drawHumans()
         m_Camera.getTileSize()) * 0.5;
 
     // Draw visible tiles
-    for (tileCoord.y = m_Camera.getVisibleTilesULCorner().y;
-         tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;    ++tileCoord.y) {
+    for (    tileCoord.y = m_Camera.getVisibleTilesULCorner().y;
+             tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;++tileCoord.y) {
         for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x;
              tileCoord.x < m_Camera.getVisibleTilesLRCorner().x;++tileCoord.x) {
+
+            // Check if tile is known by the selected character
+            if (!i_MapKnow->isKnown(tileCoord)) {
+                continue;
+            }
 
             // Get human on tile
             const HumanInfo* human(m_World.map().getTile(tileCoord).getHuman());
