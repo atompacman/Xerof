@@ -5,6 +5,7 @@
 #include "allegro5\allegro.h"
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "Display.h"
+#include "..\civ\human\FullMapKnowledge.h"
 #include "Keyboard.h"
 #include "process\MoveProcess.h"
 #include "..\civ\ai\Order.h"
@@ -25,18 +26,20 @@ public:
     void startGame();
 
 private:
-    World                m_World;
-    CivController**      m_CivCtrls;
+    World           m_World;
+    CivController** m_CivCtrls;
 
-    Mouse                m_Mouse;
-    Keyboard             m_Keyboard;
-    Display              m_Disp;
+    Mouse    m_Mouse;
+    Keyboard m_Keyboard;
+    Display  m_Disp;
 
 	ALLEGRO_EVENT_QUEUE* m_Queue;
 	ALLEGRO_TIMER*       m_ScreenRefresher;
 	
-	UINT                 m_NumMoveProcs;
-	MoveProcess**        m_MoveProcs;
+	UINT          m_NumMoveProcs;
+	MoveProcess** m_MoveProcs;
+
+    static FullMapKnowledge s_FullMapKnow;
 
     // CONSTRUCTOR/DESTRUCTOR
     CivController** initCivCtrls();

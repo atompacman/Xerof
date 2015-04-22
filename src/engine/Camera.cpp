@@ -9,7 +9,7 @@ Camera::Camera(Dimensions i_MapDim) :
 m_Pos(toDCoord(i_MapDim * TILE_SIZE[0]) * 0.5),
 
 // Start at resolution level 2
-m_Zoom(0.25),
+m_Zoom(0.5),
 
 // Start with no rotation
 m_Rotate(0),
@@ -148,4 +148,14 @@ UINT Camera::resolutionLvl() const
     else if (m_Zoom > 0.25)  { return 1; }
     else if (m_Zoom > 0.125) { return 2; }
     else				     { return 3; }
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   SETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+void Camera::setPosition(DCoord i_Tile)
+{
+    m_Pos = i_Tile * (double) TILE_SIZE[0];
 }

@@ -18,6 +18,7 @@
 
 #define Coord       Elem2D<UINT>
 #define DCoord      Elem2D<double>
+#define SCoord      Elem2D<int>
 #define Dimensions  Elem2D<UINT>
 #define DDimensions Elem2D<double>
 
@@ -198,7 +199,17 @@ static Coord round(const DCoord& i_DCoord)
     return Coord((UINT)rint(i_DCoord.x), (UINT)rint(i_DCoord.y));
 }
 
+static Coord toCoord(const SCoord& i_Coord)
+{
+    return Coord(i_Coord.x, i_Coord.y);
+}
+
 static DCoord toDCoord(const Coord& i_Coord)
 {
     return DCoord(i_Coord.x, i_Coord.y);
+}
+
+static DCoord roundCoord(const DCoord& i_Coord)
+{
+    return DCoord(rint(i_Coord.x), rint(i_Coord.y));
 }

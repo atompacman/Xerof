@@ -1,16 +1,21 @@
 #include "HumanInfo.h"
+#include <iosfwd>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-HumanInfo::HumanInfo(const Position& i_StartingPos) :
+HumanInfo::HumanInfo(const Position& i_StartingPos, Dimensions i_MapDim) :
 m_Pos(i_StartingPos),
 m_IsReady(true),
 m_IsSelected(false),
 m_MoveSpeed(1),
-m_ROSight(2)
-{}
+m_ROS(NULL),
+m_MapKnow(i_MapDim)
+{
+    m_ROS = new RangeOfSight(std::ifstream("C:/Users/Utilisateur/Documents/Xerof/config/range_of_sight/straightR-3-1.ros"));
+    discoverSurroundingTiles();
+}
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
@@ -25,6 +30,11 @@ const Position& HumanInfo::getPos() const
 Position& HumanInfo::getPos()
 {
     return m_Pos;
+}
+
+const MapKnowledge& HumanInfo::getMapKnowledge() const
+{
+    return m_MapKnow;
 }
 
 
@@ -69,15 +79,20 @@ bool HumanInfo::isSelected() const
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                            DISCOVER SURROUNDING TILES                      //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+void HumanInfo::discoverSurroundingTiles()
+{
+    m_MapKnow.discover(m_Pos, *m_ROS);
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                     STATS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 float HumanInfo::getMoveSpeed() const
 {
     return m_MoveSpeed;
-}
-
-UINT HumanInfo::getRangeOfSight() const
-{
-    return m_ROSight;
 }

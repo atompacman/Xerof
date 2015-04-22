@@ -36,43 +36,46 @@ void Mouse::handleButtonPressed(const ALLEGRO_EVENT& i_Event)
 
 void Mouse::handleButtonReleased(const ALLEGRO_EVENT& i_Event)
 {
-    // Do a selection only if mouse has not moved much since pressing
-    if (m_State == LEFT_BUTTON_PRESSED && 
-        m_MoveEventsSincePressed < MAX_MOVE_EVENT_FOR_CLICK) {
-
-        // If clicked tile is on the map
-        if (m_ClickedTile < (m_Camera.m_MaxPos / TILE_SIZE[0])) {
-
-            HumanInfo* currSelect(m_Map.getTile(m_ClickedTile).getHuman());
-
-            // If there is no human on the new tile
-            if (currSelect == NULL) {
-                // Clear previous selection
-                if (m_SelHuman != NULL) {
-                    m_SelHuman->unselect();
-                }
-            }
-            else {
-                // If it was already selected, unselect him, else select him
-                if (currSelect->isSelected()) {
-                    currSelect->unselect();
-                }
-                else {
-                    currSelect->select();
-                    m_SelHuman = currSelect;
-                }
-            }
-        }
-        else {
-            // Clear previous selection
-            if (m_SelHuman != NULL) {
-                m_SelHuman->unselect();
-            }
-        }
-    }
+    // Check if it was a selection click
+    bool isLeftClick(m_State == LEFT_BUTTON_PRESSED);
 
     // Reset mouse state to idle
     m_State = IDLE;
+
+    // Change selection only if mouse has not moved 
+    // much since left button was pressed
+    if (!isLeftClick || m_MoveEventsSincePressed > MAX_MOVE_EVENT_FOR_CLICK) {
+        return;
+    }
+
+    // If clicked tile is out of the map, clear selection
+    if (!(m_ClickedTile < (m_Camera.m_MaxPos / TILE_SIZE[0]))) {
+        clearSelection();
+        return;
+    }
+
+    // Get selected human
+    HumanInfo* currSelect(m_Map.getTile(m_ClickedTile).getHuman());
+
+    // If there is no human on selected tile or if its the selected
+    // one, clear selection
+    if (currSelect == NULL || currSelect == m_SelHuman) {
+        clearSelection();
+        return;
+    }
+
+    // Finaly, we can do our new selection !
+    clearSelection();
+    currSelect->select();
+    m_SelHuman = currSelect;
+}
+
+void Mouse::clearSelection()
+{
+    if (m_SelHuman != NULL) {
+        m_SelHuman->unselect();
+        m_SelHuman = NULL;
+    }
 }
 
 void Mouse::handleCursorMoved(const ALLEGRO_EVENT& i_Event)
@@ -127,4 +130,31 @@ const Camera& Mouse::getCamera() const
 Camera& Mouse::getCamera()
 {
     return m_Camera;
+}
+
+const HumanInfo& Mouse::getSelectedHuman() const
+{
+    return *m_SelHuman;
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                   SETTERS                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+void Mouse::setSelectedHuman(HumanInfo* i_Human)
+{
+    m_SelHuman = i_Human;
+    i_Human->select();
+    m_Camera.setPosition(i_Human->getPos().coord());
+}
+
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                     STATE                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+bool Mouse::hasSelectedHuman() const
+{
+    return m_SelHuman != NULL;
 }

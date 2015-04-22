@@ -1,0 +1,29 @@
+# 32  area
+# 5   ahead
+# 8   side
+# 11  diagonal
+# 8   average
+. . . . . . . . .
+. . X X X X X . .
+. . X X X X X . .
+. . X X X X X . .
+. . X X X X X . .
+. . . X X X . . .
+. . . X X X . . .
+. . . X ^ X . . .
+. . . X X X . . .
+. . . . . . . . .
+# 32  area
+# 7   ahead
+# 12  side
+# 7   diagonal
+# 8.7 average
+. . . . . . . . .
+. . . . X X X . .
+. . . X X X X X .
+. . . X X X X X .
+. . X X X X X X .
+. X X X X X X . .
+. X 7 X X . . . .
+. X X X . . . . .
+. . . . . . . . .
