@@ -177,7 +177,6 @@ $RECYCLE.BIN/
 
 *.sln
 *.vcxproj
-*.vcxproj.filters
 allegro.log
 *.opensdf
 *.sdf
