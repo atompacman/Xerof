@@ -47,12 +47,6 @@
     <Filter Include="resources">
       <UniqueIdentifier>{5cec5939-e712-469f-badd-9ad0fc3558df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="resources\auto">
-      <UniqueIdentifier>{519cafb1-0992-4afc-9794-9b9d50858018}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources\auto\range_of_sight_models">
-      <UniqueIdentifier>{c334fb47-04f5-408e-aafb-42d5b477a154}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\easylogging++.h">
@@ -264,17 +258,6 @@
     <ClCompile Include="src\civ\human\MapKnowledge.cpp">
       <Filter>src\civ\human</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\auto\range_of_sight_models\short.ros">
-      <Filter>resources\auto\range_of_sight_models</Filter>
-    </None>
-    <None Include="resources\auto\range_of_sight_models\straight.ros">
-      <Filter>resources\auto\range_of_sight_models</Filter>
-    </None>
-    <None Include="resources\auto\range_of_sight_models\straightR-3-1.ros">
-      <Filter>resources\auto\range_of_sight_models</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src_doc_helper.txt">

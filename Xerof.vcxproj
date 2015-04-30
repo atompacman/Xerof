@@ -153,11 +153,6 @@
     <ClCompile Include="src\Xerof.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\auto\range_of_sight_models\short.ros" />
-    <None Include="resources\auto\range_of_sight_models\straight.ros" />
-    <None Include="resources\auto\range_of_sight_models\straightR-3-1.ros" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="src_doc_helper.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
