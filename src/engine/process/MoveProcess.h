@@ -2,7 +2,7 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "HumanProcess.h"
+#include "Process.h"
 #include "..\..\world\map\Map.h"
 /*============================================================================||
 | A movement than occurs over many frames
@@ -10,7 +10,7 @@
 | Title says it all
 \=============================================================================*/
 
-class MoveProcess : public HumanProcess
+class MoveProcess : public Process
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
@@ -22,8 +22,9 @@ public:
 private:
     static const double s_DELTA;
 
-    Coord  m_InitTile;
-    Coord  m_DestTile;
-	DCoord m_Delta;
-    Map&   m_Map;
+	HumanInfo& m_Human;
+    Coord	   m_InitTile;
+    Coord	   m_DestTile;
+	DCoord	   m_Delta;
+    Map&	   m_Map;
 };

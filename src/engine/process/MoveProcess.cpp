@@ -9,7 +9,7 @@ const double MoveProcess::s_DELTA = 0.5 / TARGET_FPS;
 MoveProcess::MoveProcess(HumanInfo&      i_Human,
                          const Position& i_Dest, 
                          Map&            i_Map):
-HumanProcess(i_Human),
+m_Human(i_Human),
 m_InitTile(i_Human.getPos().tileCoord()),
 m_DestTile(i_Dest.tileCoord()),
 m_Delta((i_Dest.coord() - i_Human.getPos().coord()) / TARGET_FPS),
