@@ -76,9 +76,6 @@
     <ClInclude Include="src\civ\Civilization.h">
       <Filter>src\civ</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\process\HumanProcess.h">
-      <Filter>src\engine\process</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\process\MoveProcess.h">
       <Filter>src\engine\process</Filter>
     </ClInclude>
