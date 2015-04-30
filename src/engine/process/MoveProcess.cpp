@@ -38,18 +38,34 @@ void MoveProcess::nextIter()
     bool changedTile(false);
 
     // If character is changing tile in the x axis
-    if (abs(pos.coord().x - roundPos.x) < s_DELTA) {
-        // Set human position right on the edge of the tile
-        pos.setX(roundPos.x);
+	if (abs(roundPos.x - pos.coord().x) < s_DELTA) {
+		// Moving right
+		if (m_DestTile.x > m_InitTile.x) {
+			// Set human position right on the edge of the new tile
+			pos.setX(roundPos.x);
+		}
+		// Moving left
+		else {
+			// Set human position right before the new tile
+			pos.setX(roundPos.x - EPSILON);
+		}
         changedTile = true;
     }
 
     // If character is changing tile in the y axis
-    if (abs(pos.coord().y - roundPos.y) < s_DELTA) {
-        // Set human position right on the edge of the tile
-        pos.setY(roundPos.y);
-        changedTile = true;
-    }
+	if (abs(roundPos.y - pos.coord().y) < s_DELTA) {
+		// Moving down
+		if (m_DestTile.y > m_InitTile.y) {
+			// Set human position right on the edge of the new tile
+			pos.setY(roundPos.y);
+		}
+		// Moving up
+		else {
+			// Set human position right before the new tile
+			pos.setY(roundPos.y - EPSILON);
+		}
+		changedTile = true;
+	}
 
     // If character steps in destination tile
     if (changedTile) {
