@@ -20,9 +20,10 @@ public:
     const HumanInfo& infos() const;
 
     // SURROUNDINGS
-    const Tile&         getTileInDir(Direction i_Dir) const;
-    const Tile&         getTileInFront() const;
-    EnvType             getEnvInFront() const;
+	bool		isWithinMapLimits(Direction i_Dir) const;
+    const Tile& getTileInDir(Direction i_Dir) const;
+    const Tile& getTileInFront() const;
+    EnvType     getEnvInFront() const;
 
 private:
     const HumanInfo& m_Info;
