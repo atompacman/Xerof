@@ -2,4 +2,6 @@
 /Release
 *.sdf
 *.opensdf
+*.suo
+*.user
 *.log
