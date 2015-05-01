@@ -5,9 +5,8 @@
 #include <list>
 #include <math.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Camera.h"
+#include "DisplayInfo.h"
 #include "..\utils\FatalErrorDialog.h"
-#include "..\civ\human\HumanInfo.h"
 #include "..\world\map\Map.h"
 /*============================================================================||
 | Variables about the camera controller by the mouse
@@ -29,30 +28,19 @@ class Mouse
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-	Mouse(Camera& io_Camera, Map& i_Map);
+	Mouse(DisplayInfo& io_DisplayInfo);
 
     // EVENT HANDLING
     void handlePressedButton(const ALLEGRO_EVENT& i_Event);
     void handleReleasedButton(const ALLEGRO_EVENT& i_Event);
     void handleMovedCursor(const ALLEGRO_EVENT& i_Event);
 
-    // GETTERS
-    const Camera&    getCamera() const;
-    Camera&          getCamera();
-    const HumanInfo& getSelectedHuman() const;
-
-    // SETTERS
-    void setSelectedHuman(HumanInfo* i_Human);
-
-    // STATE
-    bool hasSelectedHuman() const;
-
 private:
-    // The camera
-    Camera& m_Camera;
+    // Display information handled by this peripheral
+    DisplayInfo& m_DisplayInfo;
 
-    // Selected human
-    HumanInfo* m_SelHuman;
+	// The camera (extracted from DisplayInfo for quicker access)
+	Camera& m_Camera;
 
     // Current pressed button (or no button pressed)
     MouseState m_State;
@@ -63,10 +51,6 @@ private:
     // Last clicked tile
     Coord m_ClickedTile;
 
-    // Map reference
-    Map& m_Map;
-
 	// EVENT HANDLING
     Coord computeSelectedTile(UINT i_x, UINT i_y) const;
-    void clearSelection();
 };

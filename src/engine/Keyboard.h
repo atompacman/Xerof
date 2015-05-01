@@ -2,7 +2,7 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Camera.h"
+#include "DisplayInfo.h"
 #include "..\utils\FatalErrorDialog.h"
 /*============================================================================||
 | Keyboard
@@ -14,7 +14,7 @@ class Keyboard
 {
 public:
 	//CONSTRUCTOR/DESTRUCTOR
-	Keyboard(Camera& io_Camera);
+	Keyboard(DisplayInfo& io_DisplayInfo);
 
 	// EVENT HANDLING
 	bool handlePressedKey(const ALLEGRO_EVENT& i_Event);
@@ -22,8 +22,8 @@ public:
 	bool handleTypedCharacter(const ALLEGRO_EVENT& i_Event);
 
 private:
-	// The camera
-	Camera& m_Camera;
+	// Display information handled by this peripheral
+	DisplayInfo& m_DisplayInfo;
 
 	// Vector of pressed keys
 	bool m_PressedKeys[ALLEGRO_KEY_MAX];

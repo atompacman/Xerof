@@ -4,11 +4,8 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Display::Display(const World&  i_World,
-                 const Camera& i_Camera) :
-m_World(i_World),
-m_Camera(i_Camera),
-
+Display::Display(DisplayInfo& io_DisplayInfo) :
+m_DisplayInfo(io_DisplayInfo),
 m_Window(createWindow()),
 m_Assets(loadAssets()),
 m_GameFont(loadGameFont())
@@ -58,8 +55,17 @@ Display::~Display()
 //                                    DRAW                                    //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Display::draw(const MapKnowledge* i_MapKnow)
+void Display::draw()
 {
+	// Center camera on selection if needed
+	m_DisplayInfo.updateCameraPosition();
+
+	// Apply camera transformation on map
+	m_DisplayInfo.getCamera().applyTransform(getWindowSize());
+
+	// Compute which tiles to display
+	m_DisplayInfo.getCamera().updateVisibleTiles(getWindowSize());
+
     // Clear buffer to background color
     al_clear_to_color(al_map_rgb(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
 
@@ -67,17 +73,19 @@ void Display::draw(const MapKnowledge* i_MapKnow)
     al_hold_bitmap_drawing(true);
 
     // Draw
-    drawEnvironment(i_MapKnow);
-    drawHumans(i_MapKnow);
+    drawEnvironment();
+    drawHumans();
 
     // Release drawing
 	al_hold_bitmap_drawing(false);
 }
 
-void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
+void Display::drawEnvironment()
 {
 	// Get various constants according to the resolution level
-	UINT resLvl(m_Camera.getResolutionLvl());
+	Coord tileULCorner(m_DisplayInfo.getCamera().getVisibleTilesULCorner());
+	Coord tileLRCorner(m_DisplayInfo.getCamera().getVisibleTilesLRCorner());
+	UINT resLvl(m_DisplayInfo.getCamera().getResolutionLvl());
 	Coord textureULCorner(TEXTURE_UL_CORNERS[resLvl]);
 	UINT tileSizeOnMap(TILE_SIZE[resLvl]);
 	UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
@@ -85,18 +93,18 @@ void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
 											 * ALPHA_OVERLAPPING[resLvl]);
     // Draw visible tiles
 	Coord tileCoord;
-    for (    tileCoord.y = m_Camera.getVisibleTilesULCorner().y; 
-             tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;++tileCoord.y) {
-        for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x; 
-             tileCoord.x < m_Camera.getVisibleTilesLRCorner().x;++tileCoord.x) {
+	for (	 tileCoord.y = tileULCorner.y; 
+			 tileCoord.y < tileLRCorner.y; ++tileCoord.y) {
+		for (tileCoord.x = tileULCorner.x;
+			 tileCoord.x < tileLRCorner.x; ++tileCoord.x) {
             
             // Check if tile is known by the selected character
-            if (!i_MapKnow->isKnown(tileCoord)) {
+			if (!m_DisplayInfo.getMapKnowledge().isKnown(tileCoord)) {
                 continue;
             }
 
             // Get tile
-            const Tile tile(m_World.map().getTile(tileCoord));
+			const Tile tile(m_DisplayInfo.getMap().getTile(tileCoord));
 
             // Get environment
             Environment env(tile.getEnvironment());
@@ -117,10 +125,12 @@ void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
     }
 }
 
-void Display::drawHumans(const MapKnowledge* i_MapKnow)
+void Display::drawHumans()
 {
 	// Get various constants according to the resolution level
-	UINT resLvl(m_Camera.getResolutionLvl());
+	Coord tileULCorner(m_DisplayInfo.getCamera().getVisibleTilesULCorner());
+	Coord tileLRCorner(m_DisplayInfo.getCamera().getVisibleTilesLRCorner());
+	UINT resLvl(m_DisplayInfo.getCamera().getResolutionLvl());
 	Coord textureULCorner(TEXTURE_UL_CORNERS[resLvl]);
 	UINT tileSizeOnMap(TILE_SIZE[resLvl]);
 	UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
@@ -131,18 +141,19 @@ void Display::drawHumans(const MapKnowledge* i_MapKnow)
 
     // Draw visible tiles
 	Coord tileCoord;
-    for (    tileCoord.y = m_Camera.getVisibleTilesULCorner().y;
-             tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;++tileCoord.y) {
-        for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x;
-             tileCoord.x < m_Camera.getVisibleTilesLRCorner().x;++tileCoord.x) {
+	for (	 tileCoord.y = tileULCorner.y;
+			 tileCoord.y < tileLRCorner.y; ++tileCoord.y) {
+		for (tileCoord.x = tileULCorner.x;
+			 tileCoord.x < tileLRCorner.x; ++tileCoord.x) {
 
             // Check if tile is known by the selected character
-            if (!i_MapKnow->isKnown(tileCoord)) {
-                continue;
+			if (!m_DisplayInfo.getMapKnowledge().isKnown(tileCoord)) {
+				continue;
             }
 
             // Get human on tile
-            const HumanInfo* human(m_World.map().getTile(tileCoord).getHuman());
+			Tile& tile(m_DisplayInfo.getMap().getTile(tileCoord));
+			const HumanInfo* human(tile.getHuman());
 
             if (human != NULL) {
                 // Create caracter sub-bitmap

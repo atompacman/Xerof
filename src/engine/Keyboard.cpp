@@ -4,8 +4,8 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Keyboard::Keyboard(Camera& io_Camera) :
-m_Camera(io_Camera)
+Keyboard::Keyboard(DisplayInfo& io_DisplayInfo) :
+m_DisplayInfo(io_DisplayInfo)
 {
 	if (!al_install_keyboard()) {
 		FatalErrorDialog("Keyboard installation failed.");
@@ -30,6 +30,9 @@ bool Keyboard::handleReleasedKey(const ALLEGRO_EVENT& i_Event)
 	switch (i_Event.keyboard.keycode) {
 	case ALLEGRO_KEY_ESCAPE:
 		return false;
+	case ALLEGRO_KEY_F:
+		m_DisplayInfo.switchFollowSelection();
+		return true;
 	default:
 		break;
 	}

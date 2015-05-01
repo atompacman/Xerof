@@ -29,18 +29,16 @@ private:
     World           m_World;
     CivController** m_CivCtrls;
 
-	Camera	 m_Camera;
-    Mouse    m_Mouse;
-    Keyboard m_Keyboard;
-    Display  m_Disp;
+	DisplayInfo m_DisplayInfo;
+    Mouse		m_Mouse;
+    Keyboard	m_Keyboard;
+    Display		m_Disp;
 
 	ALLEGRO_EVENT_QUEUE* m_Queue;
 	ALLEGRO_TIMER*       m_ScreenRefresher;
 	
 	UINT          m_NumMoveProcs;
 	MoveProcess** m_MoveProcs;
-
-    static FullMapKnowledge s_FullMapKnow;
 
     // CONSTRUCTOR/DESTRUCTOR
     CivController** initCivCtrls();

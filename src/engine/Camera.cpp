@@ -98,7 +98,7 @@ void Camera::rotateAndZoom(const DCoord& i_Delta)
     m_Zoom = max(MIN_ZOOM_SCALE, min(m_Zoom, MAX_ZOOM_SCALE));
 }
 
-void Camera::scrollwheelZoom(int i_Delta)
+void Camera::zoom(int i_Delta)
 {
     m_Zoom += i_Delta * 0.1 * m_Zoom;
     m_Zoom = max(MIN_ZOOM_SCALE, min(m_Zoom, MAX_ZOOM_SCALE));

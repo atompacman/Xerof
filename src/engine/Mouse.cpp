@@ -4,13 +4,12 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Mouse::Mouse(Camera& io_Camera, Map& i_Map) :
-m_Camera(io_Camera),
-m_SelHuman(NULL),
+Mouse::Mouse(DisplayInfo& io_DisplayInfo) :
+m_DisplayInfo(io_DisplayInfo),
+m_Camera(m_DisplayInfo.getCamera()),
 m_State(IDLE),
 m_MoveEventsSincePressed(0),
-m_ClickedTile(0,0),
-m_Map(i_Map)
+m_ClickedTile(0,0)
 {
 	if (!al_install_mouse()) {
 		FatalErrorDialog("Mouse installation failed.");
@@ -48,34 +47,8 @@ void Mouse::handleReleasedButton(const ALLEGRO_EVENT& i_Event)
         return;
     }
 
-    // If clicked tile is out of the map, clear selection
-    if (!(m_ClickedTile < (m_Camera.m_MaxPos / TILE_SIZE[0]))) {
-        clearSelection();
-        return;
-    }
-
-    // Get selected human
-    HumanInfo* currSelect(m_Map.getTile(m_ClickedTile).getHuman());
-
-    // If there is no human on selected tile or if its the selected
-    // one, clear selection
-    if (currSelect == NULL || currSelect == m_SelHuman) {
-        clearSelection();
-        return;
-    }
-
-    // Finaly, we can do our new selection !
-    clearSelection();
-    currSelect->select();
-    m_SelHuman = currSelect;
-}
-
-void Mouse::clearSelection()
-{
-    if (m_SelHuman != NULL) {
-        m_SelHuman->unselect();
-        m_SelHuman = NULL;
-    }
+	// Set selection
+	m_DisplayInfo.setSelection(m_ClickedTile);
 }
 
 void Mouse::handleMovedCursor(const ALLEGRO_EVENT& i_Event)
@@ -95,7 +68,7 @@ void Mouse::handleMovedCursor(const ALLEGRO_EVENT& i_Event)
 
     // Scrollwheel zoom
     if (i_Event.mouse.dz != 0) {
-        m_Camera.scrollwheelZoom(i_Event.mouse.dz);
+        m_Camera.zoom(i_Event.mouse.dz);
     }
 
     ++m_MoveEventsSincePressed;
@@ -115,46 +88,4 @@ Coord Mouse::computeSelectedTile(UINT i_x, UINT i_y) const
     selectedTile /= TILE_SIZE[m_Camera.getResolutionLvl()];
 
     return selectedTile;
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                   GETTERS                                  //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-const Camera& Mouse::getCamera() const
-{
-    return m_Camera;
-}
-
-Camera& Mouse::getCamera()
-{
-    return m_Camera;
-}
-
-const HumanInfo& Mouse::getSelectedHuman() const
-{
-    return *m_SelHuman;
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                   SETTERS                                  //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-void Mouse::setSelectedHuman(HumanInfo* i_Human)
-{
-    m_SelHuman = i_Human;
-    i_Human->select();
-    m_Camera.setPosition(i_Human->getPos().coord());
-}
-
-
-//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-//                                     STATE                                  //
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-bool Mouse::hasSelectedHuman() const
-{
-    return m_SelHuman != NULL;
 }

@@ -1,7 +1,5 @@
 #include "GameLoop.h"
 
-FullMapKnowledge GameLoop::s_FullMapKnow = FullMapKnowledge();
-
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -10,10 +8,10 @@ GameLoop::GameLoop():
 m_World(),
 m_CivCtrls(initCivCtrls()),
 
-m_Camera(m_World.map().dim()),
-m_Mouse(m_Camera, m_World.map()),
-m_Keyboard(m_Camera),
-m_Disp(m_World, m_Mouse.getCamera()),
+m_DisplayInfo(m_World.map(), &m_CivCtrls[0]->getCiv().getHuman(0)),
+m_Mouse(m_DisplayInfo),
+m_Keyboard(m_DisplayInfo),
+m_Disp(m_DisplayInfo),
 
 m_Queue(al_create_event_queue()),
 m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
@@ -40,9 +38,6 @@ m_MoveProcs(new MoveProcess*[NB_CIV * CIV_MAX_POP])
 											&m_Disp.getWindow()));
 	al_register_event_source(m_Queue, al_get_timer_event_source(
 											m_ScreenRefresher));
-
-    // Set camera on first human of first civ
-    m_Mouse.setSelectedHuman(&m_CivCtrls[0]->getCiv().getHuman(0));
 }
 
 CivController** GameLoop::initCivCtrls()
@@ -143,23 +138,14 @@ void GameLoop::startGame()
 		}
 
 		if (refresh && al_is_event_queue_empty(m_Queue)) {
+			// Move characters
 			updateMovements();
 
-			double time = al_get_time();
+			// Get current time
+			double time(al_get_time());
 
-            // Apply camera transformation on map
-            m_Mouse.getCamera().applyTransform(m_Disp.getWindowSize());
-
-            // Compute which tiles to display
-            m_Mouse.getCamera().updateVisibleTiles(m_Disp.getWindowSize());
-
-            // Draw frame
-            if (m_Mouse.hasSelectedHuman()) {
-                m_Disp.draw(&m_Mouse.getSelectedHuman().getMapKnowledge());
-            }
-            else {
-                m_Disp.draw(&s_FullMapKnow);
-            }
+			// Draw updated screen
+			m_Disp.draw();
 
             // Display frame
 			al_flip_display();

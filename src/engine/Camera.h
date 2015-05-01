@@ -2,6 +2,7 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
+#include "..\civ\human\HumanInfo.h"
 #include "..\Parameters.h"
 /*============================================================================||
 | Holds variables about camera position and is able to build transformation
@@ -12,7 +13,8 @@
 
 class Camera
 {
-    friend class Mouse;
+	friend class Mouse;
+	friend class Keyboard;
 
 public:
 	// CONSTRUCTOR/DESTRUCTOR
@@ -57,5 +59,5 @@ private:
     // UPDATE
     void translate(const DCoord& i_Delta);
     void rotateAndZoom(const DCoord& i_Delta);
-    void scrollwheelZoom(int i_Delta);
+    void zoom(int i_Delta);
 };

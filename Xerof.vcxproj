@@ -95,6 +95,7 @@
     <ClInclude Include="src\engine\Assets.h" />
     <ClInclude Include="src\engine\Camera.h" />
     <ClInclude Include="src\engine\Display.h" />
+    <ClInclude Include="src\engine\DisplayInfo.h" />
     <ClInclude Include="src\engine\GameLoop.h" />
     <ClInclude Include="src\engine\Keyboard.h" />
     <ClInclude Include="src\engine\Mouse.h" />
@@ -140,6 +141,7 @@
     <ClCompile Include="src\civ\human\RangeOfSight.cpp" />
     <ClCompile Include="src\engine\Camera.cpp" />
     <ClCompile Include="src\engine\Display.cpp" />
+    <ClCompile Include="src\engine\DisplayInfo.cpp" />
     <ClCompile Include="src\engine\GameLoop.cpp" />
     <ClCompile Include="src\engine\Keyboard.cpp" />
     <ClCompile Include="src\engine\Mouse.cpp" />
