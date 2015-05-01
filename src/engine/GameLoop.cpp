@@ -29,6 +29,10 @@ m_MoveProcs(new MoveProcess*[NB_CIV * CIV_MAX_POP])
 		FatalErrorDialog("Creation of timer for screen refreshing failed.");
 	}
 
+	// Set default cursor
+	al_set_system_mouse_cursor(&m_Disp.getWindow(), 
+		ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
+
     // Register event sources
 	al_register_event_source(m_Queue, al_get_keyboard_event_source());
 	al_register_event_source(m_Queue, al_get_mouse_event_source());

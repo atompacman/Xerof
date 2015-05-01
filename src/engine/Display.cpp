@@ -76,9 +76,15 @@ void Display::draw(const MapKnowledge* i_MapKnow)
 
 void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
 {
-    Coord tileCoord;
-
+	// Get various constants according to the resolution level
+	UINT resLvl(m_Camera.getResolutionLvl());
+	Coord textureULCorner(TEXTURE_UL_CORNERS[resLvl]);
+	UINT tileSizeOnMap(TILE_SIZE[resLvl]);
+	UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
+	UINT overlapTileSize  (tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
+											 * ALPHA_OVERLAPPING[resLvl]);
     // Draw visible tiles
+	Coord tileCoord;
     for (    tileCoord.y = m_Camera.getVisibleTilesULCorner().y; 
              tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;++tileCoord.y) {
         for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x; 
@@ -98,14 +104,14 @@ void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
             // Draw environment bitmap on screen
             al_draw_scaled_bitmap(
                 m_Assets[env.assetFile()],
-                m_Camera.getTextureULCorner().x,
-                m_Camera.getTextureULCorner().y,
-                m_Camera.getTileBitmapSize(),
-                m_Camera.getTileBitmapSize(),
-                tileCoord.x * m_Camera.getTileSize(),
-                tileCoord.y * m_Camera.getTileSize(),
-                m_Camera.getOverlapTileSize(),
-                m_Camera.getOverlapTileSize(),
+				textureULCorner.x,
+				textureULCorner.y,
+				tileSizeOnTexture,
+				tileSizeOnTexture,
+				tileCoord.x * tileSizeOnMap,
+				tileCoord.y * tileSizeOnMap,
+				overlapTileSize,
+				overlapTileSize,
                 env.getOrientation());
         }
     }
@@ -113,14 +119,18 @@ void Display::drawEnvironment(const MapKnowledge* i_MapKnow)
 
 void Display::drawHumans(const MapKnowledge* i_MapKnow)
 {
-    Coord tileCoord;
-    double humanScaling = (double)m_Camera.getOverlapTileSize() /
-        (double)m_Camera.getTileBitmapSize();
-
-    UINT toCenterHuman = (m_Camera.getOverlapTileSize() - 
-        m_Camera.getTileSize()) * 0.5;
+	// Get various constants according to the resolution level
+	UINT resLvl(m_Camera.getResolutionLvl());
+	Coord textureULCorner(TEXTURE_UL_CORNERS[resLvl]);
+	UINT tileSizeOnMap(TILE_SIZE[resLvl]);
+	UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
+	UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
+		* ALPHA_OVERLAPPING[resLvl]);
+	double humanScaling = (double) overlapTileSize / (double) tileSizeOnTexture;
+	UINT toCenterHuman = (overlapTileSize - tileSizeOnMap) * 0.5;
 
     // Draw visible tiles
+	Coord tileCoord;
     for (    tileCoord.y = m_Camera.getVisibleTilesULCorner().y;
              tileCoord.y < m_Camera.getVisibleTilesLRCorner().y;++tileCoord.y) {
         for (tileCoord.x = m_Camera.getVisibleTilesULCorner().x;
@@ -138,20 +148,18 @@ void Display::drawHumans(const MapKnowledge* i_MapKnow)
                 // Create caracter sub-bitmap
                 ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
                     m_Assets[human->assetFile()],
-                    m_Camera.getTextureULCorner().x,
-                    m_Camera.getTextureULCorner().y,
-                    m_Camera.getTileBitmapSize(),
-                    m_Camera.getTileBitmapSize()));
+					textureULCorner.x,
+					textureULCorner.y,
+					tileSizeOnTexture,
+					tileSizeOnTexture));
 
                 // Draw rotated human bitmap
                 al_draw_scaled_rotated_bitmap(
                     subBitmap,
-                    m_Camera.getTileBitmapSize() * 0.5,
-                    m_Camera.getTileBitmapSize() * 0.5,
-                    human->getPos().coord().x * m_Camera.getTileSize()
-                        + toCenterHuman,
-                    human->getPos().coord().y * m_Camera.getTileSize()
-                        + toCenterHuman,
+					tileSizeOnTexture * 0.5,
+					tileSizeOnTexture * 0.5,
+					human->getPos().coord().x * tileSizeOnMap + toCenterHuman,
+					human->getPos().coord().y * tileSizeOnMap + toCenterHuman,
                     humanScaling,
                     humanScaling,
                     correspondingAngle(human->getPos().facingDir()),
@@ -161,14 +169,14 @@ void Display::drawHumans(const MapKnowledge* i_MapKnow)
                 if (human->isSelected()) {
                     al_draw_scaled_bitmap(
                         m_Assets[SELECTION],
-                        m_Camera.getTextureULCorner().x,
-                        m_Camera.getTextureULCorner().y,
-                        m_Camera.getTileBitmapSize(),
-                        m_Camera.getTileBitmapSize(),
-                        human->getPos().tileCoord().x * m_Camera.getTileSize(),
-                        human->getPos().tileCoord().y * m_Camera.getTileSize(),
-                        m_Camera.getOverlapTileSize(),
-                        m_Camera.getOverlapTileSize(),
+						textureULCorner.x,
+						textureULCorner.y,
+						tileSizeOnTexture,
+						tileSizeOnTexture,
+						human->getPos().tileCoord().x * tileSizeOnMap,
+						human->getPos().tileCoord().y * tileSizeOnMap,
+						overlapTileSize,
+						overlapTileSize,
                         DOWN);
                 }
             }

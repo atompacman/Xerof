@@ -112,7 +112,7 @@ Coord Mouse::computeSelectedTile(UINT i_x, UINT i_y) const
                        copy.m[0][1] * i_x + copy.m[1][1] * i_y + copy.m[3][1]);
 
     // Divide by tile length
-    selectedTile /= m_Camera.getTileSize();
+    selectedTile /= TILE_SIZE[m_Camera.getResolutionLvl()];
 
     return selectedTile;
 }
