@@ -190,6 +190,9 @@
     <ClInclude Include="src\civ\human\FullMapKnowledge.h">
       <Filter>src\civ\human</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\DisplayInfo.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\civ\ai\AtomAI.cpp">
@@ -257,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="src\civ\human\MapKnowledge.cpp">
       <Filter>src\civ\human</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DisplayInfo.cpp">
+      <Filter>src\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

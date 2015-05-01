@@ -33,7 +33,7 @@ m_Transform()
 void Camera::applyTransform(Coord i_WinSize)
 {
     // Get resolution level from zoom level
-    UINT resLvl = resolutionLvl();
+    UINT resLvl = getResolutionLvl();
 
     // Reset transform
     al_identity_transform(&m_Transform);
@@ -98,7 +98,7 @@ void Camera::rotateAndZoom(const DCoord& i_Delta)
     m_Zoom = max(MIN_ZOOM_SCALE, min(m_Zoom, MAX_ZOOM_SCALE));
 }
 
-void Camera::scrollwheelZoom(int i_Delta)
+void Camera::zoom(int i_Delta)
 {
     m_Zoom += i_Delta * 0.1 * m_Zoom;
     m_Zoom = max(MIN_ZOOM_SCALE, min(m_Zoom, MAX_ZOOM_SCALE));
@@ -109,6 +109,14 @@ void Camera::scrollwheelZoom(int i_Delta)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+UINT Camera::getResolutionLvl() const
+{
+	if (m_Zoom > 0.5)	     { return 0; }
+	else if (m_Zoom > 0.25)  { return 1; }
+	else if (m_Zoom > 0.125) { return 2; }
+	else				     { return 3; }
+}
+
 Coord Camera::getVisibleTilesULCorner() const
 {
     return m_ULtiles;
@@ -117,37 +125,6 @@ Coord Camera::getVisibleTilesULCorner() const
 Coord Camera::getVisibleTilesLRCorner() const
 {
     return m_LRtiles;
-}
-
-UINT Camera::getTileSize() const
-{
-    return TILE_SIZE[resolutionLvl()];
-}
-
-UINT Camera::getTileBitmapSize() const
-{
-    UINT resLvl(resolutionLvl());
-    return TILE_SIZE[resLvl] + 2 * TILE_GRADIENT_SIZE[resLvl];
-}
-
-UINT Camera::getOverlapTileSize() const
-{
-    UINT resLvl(resolutionLvl());
-    return TILE_SIZE[resLvl] + 2 * 
-        TILE_GRADIENT_SIZE[resLvl] * ALPHA_OVERLAPPING[resLvl];
-}
-
-Coord Camera::getTextureULCorner() const
-{
-    return TEXTURE_UL_CORNERS[resolutionLvl()];
-}
-
-UINT Camera::resolutionLvl() const
-{
-    if (m_Zoom > 0.5)	     { return 0; }
-    else if (m_Zoom > 0.25)  { return 1; }
-    else if (m_Zoom > 0.125) { return 2; }
-    else				     { return 3; }
 }
 
 
