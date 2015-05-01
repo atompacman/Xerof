@@ -4,8 +4,8 @@
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Mouse::Mouse(Map& i_Map) :
-m_Camera(i_Map.dim()),
+Mouse::Mouse(Camera& io_Camera, Map& i_Map) :
+m_Camera(io_Camera),
 m_SelHuman(NULL),
 m_State(IDLE),
 m_MoveEventsSincePressed(0),
@@ -22,7 +22,7 @@ m_Map(i_Map)
 //                               EVENT HANDLING                               //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Mouse::handleButtonPressed(const ALLEGRO_EVENT& i_Event)
+void Mouse::handlePressedButton(const ALLEGRO_EVENT& i_Event)
 {
     // Save what button was pressed
     m_State = MouseState(i_Event.mouse.button);
@@ -34,7 +34,7 @@ void Mouse::handleButtonPressed(const ALLEGRO_EVENT& i_Event)
     m_MoveEventsSincePressed = 0;
 }
 
-void Mouse::handleButtonReleased(const ALLEGRO_EVENT& i_Event)
+void Mouse::handleReleasedButton(const ALLEGRO_EVENT& i_Event)
 {
     // Check if it was a selection click
     bool isLeftClick(m_State == LEFT_BUTTON_PRESSED);
@@ -78,7 +78,7 @@ void Mouse::clearSelection()
     }
 }
 
-void Mouse::handleCursorMoved(const ALLEGRO_EVENT& i_Event)
+void Mouse::handleMovedCursor(const ALLEGRO_EVENT& i_Event)
 {
     switch (m_State) {
     case LEFT_BUTTON_PRESSED:

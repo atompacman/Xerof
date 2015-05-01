@@ -29,12 +29,12 @@ class Mouse
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    Mouse(Map& i_Map);
+	Mouse(Camera& io_Camera, Map& i_Map);
 
     // EVENT HANDLING
-    void handleButtonPressed(const ALLEGRO_EVENT& i_Event);
-    void handleButtonReleased(const ALLEGRO_EVENT& i_Event);
-    void handleCursorMoved(const ALLEGRO_EVENT& i_Event);
+    void handlePressedButton(const ALLEGRO_EVENT& i_Event);
+    void handleReleasedButton(const ALLEGRO_EVENT& i_Event);
+    void handleMovedCursor(const ALLEGRO_EVENT& i_Event);
 
     // GETTERS
     const Camera&    getCamera() const;
@@ -48,8 +48,8 @@ public:
     bool hasSelectedHuman() const;
 
 private:
-    // The camera controlled by the mouse
-    Camera m_Camera;
+    // The camera
+    Camera& m_Camera;
 
     // Selected human
     HumanInfo* m_SelHuman;

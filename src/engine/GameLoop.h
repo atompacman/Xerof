@@ -29,6 +29,7 @@ private:
     World           m_World;
     CivController** m_CivCtrls;
 
+	Camera	 m_Camera;
     Mouse    m_Mouse;
     Keyboard m_Keyboard;
     Display  m_Disp;
