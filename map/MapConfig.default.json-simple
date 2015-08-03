@@ -1,0 +1,15 @@
+{
+	"XerofMapGeneratorConfig": {
+		"Dimensions": { 
+			"Width":  35, 
+			"Height": 30
+		},
+		"InitialEnvType": "GRASSLAND",
+		"Borders": {
+
+		},
+		"Phases": {
+
+		}
+	}
+}
