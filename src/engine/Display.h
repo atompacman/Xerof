@@ -20,12 +20,11 @@ class Display
 {
 public:
 	//CONSTRUCTOR/DESTRUCTOR
-    Display(const World&     i_World, 
-            const Camera&    i_Camera);
+	Display(DisplayInfo& io_DisplayInfo);
 	~Display();
 
 	//DRAW
-	void draw(const MapKnowledge* i_MapKnow);
+	void draw();
     void resize();
 
 	//SETTERS
@@ -37,9 +36,8 @@ public:
     Coord            getWindowSize() const;
 
 private:
-    // Initialized outside
-    const World&     m_World;
-    const Camera&    m_Camera;
+	// Display information that is updated by other classes
+	DisplayInfo& m_DisplayInfo;
 
     // Initialized here
     ALLEGRO_DISPLAY&  m_Window;
@@ -50,8 +48,8 @@ private:
     static ALLEGRO_DISPLAY& createWindow();
 
     // DRAW
-    void drawEnvironment(const MapKnowledge* i_MapKnow);
-    void drawHumans(const MapKnowledge* i_MapKnow);
+    void drawEnvironment();
+    void drawHumans();
 };
 
 static float correspondingAngle(Direction i_Dir) {

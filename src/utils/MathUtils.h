@@ -9,7 +9,7 @@
 | - Double (almost) equal
 \=============================================================================*/
 
-#define EPSILON 1e-12;
+#define EPSILON 1e-12
 
 static bool almostEqual(double a, double b)
 {

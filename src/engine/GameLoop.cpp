@@ -1,7 +1,5 @@
 #include "GameLoop.h"
 
-FullMapKnowledge GameLoop::s_FullMapKnow = FullMapKnowledge();
-
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -10,9 +8,10 @@ GameLoop::GameLoop():
 m_World(),
 m_CivCtrls(initCivCtrls()),
 
-m_Mouse(m_World.map()),
-m_Keyboard(),
-m_Disp(m_World, m_Mouse.getCamera()),
+m_DisplayInfo(m_World.map(), &m_CivCtrls[0]->getCiv().getHuman(0)),
+m_Mouse(m_DisplayInfo),
+m_Keyboard(m_DisplayInfo),
+m_Disp(m_DisplayInfo),
 
 m_Queue(al_create_event_queue()),
 m_ScreenRefresher(al_create_timer(1.0 / TARGET_FPS)),
@@ -28,18 +27,17 @@ m_MoveProcs(new MoveProcess*[NB_CIV * CIV_MAX_POP])
 		FatalErrorDialog("Creation of timer for screen refreshing failed.");
 	}
 
-    // Register event sources
-	al_register_event_source(
-        m_Queue, al_get_keyboard_event_source());
-	al_register_event_source(
-        m_Queue, al_get_mouse_event_source());
-	al_register_event_source(
-        m_Queue, al_get_display_event_source(&m_Disp.getWindow()));
-	al_register_event_source(
-        m_Queue, al_get_timer_event_source(m_ScreenRefresher));
+	// Set default cursor
+	al_set_system_mouse_cursor(&m_Disp.getWindow(), 
+		ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
 
-    // Set camera on first human of first civ
-    m_Mouse.setSelectedHuman(&m_CivCtrls[0]->getCiv().getHuman(0));
+    // Register event sources
+	al_register_event_source(m_Queue, al_get_keyboard_event_source());
+	al_register_event_source(m_Queue, al_get_mouse_event_source());
+	al_register_event_source(m_Queue, al_get_display_event_source(
+											&m_Disp.getWindow()));
+	al_register_event_source(m_Queue, al_get_timer_event_source(
+											m_ScreenRefresher));
 }
 
 CivController** GameLoop::initCivCtrls()
@@ -89,35 +87,50 @@ void GameLoop::startGame()
 		}
 
 		switch (ev.type) {
-		case ALLEGRO_EVENT_DISPLAY_CLOSE: 
-			exitGame = true; 
+//--------------------------------- KEYBOARD ---------------------------------//
+		// When a key is physicaly pressed
+		case ALLEGRO_EVENT_KEY_DOWN :
+			exitGame = !m_Keyboard.handlePressedKey(ev);
 			break;
 
-		case ALLEGRO_EVENT_KEY_DOWN: 
-			if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-				exitGame = true;
-			}
+		// When a key is physicaly released
+		case ALLEGRO_EVENT_KEY_UP:
+			exitGame = !m_Keyboard.handleReleasedKey(ev);
 			break;
 
+		// When a character is typed or auto-repeated
+		case ALLEGRO_EVENT_KEY_CHAR:
+			exitGame = !m_Keyboard.handleTypedCharacter(ev);
+			break;
+
+//---------------------------------- MOUSE -----------------------------------//
         // When there is a click
 		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN :
-            m_Mouse.handleButtonPressed(ev);
+            m_Mouse.handlePressedButton(ev);
             break;
 
         // When a button is released
 		case ALLEGRO_EVENT_MOUSE_BUTTON_UP :
-            m_Mouse.handleButtonReleased(ev);
+            m_Mouse.handleReleasedButton(ev);
             break;
 
         // When cursor is moved
 		case ALLEGRO_EVENT_MOUSE_AXES :
-            m_Mouse.handleCursorMoved(ev);
+            m_Mouse.handleMovedCursor(ev);
 			break;
 
+//---------------------------------- DISPLAY ---------------------------------//
+		// When main window is closed
+		case ALLEGRO_EVENT_DISPLAY_CLOSE:
+			exitGame = true;
+			break;
+
+		// When to update display
 		case ALLEGRO_EVENT_TIMER:
 			refresh = true;
 			break;
 
+		// When window is resized
 		case ALLEGRO_EVENT_DISPLAY_RESIZE:
             m_Disp.resize();
 			refresh = true;
@@ -125,29 +138,20 @@ void GameLoop::startGame()
 		}
 
 		if (refresh && al_is_event_queue_empty(m_Queue)) {
+			// Move characters
 			updateMovements();
 
-			double time = al_get_time();
+			// Get current time
+			double time(al_get_time());
 
-            // Apply camera transformation on map
-            m_Mouse.getCamera().applyTransform(m_Disp.getWindowSize());
-
-            // Compute which tiles to display
-            m_Mouse.getCamera().updateVisibleTiles(m_Disp.getWindowSize());
-
-            // Draw frame
-            if (m_Mouse.hasSelectedHuman()) {
-                m_Disp.draw(&m_Mouse.getSelectedHuman().getMapKnowledge());
-            }
-            else {
-                m_Disp.draw(&s_FullMapKnow);
-            }
+			// Draw updated screen
+			m_Disp.draw();
 
             // Display frame
 			al_flip_display();
 
             // Update FPS
-			fps_accum++;
+			++fps_accum;
 			if (time - fps_time >= 1) {
 				fps = fps_accum;
 				fps_accum = 0;

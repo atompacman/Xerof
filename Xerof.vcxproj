@@ -39,9 +39,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files (x86)\Boost;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\Boost\stage\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>$(ProjectDir)\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
@@ -95,10 +95,10 @@
     <ClInclude Include="src\engine\Assets.h" />
     <ClInclude Include="src\engine\Camera.h" />
     <ClInclude Include="src\engine\Display.h" />
+    <ClInclude Include="src\engine\DisplayInfo.h" />
     <ClInclude Include="src\engine\GameLoop.h" />
     <ClInclude Include="src\engine\Keyboard.h" />
     <ClInclude Include="src\engine\Mouse.h" />
-    <ClInclude Include="src\engine\process\HumanProcess.h" />
     <ClInclude Include="src\engine\process\MoveProcess.h" />
     <ClInclude Include="src\engine\process\Process.h" />
     <ClInclude Include="src\Parameters.h" />
@@ -141,6 +141,7 @@
     <ClCompile Include="src\civ\human\RangeOfSight.cpp" />
     <ClCompile Include="src\engine\Camera.cpp" />
     <ClCompile Include="src\engine\Display.cpp" />
+    <ClCompile Include="src\engine\DisplayInfo.cpp" />
     <ClCompile Include="src\engine\GameLoop.cpp" />
     <ClCompile Include="src\engine\Keyboard.cpp" />
     <ClCompile Include="src\engine\Mouse.cpp" />
@@ -152,11 +153,6 @@
     <ClCompile Include="src\world\map\tile\Tile.cpp" />
     <ClCompile Include="src\world\World.cpp" />
     <ClCompile Include="src\Xerof.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\auto\range_of_sight_models\short.ros" />
-    <None Include="resources\auto\range_of_sight_models\straight.ros" />
-    <None Include="resources\auto\range_of_sight_models\straightR-3-1.ros" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src_doc_helper.txt" />
