@@ -1,11 +1,9 @@
-
 #pragma once
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
 #include <vector>
-#include <math.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "constr\Constraint.h"
 #include "constr\DistanceFromCenter.h"
@@ -14,7 +12,6 @@
 #include "config\MapConfig.h"
 #include "..\src\utils\ProgressLogger.h"
 #include "..\src\utils\Random.h"
-#include "..\tile\Environment.h"
 /*============================================================================||
 | Generates map
 |-----------------------------------------------------------------------------||
@@ -41,7 +38,7 @@ private:
     static void placeBorders();
     static void fillWithInitEnv();
     static void executeMapGenPhase(const Phase& i_Phase);
-    static void overpass();
+
     static const Coord randCoord();
 };
 
