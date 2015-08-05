@@ -206,7 +206,7 @@ void MapGenerator::overpass()
 
 
     // We stop reading when we reach the bottom right corner
-    while (coordX != s_LRCorner.x && coordY != s_LRCorner.y){
+    while (coordX < s_LRCorner.x || coordY < s_LRCorner.y){
 
         // calculation of the next coordinate
         // si le nombre est impaire l'addition est toujours la meme
@@ -256,7 +256,7 @@ void MapGenerator::overpass()
         if (coordX < s_Map->m_Dim.x && coordY < s_Map->m_Dim.y)
         {
             // add the bushes
-            if (s_Map->m_Tiles[coordX + coordY * s_Map->m_Dim.x].getEnvironment().getType()
+            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment().getType()
                 == bushBiome)
             {
                 // place bushes following a binomial distribution
@@ -278,11 +278,15 @@ void MapGenerator::overpass()
                 {
                     tempCoordX += xAroundCoord[i];
                     tempCoordY += yAroundCoord[i];
-
-                    if (s_Map->getTile(Coord(tempCoordX, tempCoordY)).getEnvironment().getType() == OCEAN)
+                    // on s'assure de ne pas sortir des limites de la carte
+                    if (tempCoordX < s_Map->m_Dim.x && tempCoordY < s_Map->m_Dim.y)
                     {
-                        tileChange = false;
+                        if (s_Map->getTile(Coord(tempCoordX, tempCoordY)).getEnvironment().getType() == OCEAN)
+                        {
+                            tileChange = false;
+                        }
                     }
+
                 }
                 // if the tile change we find a random tile around and change 
                 // the biome to the selected tile biome
