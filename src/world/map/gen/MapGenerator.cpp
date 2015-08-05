@@ -190,7 +190,7 @@ void MapGenerator::overpass()
     int valeurDeplacement = 0;
     bool addToX = true;
 
-    Environment bushBiome = GRASSLAND;
+    EnvType bushBiome = GRASSLAND;
     int bushBiomeCounter = 0;
     UINT probabilitOfBush = 7;
 
@@ -210,32 +210,39 @@ void MapGenerator::overpass()
 
         // calculation of the next coordinate
         // si le nombre est impaire l'addition est toujours la meme
-        if (nbCaseParcourue % 2 != 0){
+        if (nbCaseParcourue % 2 != 0)
+        {
             ++coordX;
         }
-        else {
-            while (nbCaseParcourue % diviseur == 0){
+        else 
+        {
+            while (nbCaseParcourue % diviseur == 0)
+            {
                 diviseur *= 2;
             }
 
             // on a multiplié une fois de trop donc on réduit l'exposant de 1
             diviseur = (log2(diviseur)) - 1;
 
-            if (diviseur % 2 == 0){
+            if (diviseur % 2 == 0)
+            {
                 addToX = false;
             }
-            else{
+            else
+            {
                 addToX = true;
                 ++diviseur;
             }
 
             valeurDeplacement = (pow(2, (diviseur / 2))) - 1;
 
-            if (addToX){
+            if (addToX)
+            {
                 coordX -= valeurDeplacement;
                 ++coordY;
             }
-            else{
+            else
+            {
                 coordY -= valeurDeplacement;
                 ++coordX;
             }
@@ -245,43 +252,47 @@ void MapGenerator::overpass()
 
         ++nbCaseParcourue;
 
-        // add the bushes
-        if (s_Map->m_Tiles[coordX + coordY * s_Map->m_Dim.x].getEnvironment
-            == bushBiome)
+        // if we are outside the map nothing is done
+        if (coordX < s_Map->m_Dim.x && coordY < s_Map->m_Dim.y)
         {
-            // find a way to randomly place tree
-            if (randUINT(1, probabilitOfBush) == 1)
+            // add the bushes
+            if (s_Map->m_Tiles[coordX + coordY * s_Map->m_Dim.x].getEnvironment().getType()
+                == bushBiome)
             {
-                // Add a bush to the tile
-            }
-        }
-
-        // Looking at the tile biome to decide if modification will be made
-        if (s_Map->getTile(Coord(coordX,coordY)).getEnvironment == OCEAN)
-        {
-            tempCoordX = coordX;
-            tempCoordY = coordY;
-            tileChange = true;  
-
-            // we travel the surrounding tile to look for a second ocean tile
-            for (int i = 0; i < 8; ++i)
-            {
-                tempCoordX += xAroundCoord[i];
-                tempCoordY += yAroundCoord[i];
-
-                if (s_Map->getTile(Coord(tempCoordX,tempCoordY)).getEnvironment == OCEAN)
+                // place bushes following a binomial distribution
+                if (randUINT(1, probabilitOfBush) == 1)
                 {
-                    tileChange = false;
+                    // Add a bush to the tile
                 }
             }
-            // if the tile is changed we find a random tile around and change 
-            // the biome to this one
-            if (tileChange)
+
+            // Modification of lonely ocean biome
+            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment().getType() == OCEAN)
             {
-                randomNumber = randUINT(0, 7);
-                s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
-                    s_Map->getTile(Coord((coordX + xAroundRandCoord[randomNumber]),
-                    (coordY + yAroundRandCoord[randomNumber]))).getEnvironment);
+                tempCoordX = coordX;
+                tempCoordY = coordY;
+                tileChange = true;
+
+                // we travel the surrounding tile to look for a second ocean tile
+                for (int i = 0; i < 8; ++i)
+                {
+                    tempCoordX += xAroundCoord[i];
+                    tempCoordY += yAroundCoord[i];
+
+                    if (s_Map->getTile(Coord(tempCoordX, tempCoordY)).getEnvironment().getType() == OCEAN)
+                    {
+                        tileChange = false;
+                    }
+                }
+                // if the tile change we find a random tile around and change 
+                // the biome to the selected tile biome
+                if (tileChange)
+                {
+                    randomNumber = randUINT(0, 7);
+                    s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
+                        s_Map->getTile(Coord((coordX + xAroundRandCoord[randomNumber]),
+                        (coordY + yAroundRandCoord[randomNumber]))).getEnvironment().getType());
+                }
             }
         }
     }
