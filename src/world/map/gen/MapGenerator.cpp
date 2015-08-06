@@ -204,6 +204,7 @@ void MapGenerator::overpass()
     bool tileChange = false;
     int randomNumber;
 
+    LOG(INFO) << "Start of overpass";
 
     // We stop reading when we reach the bottom right corner
     while (coordX < s_LRCorner.x || coordY < s_LRCorner.y){
@@ -253,11 +254,12 @@ void MapGenerator::overpass()
         ++nbCaseParcourue;
 
         // if we are outside the map nothing is done
-        if (coordX < s_Map->m_Dim.x && coordY < s_Map->m_Dim.y)
+        if (coordX < s_Map->m_Dim.x && coordX > 0 
+            && coordY < s_Map->m_Dim.y && coordY > 0)
         {
             // add the bushes
-            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment().getType()
-                == bushBiome)
+            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
+                .getType() == bushBiome)
             {
                 // place bushes following a binomial distribution
                 if (randUINT(1, probabilitOfBush) == 1)
@@ -267,21 +269,25 @@ void MapGenerator::overpass()
             }
 
             // Modification of lonely ocean biome
-            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment().getType() == OCEAN)
+            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
+                .getType() == OCEAN)
             {
                 tempCoordX = coordX;
                 tempCoordY = coordY;
                 tileChange = true;
 
-                // we travel the surrounding tile to look for a second ocean tile
+                // we travel the surrounding tile to look for a second ocean
                 for (int i = 0; i < 8; ++i)
                 {
                     tempCoordX += xAroundCoord[i];
                     tempCoordY += yAroundCoord[i];
-                    // on s'assure de ne pas sortir des limites de la carte
-                    if (tempCoordX < s_Map->m_Dim.x && tempCoordY < s_Map->m_Dim.y)
+
+                    // verification to make sur we're not outside the map limit
+                    if (tempCoordX < s_Map->m_Dim.x && tempCoordX > 0
+                        && tempCoordY < s_Map->m_Dim.y && tempCoordY > 0)
                     {
-                        if (s_Map->getTile(Coord(tempCoordX, tempCoordY)).getEnvironment().getType() == OCEAN)
+                        if (s_Map->getTile(Coord(tempCoordX, tempCoordY))
+                            .getEnvironment().getType() == OCEAN)
                         {
                             tileChange = false;
                         }
@@ -293,13 +299,24 @@ void MapGenerator::overpass()
                 if (tileChange)
                 {
                     randomNumber = randUINT(0, 7);
-                    s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
-                        s_Map->getTile(Coord((coordX + xAroundRandCoord[randomNumber]),
-                        (coordY + yAroundRandCoord[randomNumber]))).getEnvironment().getType());
+
+                    tempCoordX = coordX + xAroundRandCoord[randomNumber];
+                    tempCoordY = coordY + yAroundRandCoord[randomNumber];
+
+                    // verification to make sur we're not outside the map limit
+                    if (tempCoordX < s_Map->m_Dim.x && tempCoordX > 0
+                        && tempCoordY < s_Map->m_Dim.y && tempCoordY > 0)
+                    {
+                        s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
+                            s_Map->getTile(Coord(tempCoordX, tempCoordY))
+                            .getEnvironment().getType());
+                    }
                 }
             }
         }
     }
+
+    LOG(INFO) << "End of overpass";
 }
 
 const Coord MapGenerator::randCoord()
