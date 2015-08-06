@@ -184,8 +184,8 @@ void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
 void MapGenerator::overpass()
 {
     int nbCaseParcourue = 1;
-    int coordX = 0;
-    int coordY = 0;
+    UINT coordX = 0;
+    UINT coordY = 0;
     int diviseur = 2;
     int valeurDeplacement = 0;
     bool addToX = true;
@@ -199,8 +199,8 @@ void MapGenerator::overpass()
     int yAroundCoord[8] = { 1, 0, -1, -1,  0,  0, 1, 1 };
     int xAroundRandCoord[8] = { -1,  0,  1, -1, 1, -1, 0, 1 };
     int yAroundRandCoord[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
-    int tempCoordX;
-    int tempCoordY;
+    UINT tempCoordX;
+    UINT tempCoordY;
     bool tileChange = false;
     int randomNumber;
 
@@ -254,8 +254,7 @@ void MapGenerator::overpass()
         ++nbCaseParcourue;
 
         // if we are outside the map nothing is done
-        if (coordX < s_Map->m_Dim.x && coordX > 0 
-            && coordY < s_Map->m_Dim.y && coordY > 0)
+        if (coordX < s_Map->m_Dim.x && coordY < s_Map->m_Dim.y)
         {
             // add the bushes
             if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
@@ -283,8 +282,8 @@ void MapGenerator::overpass()
                     tempCoordY += yAroundCoord[i];
 
                     // verification to make sur we're not outside the map limit
-                    if (tempCoordX < s_Map->m_Dim.x && tempCoordX > 0
-                        && tempCoordY < s_Map->m_Dim.y && tempCoordY > 0)
+                    if (tempCoordX < s_Map->m_Dim.x 
+                        && tempCoordY < s_Map->m_Dim.y)
                     {
                         if (s_Map->getTile(Coord(tempCoordX, tempCoordY))
                             .getEnvironment().getType() == OCEAN)
@@ -304,8 +303,8 @@ void MapGenerator::overpass()
                     tempCoordY = coordY + yAroundRandCoord[randomNumber];
 
                     // verification to make sur we're not outside the map limit
-                    if (tempCoordX < s_Map->m_Dim.x && tempCoordX > 0
-                        && tempCoordY < s_Map->m_Dim.y && tempCoordY > 0)
+                    if (tempCoordX < s_Map->m_Dim.x 
+                        && tempCoordY < s_Map->m_Dim.y)
                     {
                         s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
                             s_Map->getTile(Coord(tempCoordX, tempCoordY))
