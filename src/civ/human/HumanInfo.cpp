@@ -13,7 +13,7 @@ m_MoveSpeed(1),
 m_ROS(NULL),
 m_MapKnow(i_MapDim)
 {
-    m_ROS = new RangeOfSight(std::ifstream("config/range_of_sight/straightR-3-1.ros"));
+    m_ROS = new RangeOfSight(std::ifstream("config/range_of_sight/90degre.ros"));
     discoverSurroundingTiles();
 }
 

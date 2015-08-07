@@ -34,6 +34,7 @@ enum AssetID
 	STICKMAN,
 	SELECTION,
 	APARATUS3,
+    ADVENTURER,
 
     // Other
     WINDOW_ICON
