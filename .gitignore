@@ -1,8 +1,9 @@
 /Debug
 /logs
 /Release
-*.sdf
+*.aps
+*.log
 *.opensdf
+*.sdf
 *.suo
 *.user
-*.log
