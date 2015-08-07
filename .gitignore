@@ -1,4 +1,5 @@
 /Debug
+/logs
 /Release
 *.sdf
 *.opensdf

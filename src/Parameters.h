@@ -24,7 +24,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 // The path to the easylogging++ configuration file
-#define LOGGER_CONFIG_FILE "logs/log_config.conf"
+#define LOGGER_CONFIG_FILE "config/other/easyloggingpp.config"
 
 // Progress bars increments (ex.: 0.1 means we print every 10%)
 #define PGI 0.1
