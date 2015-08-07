@@ -35,6 +35,8 @@ ALLEGRO_DISPLAY& Display::createWindow()
 
     ALLEGRO_DISPLAY* window = al_create_display(dispWidth, dispHeight);
 
+    al_set_window_position(window, 0, 0);
+
     if (window == NULL){
         FatalErrorDialog("Display creation failed.");
     }
