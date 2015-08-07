@@ -92,8 +92,8 @@ static const Coord TEXTURE_UL_CORNERS[] = { Coord(0, 0),
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 // Config file paths
-#define DEFAULT_MAP_CONFIG "map/MapConfig.default.json"
-#define MAP_LIMITS         "map/Limits.json"
+#define DEFAULT_MAP_CONFIG "config/map/MapConfig.default.json"
+#define MAP_LIMITS         "config/map/Limits.json"
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
