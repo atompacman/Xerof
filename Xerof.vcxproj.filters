@@ -193,6 +193,9 @@
     <ClInclude Include="src\engine\DisplayInfo.h">
       <Filter>src\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\resource.h">
+      <Filter>resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\civ\ai\AtomAI.cpp">
@@ -269,5 +272,15 @@
     <Text Include="src_doc_helper.txt">
       <Filter>resources</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\xerof.ico">
+      <Filter>resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xerof.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
