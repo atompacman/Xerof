@@ -18,7 +18,7 @@ class NeighbouringEnvConstraint : public virtual Constraint
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvConstraint(const Map& i_Map, 
-                              EnvType    i_EnvType, 
+                              Biome    i_EnvType, 
                               UINT       i_Radius) :
         Constraint(i_Map),
         m_EnvType(i_EnvType),
@@ -40,7 +40,7 @@ public:
                 if (coord == i_Coord) {
                     continue;
                 }
-                if (m_Map.getTile(coord).getEnvironment().getType()==m_EnvType){
+                if (m_Map.getTile(coord).getEnvironment().getBiome()==m_EnvType){
                     ++count;
                 }
             }
@@ -49,6 +49,6 @@ public:
     }
 
 protected:
-    EnvType m_EnvType;
+    Biome m_EnvType;
     UINT    m_Radius;
 };

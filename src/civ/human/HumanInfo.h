@@ -22,8 +22,8 @@ public:
     HumanInfo(const Position& i_StartingPos, Dimensions i_MapDim);
 
 	// GETTERS
-    const Position&     getPos() const;
-    Position&           getPos();
+    const Position&     getPosition() const;
+    Position&           getPosition();
     const MapKnowledge& getMapKnowledge() const;
 
     // SETTERS

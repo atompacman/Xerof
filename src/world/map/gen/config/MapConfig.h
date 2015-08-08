@@ -44,7 +44,7 @@ class MapConfig
 {
 public:
     Dimensions 		  m_Dim;
-    EnvType			  m_InitEnvType;
+    Biome			  m_InitEnvType;
     std::list<Border> m_Borders;
     std::list<Phase>  m_Phases;
 

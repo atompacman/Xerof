@@ -15,7 +15,7 @@
 | that is random.
 \=============================================================================*/
 
-enum EnvType
+enum Biome
 {
     GRASSLAND,
     LAKE,
@@ -25,7 +25,7 @@ enum EnvType
     TUNDRA
 };
 
-static const std::map<std::string, EnvType> ENV_TYPES = {
+static const std::map<std::string, Biome> ENV_TYPES = {
     { "GRASSLAND",  GRASSLAND   },
     { "LAKE",       LAKE        },
     { "OCEAN",      OCEAN       },
@@ -43,7 +43,7 @@ static const char* ENV_NAMES[] = {
     "TUNDRA"
 };
 
-static const std::list<EnvType> LAND_ENV_TYPES = {
+static const std::list<Biome> LAND_ENV_TYPES = {
     GRASSLAND,
     PLAIN,
     ROCKY,
@@ -54,23 +54,23 @@ class Environment : public MapElement
 {
 public:
 	// CONSTRUCTOR/DESTRUCTOR
-    Environment(EnvType i_Type);
+    Environment(Biome i_Type);
 	
 	// GETTERS
-	EnvType getType() const;
+	Biome getBiome() const;
 	Direction getOrientation() const;
 
     // SETTERS
-    void setEnvType(EnvType i_Type);
+    void setBiome(Biome i_Type);
 
 	// STATUS
 	bool isSolidLand() const;
-    static bool isSolidLand(EnvType i_Type);
+    static bool isSolidLand(Biome i_Type);
 
 	// ASSET
 	AssetID assetFile() const;
 
 private:
-	EnvType   m_Type;
+	Biome   m_Type;
 	Direction m_Orien;
 };

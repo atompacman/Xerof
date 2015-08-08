@@ -169,11 +169,11 @@ void Display::drawHumans()
                     subBitmap,
 					tileSizeOnTexture * 0.5,
 					tileSizeOnTexture * 0.5,
-					human->getPos().coord().x * tileSizeOnMap + toCenterHuman,
-					human->getPos().coord().y * tileSizeOnMap + toCenterHuman,
+					human->getPosition().coord().x * tileSizeOnMap + toCenterHuman,
+					human->getPosition().coord().y * tileSizeOnMap + toCenterHuman,
                     humanScaling,
                     humanScaling,
-                    correspondingAngle(human->getPos().facingDir()),
+                    correspondingAngle(human->getPosition().facingDir()),
                     0);
 
                 // Draw selection box
@@ -184,8 +184,8 @@ void Display::drawHumans()
 						textureULCorner.y,
 						tileSizeOnTexture,
 						tileSizeOnTexture,
-						human->getPos().tileCoord().x * tileSizeOnMap,
-						human->getPos().tileCoord().y * tileSizeOnMap,
+						human->getPosition().tileCoord().x * tileSizeOnMap,
+						human->getPosition().tileCoord().y * tileSizeOnMap,
 						overlapTileSize,
 						overlapTileSize,
                         DOWN);

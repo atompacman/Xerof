@@ -19,7 +19,7 @@ struct Border
 {
     BasicDir m_Side;
     UINT	 m_Width;
-    EnvType	 m_Env;
+    Biome	 m_Env;
 
     // CONSTRUCTOR/DESTRUCTOR
     Border(const char* i_Side, const rapidjson::Value& i_JSONElem)

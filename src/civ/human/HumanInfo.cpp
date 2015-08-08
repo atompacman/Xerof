@@ -22,12 +22,12 @@ m_MapKnow(i_MapDim)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const Position& HumanInfo::getPos() const
+const Position& HumanInfo::getPosition() const
 {
     return m_Pos;
 }
 
-Position& HumanInfo::getPos()
+Position& HumanInfo::getPosition()
 {
     return m_Pos;
 }

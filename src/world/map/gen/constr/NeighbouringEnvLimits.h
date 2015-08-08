@@ -19,7 +19,7 @@ class NeighbouringEnvLimits : public NeighbouringEnvConstraint
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvLimits(const Map& i_Map,
-                          EnvType    i_EnvType,
+                          Biome    i_EnvType,
                           UINT       i_Min,
                           UINT       i_Max,
                           UINT       i_Radius) :

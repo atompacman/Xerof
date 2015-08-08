@@ -14,9 +14,9 @@ m_Map(i_Map)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const HumanInfo& HumanPerception::infos() const
+const Position& HumanPerception::getPosition() const
 {
-    return m_Info;
+    return m_Info.getPosition();
 }
 
 
@@ -40,7 +40,7 @@ const Tile& HumanPerception::getTileInFront() const
     return getTileInDir(m_Info.m_Pos.facingDir());
 }
 
-EnvType HumanPerception::getEnvInFront() const
+Biome HumanPerception::getBiomeInFront() const
 {
-    return getTileInFront().getEnvironment().getType();
+    return getTileInFront().getEnvironment().getBiome();
 }

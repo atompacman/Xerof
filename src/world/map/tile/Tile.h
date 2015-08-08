@@ -22,7 +22,7 @@ public:
 
 	// SETTERS
     void setObject(Direction i_Dir, Object* i_Obj);
-    void setEnvironment(EnvType i_Type);
+    void setEnvironment(Biome i_Type);
     void setHuman(HumanInfo* i_Human);
 
 	// REMOVE
