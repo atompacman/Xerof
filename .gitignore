@@ -4,6 +4,8 @@
 *.aps
 *.log
 *.opensdf
+*.psess
 *.sdf
 *.suo
 *.user
+*.vsp
