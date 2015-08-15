@@ -43,7 +43,7 @@ public:
     float getMoveSpeed() const;
 
     // ASSET
-    virtual AssetID assetFile() const { return ADVENTURER; }
+    virtual AssetID assetFile() const { return CHARACTER; }
 
 private:
     Position      m_Pos;

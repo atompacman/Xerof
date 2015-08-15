@@ -18,25 +18,25 @@
 | to a bitmap file).
 \=============================================================================*/
 
-// Important: AssetIDs must be in the same order than the keys in the assets
-// routing file.
+// Directory of selected datapack
+static const char* DATAPACK_DIR = "assets/0.3.0 - antialiasing/";
+
+// Important: AssetIDs must be in the same order than the keys in the graphic
+// pack content file
 enum AssetID
 {
-    // Environment
-    GRASSLAND_TILE_FILE,
-    OCEAN_TILE_FILE,
-    PLAINS_TILE_FILE,
-    ROCKY_TILE_FILE,
-    TUNDRA_TILE_FILE,
+    // Biomes
+    BIOME_GRASSLAND,
+    BIOME_OCEAN,
+    BIOME_PLAINS,
+    BIOME_ROCKY,
+    BIOME_TUNDRA,
 
-    // Caracters
-    ALPHA_TEST_PACMAN,
-    STICKMAN,
+    // Characters
+    CHARACTER,
     SELECTION,
-    APARATUS3,
-    ADVENTURER,
 
-    // Other
+    // Others
     WINDOW_ICON
 };
 
@@ -44,7 +44,7 @@ enum AssetID
 static UINT numAssets;
 
 // The location of the asset routing file
-static const char* ASSET_ROUTING_FILE = "assets/assets_routing.txt";
+static const char* GRAPHIC_PACK_CONTENT_FILE ="assets/graphic_pack_content.txt";
 
 // Assets that are not bitmaps
 static const char* GAME_FONT = "assets/font.tga";
@@ -52,17 +52,27 @@ static const char* GAME_FONT = "assets/font.tga";
 // Load assets from disk
 static ALLEGRO_BITMAP** loadAssets()
 {
-    LOG(DEBUG) << "Assets loading - Reading \"" << ASSET_ROUTING_FILE << "\"";
+    LOG(DEBUG) << "Assets loading - Reading datapack content in \"" 
+               << GRAPHIC_PACK_CONTENT_FILE << "\"";
 
-    std::ifstream fis(ASSET_ROUTING_FILE);
+    std::ifstream fis(GRAPHIC_PACK_CONTENT_FILE);
     std::string name, path;
     std::vector<ALLEGRO_BITMAP*> bitmapVec;
     ALLEGRO_BITMAP* bitmap;
 
     while (!fis.eof()) {
         fis >> name >> path >> path;
+
+        // Skip comment lines
+        if (name[0] == '#') {
+            continue;
+        }
+
+        // Append datapack name at the beginning of the path
+        path = DATAPACK_DIR + path;
+
         LOG(TRACE) << "Assets loading - " << std::setw(24)
-            << std::left << name << " at " << path;
+                   << std::left << name << " at " << path;
 
         bitmap = al_load_bitmap(path.c_str());
 

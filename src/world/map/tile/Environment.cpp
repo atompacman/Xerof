@@ -58,11 +58,11 @@ bool Environment::isSolidLand(Biome i_Type)
 AssetID Environment::assetFile() const
 {
     switch (m_Type) {
-    case GRASSLAND: return GRASSLAND_TILE_FILE;
-    case OCEAN:		return OCEAN_TILE_FILE;
-    case PLAIN:		return PLAINS_TILE_FILE;
-    case ROCKY:		return ROCKY_TILE_FILE;
-    case TUNDRA:	return TUNDRA_TILE_FILE;
+    case GRASSLAND: return BIOME_GRASSLAND;
+    case OCEAN:     return BIOME_OCEAN;
+    case PLAIN:     return BIOME_PLAINS;
+    case ROCKY:     return BIOME_ROCKY;
+    case TUNDRA:    return BIOME_TUNDRA;
     }
     return SELECTION;
 }
