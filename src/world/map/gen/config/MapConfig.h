@@ -43,8 +43,8 @@ struct Limits
 class MapConfig
 {
 public:
-    Dimensions 		  m_Dim;
-    EnvType			  m_InitEnvType;
+    Dimensions        m_Dim;
+    Biome             m_InitEnvType;
     std::list<Border> m_Borders;
     std::list<Phase>  m_Phases;
 

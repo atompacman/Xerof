@@ -17,7 +17,7 @@ m_MapKnow(NULL)
 	i_SelectedHuman->select();
 
 	// Zoom on initial selected human
-	m_Camera.setPosition(m_SelectedHuman->getPos().coord());
+	m_Camera.setPosition(m_SelectedHuman->getPosition().coord());
 }
 
 
@@ -113,6 +113,6 @@ void DisplayInfo::updateCameraPosition()
 {
 	// Center camera on selection
 	if (m_SelectedHuman != NULL && m_FollowSelection) {
-		m_Camera.setPosition(m_SelectedHuman->getPos().coord());
+		m_Camera.setPosition(m_SelectedHuman->getPosition().coord());
 	}
 }

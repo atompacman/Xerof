@@ -1,0 +1,13 @@
+################### BIOME ###################
+GRASSLAND           = biome/grassland.tga
+OCEAN               = biome/ocean.tga
+PLAINS              = biome/plains.tga
+ROCKY               = biome/rocky.tga
+TUNDRA              = biome/tundra.tga
+
+################# CHARACTER #################
+CHARACTER           = character/character.tga
+SELECTION           = character/selection.tga
+
+################### OTHER ###################
+WINDOW_ICON         = other/icon.tga

@@ -208,7 +208,7 @@ void GameLoop::processMovingOrder(HumanInfo&     io_Human,
 {
     assertNonCenterDir(i_Dir);
 
-    DCoord after(incrementedToDirection(io_Human.getPos().coord(), i_Dir));
+    DCoord after(incrementedToDirection(io_Human.getPosition().coord(), i_Dir));
 	Position dest(after, i_Dir);
 
     if (verifyDestination(dest)) {
@@ -238,7 +238,7 @@ bool GameLoop::isOccupied(Coord i_Coord) const
 		const Civilization& civ = m_CivCtrls[i]->getCiv();
         for (UINT j = 0; j < civ.population(); ++j) {
             const HumanInfo& human = civ.getHuman(j);
-            if (human.getPos() == Position(i_Coord, UP)) {
+            if (human.getPosition() == Position(i_Coord, UP)) {
 				return true;
 			}
 		}

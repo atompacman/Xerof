@@ -26,7 +26,7 @@
 
 using namespace rapidjson;
 
-typedef std::map<EnvType,std::pair<UINT,std::vector<Constraint*>>> Constraints;
+typedef std::map<Biome,std::pair<UINT,std::vector<Constraint*>>> Constraints;
 
 #define QTY_ELEM            "Quantity"
 #define RELATIVE_ELEM       "Relative"
@@ -101,7 +101,7 @@ private:
     void parseEnvTypeProps(const Value& i_EnvPropElem, UINT qty)
     {
         UINT numParsedElem(0);
-        for (std::pair<std::string, EnvType> envType : ENV_TYPES) {
+        for (std::pair<std::string, Biome> envType : ENV_TYPES) {
             auto envElem(i_EnvPropElem.FindMember(envType.first.c_str()));
             UINT envQty(0);
 
