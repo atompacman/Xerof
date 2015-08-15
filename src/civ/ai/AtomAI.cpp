@@ -6,8 +6,8 @@
 
 Order AtomAI::giveOrder(const HumanPerception& i_HP)
 {
-    unsigned int attempts(0);
-    Direction dir(i_HP.infos().getPos().facingDir());
+    UINT attempts(0);
+    Direction dir(i_HP.getPosition().facingDir());
 	while ((!i_HP.isWithinMapLimits(dir) ||		
 		!i_HP.getTileInDir(dir).isPassable()) && attempts < 100) {
         dir = randDirNoCenter();

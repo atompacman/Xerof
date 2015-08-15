@@ -21,7 +21,7 @@ public:
     {}
 
     // ADD
-    void addEnv(EnvType i_EnvType)
+    void addEnv(Biome i_EnvType)
     {
         m_EnvTypes.insert(i_EnvType);
     }
@@ -29,10 +29,10 @@ public:
 	// WEIGHT
     double getWeightFor(Coord i_Coord) const
 	{
-        EnvType currEnv(m_Map.getTile(i_Coord).getEnvironment().getType());
+        Biome currEnv(m_Map.getTile(i_Coord).getEnvironment().getBiome());
         return m_EnvTypes.find(currEnv) != m_EnvTypes.end();
 	}
 
 private:
-    std::set<EnvType> m_EnvTypes;
+    std::set<Biome> m_EnvTypes;
 };

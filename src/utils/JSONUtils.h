@@ -116,7 +116,7 @@ static const char* parseString(const Value& i_Value, const char* i_Elem)
     return subElem.GetString();
 }
 
-static EnvType parseEnvType(const Value& i_Value, const char* i_Elem)
+static Biome parseEnvType(const Value& i_Value, const char* i_Elem)
 {
     auto it(ENV_TYPES.find(parseString(i_Value, i_Elem)));
     if (it == ENV_TYPES.end()) {
@@ -127,7 +127,7 @@ static EnvType parseEnvType(const Value& i_Value, const char* i_Elem)
     return it->second;
 }
 
-static EnvType parseEnvType(const Value& i_Value)
+static Biome parseEnvType(const Value& i_Value)
 {
     return parseEnvType(i_Value, ENV_TYPE_ELEM);
 }

@@ -5,7 +5,7 @@
 #include "Constraint.h"
 /*============================================================================//
 | Abstract class that defines the main method of constraints concerning
-| neighbouring environment: unsigned int countNeighbourEnv(Coord).
+| neighbouring environment: UINT countNeighbourEnv(Coord).
 | The zone that is looked at is a square.
 |-----------------------------------------------------------------------------||
 | Parameters:
@@ -18,21 +18,21 @@ class NeighbouringEnvConstraint : public virtual Constraint
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvConstraint(const Map& i_Map, 
-                              EnvType    i_EnvType, 
-                              unsigned int       i_Radius) :
+                              Biome      i_EnvType, 
+                              UINT       i_Radius) :
         Constraint(i_Map),
         m_EnvType(i_EnvType),
         m_Radius(i_Radius)
     {}
 
     // WEIGHT
-    unsigned int countNeighbourEnv(Coord i_Coord) const
+    UINT countNeighbourEnv(Coord i_Coord) const
     {
-        unsigned int count(0);
-        unsigned int begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
-        unsigned int begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
-        unsigned int endX(min(i_Coord.x + m_Radius + 1, m_Map.dim().x));
-        unsigned int endY(min(i_Coord.y + m_Radius + 1, m_Map.dim().y));
+        UINT count(0);
+        UINT begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
+        UINT begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
+        UINT endX(min(i_Coord.x + m_Radius + 1, m_Map.dim().x));
+        UINT endY(min(i_Coord.y + m_Radius + 1, m_Map.dim().y));
         Coord coord;
 
         for (coord.y = begY; coord.y < endY; ++coord.y) {
@@ -40,7 +40,7 @@ public:
                 if (coord == i_Coord) {
                     continue;
                 }
-                if (m_Map.getTile(coord).getEnvironment().getType()==m_EnvType){
+                if (m_Map.getTile(coord).getEnvironment().getBiome()==m_EnvType){
                     ++count;
                 }
             }
@@ -49,6 +49,6 @@ public:
     }
 
 protected:
-    EnvType m_EnvType;
-    unsigned int    m_Radius;
+    Biome m_EnvType;
+    UINT  m_Radius;
 };

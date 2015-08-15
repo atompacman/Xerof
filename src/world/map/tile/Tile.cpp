@@ -30,9 +30,9 @@ void Tile::setObject(Direction i_Dir, Object* i_Obj)
 	m_Objs[i_Dir - UPPER_LEFT] = i_Obj;
 }
 
-void Tile::setEnvironment(EnvType i_Type)
+void Tile::setEnvironment(Biome i_Type)
 {
-    m_Env.setEnvType(i_Type);
+    m_Env.setBiome(i_Type);
 }
 
 void Tile::setHuman(HumanInfo* i_Human)

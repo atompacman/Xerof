@@ -11,13 +11,13 @@ MoveProcess::MoveProcess(HumanInfo&      i_Human,
                          const Position& i_Dest, 
                          Map&            i_Map):
 m_Human(i_Human),
-m_InitTile(i_Human.getPos().tileCoord()),
+m_InitTile(i_Human.getPosition().tileCoord()),
 m_DestTile(i_Dest.tileCoord()),
-m_Delta((i_Dest.coord() - i_Human.getPos().coord()) / TARGET_FPS),
+m_Delta((i_Dest.coord() - i_Human.getPosition().coord()) / TARGET_FPS),
 m_Map(i_Map)
 {
     // Turn head in the direction told by destination
-    m_Human.getPos().setDir(i_Dest.facingDir());
+    m_Human.getPosition().setDir(i_Dest.facingDir());
 
     // Explore the map in this new direction
     m_Human.discoverSurroundingTiles();
@@ -31,7 +31,7 @@ m_Map(i_Map)
 void MoveProcess::nextIter()
 {
     // Get current position
-    Position& pos(m_Human.getPos());
+    Position& pos(m_Human.getPosition());
     DCoord roundPos(roundCoord(pos.coord()));
 
     // Move in facing direction

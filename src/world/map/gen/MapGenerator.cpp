@@ -190,7 +190,7 @@ void MapGenerator::overpass()
     int valeurDeplacement = 0;
     bool addToX = true;
 
-    EnvType bushBiome = GRASSLAND;
+    Biome bushBiome = GRASSLAND;
     int bushBiomeCounter = 0;
     unsigned int probabilitOfBush = 7;
 
@@ -258,7 +258,7 @@ void MapGenerator::overpass()
         {
             // add the bushes
             if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
-                .getType() == bushBiome)
+                .getBiome() == bushBiome)
             {
                 // place bushes following a binomial distribution
                 if (randUINT(1, probabilitOfBush) == 1)
@@ -269,7 +269,7 @@ void MapGenerator::overpass()
 
             // Modification of lonely ocean biome
             if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
-                .getType() == OCEAN)
+                .getBiome() == OCEAN)
             {
                 tempCoordX = coordX;
                 tempCoordY = coordY;
@@ -286,7 +286,7 @@ void MapGenerator::overpass()
                         && tempCoordY < s_Map->m_Dim.y)
                     {
                         if (s_Map->getTile(Coord(tempCoordX, tempCoordY))
-                            .getEnvironment().getType() == OCEAN)
+                            .getEnvironment().getBiome() == OCEAN)
                         {
                             tileChange = false;
                         }
@@ -308,7 +308,7 @@ void MapGenerator::overpass()
                     {
                         s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
                             s_Map->getTile(Coord(tempCoordX, tempCoordY))
-                            .getEnvironment().getType());
+                            .getEnvironment().getBiome());
                     }
                 }
             }
