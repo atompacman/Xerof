@@ -18,7 +18,7 @@
 struct Border
 {
     BasicDir m_Side;
-    UINT	 m_Width;
+    unsigned int	 m_Width;
     EnvType	 m_Env;
 
     // CONSTRUCTOR/DESTRUCTOR

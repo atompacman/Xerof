@@ -20,9 +20,9 @@ public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvLimits(const Map& i_Map,
                           EnvType    i_EnvType,
-                          UINT       i_Min,
-                          UINT       i_Max,
-                          UINT       i_Radius) :
+                          unsigned int       i_Min,
+                          unsigned int       i_Max,
+                          unsigned int       i_Radius) :
         Constraint(i_Map),
         NeighbouringEnvConstraint(i_Map, i_EnvType, i_Radius),
         m_Min(i_Min),
@@ -33,7 +33,7 @@ public:
                                cannot be higher that the maximum");
         }
 
-        UINT zoneArea((1 + 2 * i_Radius) * (1 + 2 * i_Radius));
+        unsigned int zoneArea((1 + 2 * i_Radius) * (1 + 2 * i_Radius));
         if (i_Max > zoneArea) {
             std::stringstream ss;
             ss << "Maximum num of neighbouring env. cannot be higher that the "
@@ -45,11 +45,11 @@ public:
     // WEIGHT
     double getWeightFor(Coord i_Coord) const
     {
-        UINT neighbouringEnv(countNeighbourEnv(i_Coord));
+        unsigned int neighbouringEnv(countNeighbourEnv(i_Coord));
         return neighbouringEnv >= m_Min && neighbouringEnv <= m_Max;
     }
 
 private:
-    UINT m_Min;
-    UINT m_Max;
+    unsigned int m_Min;
+    unsigned int m_Max;
 };

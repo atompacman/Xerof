@@ -13,12 +13,12 @@ m_People()
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const HumanInfo& Civilization::getHuman(UINT i_ID) const
+const HumanInfo& Civilization::getHuman(unsigned int i_ID) const
 {
     return m_People.at(i_ID);
 }
 
-HumanInfo& Civilization::getHuman(UINT i_ID)
+HumanInfo& Civilization::getHuman(unsigned int i_ID)
 {
     return m_People.at(i_ID);
 }
@@ -28,7 +28,7 @@ HumanInfo& Civilization::getHuman(UINT i_ID)
 //                                    STATUS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-UINT Civilization::population() const
+unsigned int Civilization::population() const
 {
     return m_People.size();
 }

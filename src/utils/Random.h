@@ -5,35 +5,40 @@
 #include <assert.h>
 #include <ctime>
 #include <stdlib.h>
-#include <wtypes.h>
+//#include <wtypes.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "Direction.h"
-#include "..\Parameters.h"
+//#include "..\Parameters.h"
 /*============================================================================||
 | Random number manager
 |-----------------------------------------------------------------------------||
-| - UINT
+| - unsigned int
 | - Probability [0-1]
 | - Directions
 \=============================================================================*/
 
+//class Direction;
+
+const bool SEED_IS_RANDOM = true;
+const int WORLD_GENERATION_SEED = 304;
+
 static void initRandSeed()
 {
-	if (RANDOM_SEED) {
-		srand((UINT)time(NULL));
+	if (SEED_IS_RANDOM) {
+		srand((unsigned int)time(NULL));
 	}
 	else {
 		srand(WORLD_GENERATION_SEED);
 	}
 }
 
-static UINT randUINT(UINT i_Min, UINT i_Max)
+static unsigned int randUINT(unsigned int i_Min, unsigned int i_Max)
 {
 	assert(i_Min <= i_Max);
 	return rand() % (i_Max - i_Min + 1) + i_Min;
 }
 
-static UINT randUINT(UINT i_Max)
+static unsigned int randUINT(unsigned int i_Max)
 {
 	return randUINT(0, i_Max);
 }

@@ -12,7 +12,7 @@ m_Human(NULL)
 
 Tile::~Tile()
 {
-    for (UINT i = 0; i < 4; ++i) {
+    for (unsigned int i = 0; i < 4; ++i) {
         //delete[] m_Objs[i];
     }
 	//delete[] m_Objs;

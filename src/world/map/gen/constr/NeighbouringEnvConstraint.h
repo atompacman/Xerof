@@ -5,7 +5,7 @@
 #include "Constraint.h"
 /*============================================================================//
 | Abstract class that defines the main method of constraints concerning
-| neighbouring environment: UINT countNeighbourEnv(Coord).
+| neighbouring environment: unsigned int countNeighbourEnv(Coord).
 | The zone that is looked at is a square.
 |-----------------------------------------------------------------------------||
 | Parameters:
@@ -19,20 +19,20 @@ public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvConstraint(const Map& i_Map, 
                               EnvType    i_EnvType, 
-                              UINT       i_Radius) :
+                              unsigned int       i_Radius) :
         Constraint(i_Map),
         m_EnvType(i_EnvType),
         m_Radius(i_Radius)
     {}
 
     // WEIGHT
-    UINT countNeighbourEnv(Coord i_Coord) const
+    unsigned int countNeighbourEnv(Coord i_Coord) const
     {
-        UINT count(0);
-        UINT begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
-        UINT begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
-        UINT endX(min(i_Coord.x + m_Radius + 1, m_Map.dim().x));
-        UINT endY(min(i_Coord.y + m_Radius + 1, m_Map.dim().y));
+        unsigned int count(0);
+        unsigned int begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
+        unsigned int begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
+        unsigned int endX(min(i_Coord.x + m_Radius + 1, m_Map.dim().x));
+        unsigned int endY(min(i_Coord.y + m_Radius + 1, m_Map.dim().y));
         Coord coord;
 
         for (coord.y = begY; coord.y < endY; ++coord.y) {
@@ -50,5 +50,5 @@ public:
 
 protected:
     EnvType m_EnvType;
-    UINT    m_Radius;
+    unsigned int    m_Radius;
 };

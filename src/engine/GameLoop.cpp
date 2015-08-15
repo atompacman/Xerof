@@ -179,8 +179,8 @@ void GameLoop::updateGame()
 
 void GameLoop::processAI()
 {
-	for (UINT i = 0; i < NB_CIV; ++i) {
-        for (UINT j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j) {
+	for (unsigned int i = 0; i < NB_CIV; ++i) {
+        for (unsigned int j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j) {
             HumanInfo& human = m_CivCtrls[i]->getCiv().getHuman(j);
             if (!human.isReady()) {
 				continue;
@@ -234,9 +234,9 @@ bool GameLoop::verifyDestination(const Position& i_Dest) const
 
 bool GameLoop::isOccupied(Coord i_Coord) const
 {
-	for (UINT i = 0; i < NB_CIV; ++i) {
+	for (unsigned int i = 0; i < NB_CIV; ++i) {
 		const Civilization& civ = m_CivCtrls[i]->getCiv();
-        for (UINT j = 0; j < civ.population(); ++j) {
+        for (unsigned int j = 0; j < civ.population(); ++j) {
             const HumanInfo& human = civ.getHuman(j);
             if (human.getPos() == Position(i_Coord, UP)) {
 				return true;
@@ -248,7 +248,7 @@ bool GameLoop::isOccupied(Coord i_Coord) const
 
 void GameLoop::updateMovements()
 {
-	for (UINT i = 0; i < m_NumMoveProcs; ++i) {
+	for (unsigned int i = 0; i < m_NumMoveProcs; ++i) {
 		m_MoveProcs[i]->nextIter();
 	}
 }
@@ -260,7 +260,7 @@ void GameLoop::updateMovements()
 
 void GameLoop::endProcesses()
 {
-	for (UINT i = 0; i < m_NumMoveProcs; ++i) {
+	for (unsigned int i = 0; i < m_NumMoveProcs; ++i) {
 		delete m_MoveProcs[i];
 	}
 	m_NumMoveProcs = 0;

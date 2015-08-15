@@ -27,12 +27,12 @@ public:
 
     // STATUS
     Dimensions  dim() const;
-    UINT        area() const;
+    unsigned int        area() const;
 
 private:
     Dimensions m_Dim;
 	Tile*      m_Tiles;
 
     // GETTERS
-    UINT linearize(Coord i_Coord) const;
+    unsigned int linearize(Coord i_Coord) const;
 };

@@ -26,7 +26,7 @@
 
 using namespace rapidjson;
 
-typedef std::map<EnvType,std::pair<UINT,std::vector<Constraint*>>> Constraints;
+typedef std::map<EnvType,std::pair<unsigned int,std::vector<Constraint*>>> Constraints;
 
 #define QTY_ELEM            "Quantity"
 #define RELATIVE_ELEM       "Relative"
@@ -43,7 +43,7 @@ struct Phase
 {
     const char*	m_Name;
     Constraints m_Cnstrts;
-    UINT		m_MaxTries;
+    unsigned int		m_MaxTries;
 
     // CONSTRUCTOR/DESTRUCTOR
     Phase(const Map&   i_Map, 
@@ -54,7 +54,7 @@ struct Phase
         m_MaxTries(-1)
     {
         const Value& qtyElem(parseSubElem(i_JSONElem, QTY_ELEM));
-        UINT qty(parseQuantityElem(qtyElem, i_Map.area()));
+        unsigned int qty(parseQuantityElem(qtyElem, i_Map.area()));
         parseEnvTypeProps(parseSubElem(i_JSONElem, ENV_TYPES_PROP_ELEM), qty);
         parseCnstrts(parseSubElem(i_JSONElem, CONSTRAINTS_ELEM), i_Map);
         if (i_JSONElem.HasMember(MAX_TRIES_ELEM)) {
@@ -78,10 +78,10 @@ struct Phase
 private:
 
     // CONSTRUCTOR/DESTRUCTOR
-    UINT parseQuantityElem(const Value& i_QtyElem, UINT i_Area)
+    unsigned int parseQuantityElem(const Value& i_QtyElem, unsigned int i_Area)
     {
         if (i_QtyElem.HasMember(RELATIVE_ELEM)) {
-            return (UINT) rint(parseDouble(i_QtyElem, RELATIVE_ELEM) * i_Area);
+            return (unsigned int) rint(parseDouble(i_QtyElem, RELATIVE_ELEM) * i_Area);
         }
         else{
             if (i_QtyElem.HasMember(ABSOLUTE_ELEM)) {
@@ -98,18 +98,18 @@ private:
         }
     }
 
-    void parseEnvTypeProps(const Value& i_EnvPropElem, UINT qty)
+    void parseEnvTypeProps(const Value& i_EnvPropElem, unsigned int qty)
     {
-        UINT numParsedElem(0);
+        unsigned int numParsedElem(0);
         for (std::pair<std::string, EnvType> envType : ENV_TYPES) {
             auto envElem(i_EnvPropElem.FindMember(envType.first.c_str()));
-            UINT envQty(0);
+            unsigned int envQty(0);
 
             if (envElem != i_EnvPropElem.MemberEnd()) {
                 double prop(envElem->value.GetDouble());
-                envQty = (UINT)rint(prop * (double)qty);
+                envQty = (unsigned int)rint(prop * (double)qty);
                 m_Cnstrts[envType.second] = 
-                    std::pair<UINT, std::vector<Constraint*>>(
+                    std::pair<unsigned int, std::vector<Constraint*>>(
                             envQty, std::vector<Constraint*>());
 
                 ++numParsedElem;
@@ -140,7 +140,7 @@ private:
                                           must be an array");
                     }
                     EnvironmentIsAmong* eia(new EnvironmentIsAmong(i_Map));
-                    for (UINT i = 0; i < it->value.Size(); ++i) {
+                    for (unsigned int i = 0; i < it->value.Size(); ++i) {
                         eia->addEnv(ENV_TYPES.at(it->value[i].GetString()));
                     }
                     cnstrnts.push_back(eia);

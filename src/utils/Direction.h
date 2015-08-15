@@ -11,7 +11,7 @@
 | - Diagonal (4 corners)
 | - The "special" center value
 |
-| A Direction is basically a UINT that must be asserted before usage
+| A Direction is basically a unsigned int that must be asserted before usage
 \=============================================================================*/
 
 typedef unsigned int Direction;

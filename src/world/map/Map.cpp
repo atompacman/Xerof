@@ -36,7 +36,7 @@ Coord Map::randCoord() const
     return Coord(randUINT(m_Dim.x - 1), randUINT(m_Dim.y - 1));
 }
 
-UINT Map::linearize(Coord i_Coord) const
+unsigned int Map::linearize(Coord i_Coord) const
 {
     return i_Coord.x + i_Coord.y * m_Dim.x;
 }
@@ -51,7 +51,7 @@ Dimensions Map::dim() const
     return m_Dim;
 }
 
-UINT Map::area() const
+unsigned int Map::area() const
 {
     return m_Dim.x * m_Dim.y;
 }

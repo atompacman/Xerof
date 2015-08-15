@@ -33,7 +33,7 @@ m_Transform()
 void Camera::applyTransform(Coord i_WinSize)
 {
     // Get resolution level from zoom level
-    UINT resLvl = getResolutionLvl();
+    unsigned int resLvl = getResolutionLvl();
 
     // Reset transform
     al_identity_transform(&m_Transform);
@@ -109,7 +109,7 @@ void Camera::zoom(int i_Delta)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-UINT Camera::getResolutionLvl() const
+unsigned int Camera::getResolutionLvl() const
 {
 	if (m_Zoom > 0.5)	     { return 0; }
 	else if (m_Zoom > 0.25)  { return 1; }

@@ -27,7 +27,7 @@ public:
     void updateVisibleTiles(Coord i_WinSize);
 
     // GETTERS
-	UINT getResolutionLvl() const;
+	unsigned int getResolutionLvl() const;
     Coord getVisibleTilesULCorner() const;
     Coord getVisibleTilesLRCorner() const;
 

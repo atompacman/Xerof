@@ -37,7 +37,7 @@ private:
 	ALLEGRO_EVENT_QUEUE* m_Queue;
 	ALLEGRO_TIMER*       m_ScreenRefresher;
 	
-	UINT          m_NumMoveProcs;
+	unsigned int          m_NumMoveProcs;
 	MoveProcess** m_MoveProcs;
 
     // CONSTRUCTOR/DESTRUCTOR

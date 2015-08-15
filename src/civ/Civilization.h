@@ -22,11 +22,11 @@ public:
     Civilization();
 
 	// GETTERS
-	const HumanInfo& getHuman(UINT i_ID) const;
-    HumanInfo&       getHuman(UINT i_ID);
+	const HumanInfo& getHuman(unsigned int i_ID) const;
+    HumanInfo&       getHuman(unsigned int i_ID);
 
 	// STATUS
-	UINT population() const;
+	unsigned int population() const;
 
 private:
 	std::vector<HumanInfo> m_People;

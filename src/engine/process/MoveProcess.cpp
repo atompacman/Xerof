@@ -1,4 +1,5 @@
 #include "MoveProcess.h"
+#include "..\..\Parameters.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

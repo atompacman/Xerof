@@ -22,7 +22,7 @@ PossibleOrders Order::getAction() const
     return m_Action; 
 }
 
-int Order::getParam(UINT i_ID) const
+int Order::getParam(unsigned int i_ID) const
 {
     assert(i_ID < 4);
     return m_Params[i_ID];

@@ -27,7 +27,7 @@ public:
 
 	// GETTERS
     PossibleOrders getAction() const;
-    int            getParam(UINT i_ID) const;
+    int            getParam(unsigned int i_ID) const;
 
 private:
 	PossibleOrders m_Action;

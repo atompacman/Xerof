@@ -85,11 +85,11 @@ void Display::drawEnvironment()
 	// Get various constants according to the resolution level
 	Coord tileULCorner(m_DisplayInfo.getCamera().getVisibleTilesULCorner());
 	Coord tileLRCorner(m_DisplayInfo.getCamera().getVisibleTilesLRCorner());
-	UINT resLvl(m_DisplayInfo.getCamera().getResolutionLvl());
+	unsigned int resLvl(m_DisplayInfo.getCamera().getResolutionLvl());
 	Coord textureULCorner(TEXTURE_UL_CORNERS[resLvl]);
-	UINT tileSizeOnMap(TILE_SIZE[resLvl]);
-	UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
-	UINT overlapTileSize  (tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
+	unsigned int tileSizeOnMap(TILE_SIZE[resLvl]);
+	unsigned int tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
+	unsigned int overlapTileSize  (tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
 											 * ALPHA_OVERLAPPING[resLvl]);
     // Draw visible tiles
 	Coord tileCoord;
@@ -130,14 +130,14 @@ void Display::drawHumans()
 	// Get various constants according to the resolution level
 	Coord tileULCorner(m_DisplayInfo.getCamera().getVisibleTilesULCorner());
 	Coord tileLRCorner(m_DisplayInfo.getCamera().getVisibleTilesLRCorner());
-	UINT resLvl(m_DisplayInfo.getCamera().getResolutionLvl());
+	unsigned int resLvl(m_DisplayInfo.getCamera().getResolutionLvl());
 	Coord textureULCorner(TEXTURE_UL_CORNERS[resLvl]);
-	UINT tileSizeOnMap(TILE_SIZE[resLvl]);
-	UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
-	UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
+	unsigned int tileSizeOnMap(TILE_SIZE[resLvl]);
+	unsigned int tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
+	unsigned int overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
 		* ALPHA_OVERLAPPING[resLvl]);
 	double humanScaling = (double) overlapTileSize / (double) tileSizeOnTexture;
-	UINT toCenterHuman = (overlapTileSize - tileSizeOnMap) * 0.5;
+	unsigned int toCenterHuman = (overlapTileSize - tileSizeOnMap) * 0.5;
 
     // Draw visible tiles
 	Coord tileCoord;

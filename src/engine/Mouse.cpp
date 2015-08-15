@@ -74,7 +74,7 @@ void Mouse::handleMovedCursor(const ALLEGRO_EVENT& i_Event)
     ++m_MoveEventsSincePressed;
 }
 
-Coord Mouse::computeSelectedTile(UINT i_x, UINT i_y) const
+Coord Mouse::computeSelectedTile(unsigned int i_x, unsigned int i_y) const
 {
     // Invert camera transform
     ALLEGRO_TRANSFORM copy(m_Camera.m_Transform);

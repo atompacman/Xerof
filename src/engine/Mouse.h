@@ -46,11 +46,11 @@ private:
     MouseState m_State;
 
     // Used for selection clicks
-    UINT m_MoveEventsSincePressed;
+    unsigned int m_MoveEventsSincePressed;
 
     // Last clicked tile
     Coord m_ClickedTile;
 
 	// EVENT HANDLING
-    Coord computeSelectedTile(UINT i_x, UINT i_y) const;
+    Coord computeSelectedTile(unsigned int i_x, unsigned int i_y) const;
 };

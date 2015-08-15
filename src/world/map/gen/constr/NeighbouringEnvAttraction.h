@@ -21,7 +21,7 @@ public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvAttraction(const Map& i_Map,
                               EnvType    i_EnvType,
-                              UINT       i_Radius,
+                              unsigned int       i_Radius,
                               double     i_Strength) :
         Constraint(i_Map),
         NeighbouringEnvConstraint(i_Map, i_EnvType, i_Radius),
@@ -36,7 +36,7 @@ public:
 
     double getSimpleWeightFor(Coord i_Coord) const
     {
-        UINT neighbouringEnv(countNeighbourEnv(i_Coord));
+        unsigned int neighbouringEnv(countNeighbourEnv(i_Coord));
         return (double) neighbouringEnv / (double)(m_Radius * m_Radius);
     }
 };

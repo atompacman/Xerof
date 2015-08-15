@@ -40,7 +40,7 @@ enum AssetID
 };
 
 // The number of bitmap assets
-static UINT numAssets;
+static unsigned int numAssets;
 
 // The location of the asset routing file
 static const char* ASSET_ROUTING_FILE = "assets/assets_routing.txt";
@@ -74,7 +74,7 @@ static ALLEGRO_BITMAP** loadAssets()
 
     numAssets = bitmapVec.size();
     ALLEGRO_BITMAP** bitmaps = new ALLEGRO_BITMAP*[numAssets];
-    for (UINT i = 0; i < numAssets; ++i) {
+    for (unsigned int i = 0; i < numAssets; ++i) {
         bitmaps[i] = bitmapVec[i];
     }
 
@@ -101,7 +101,7 @@ static void destroyAssets(ALLEGRO_BITMAP** io_Assets,
                           ALLEGRO_FONT&    io_Font)
 {
     LOG(TRACE) << "Desallocation - Assets";
-    for (UINT i = 0; i < numAssets; ++i) {
+    for (unsigned int i = 0; i < numAssets; ++i) {
 		al_destroy_bitmap(io_Assets[i]);
 	}
 	delete[] io_Assets;

@@ -69,7 +69,7 @@ static const Value& parseSubElem(const Value& i_Value, const char* i_Elem)
     return i_Value[i_Elem];
 }
 
-static UINT parseUINT(const Value& i_Value, const char* i_Elem)
+static unsigned int parseUINT(const Value& i_Value, const char* i_Elem)
 {
     const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsUint()) {

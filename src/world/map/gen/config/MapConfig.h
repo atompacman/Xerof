@@ -36,8 +36,8 @@ using namespace rapidjson;
 
 struct Limits
 {
-    UINT m_MinMapSize;
-    UINT m_MaxMapSize;
+    unsigned int m_MinMapSize;
+    unsigned int m_MaxMapSize;
 };
 
 class MapConfig
