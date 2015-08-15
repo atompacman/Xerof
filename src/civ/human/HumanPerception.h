@@ -13,14 +13,14 @@
 class HumanPerception
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR 
+    // CONSTRUCTOR/DESTRUCTOR 
     HumanPerception(const HumanInfo& i_Info, const Map& i_Map);
 
-	// GETTERS
-    const Position&  getPosition() const;
+    // GETTERS
+    const Position& getPosition() const;
 
     // SURROUNDINGS
-	bool		isWithinMapLimits(Direction i_Dir) const;
+    bool        isWithinMapLimits(Direction i_Dir) const;
     const Tile& getTileInDir(Direction i_Dir) const;
     const Tile& getTileInFront() const;
     Biome       getBiomeInFront() const;

@@ -20,7 +20,7 @@ class NeighbouringEnvAttraction : public NeighbouringEnvConstraint,
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvAttraction(const Map& i_Map,
-                              Biome    i_EnvType,
+                              Biome      i_EnvType,
                               UINT       i_Radius,
                               double     i_Strength) :
         Constraint(i_Map),

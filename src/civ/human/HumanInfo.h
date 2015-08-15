@@ -18,10 +18,10 @@ class HumanInfo : public MapElement
     friend class HumanPerception;
 
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     HumanInfo(const Position& i_StartingPos, Dimensions i_MapDim);
 
-	// GETTERS
+    // GETTERS
     const Position&     getPosition() const;
     Position&           getPosition();
     const MapKnowledge& getMapKnowledge() const;
@@ -39,17 +39,17 @@ public:
     // DISCOVER SURROUNDING TILES
     void discoverSurroundingTiles();
 
-	// STATS
-	float getMoveSpeed() const;
+    // STATS
+    float getMoveSpeed() const;
 
-	// ASSET
-	virtual AssetID assetFile() const { return ADVENTURER; }
+    // ASSET
+    virtual AssetID assetFile() const { return ADVENTURER; }
 
 private:
     Position      m_Pos;
-	bool          m_IsReady;
+    bool          m_IsReady;
     bool          m_IsSelected;
-	float         m_MoveSpeed;
+    float         m_MoveSpeed;
     RangeOfSight* m_ROS;
     MapKnowledge  m_MapKnow;
 };

@@ -18,7 +18,7 @@ class NeighbouringEnvConstraint : public virtual Constraint
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvConstraint(const Map& i_Map, 
-                              Biome    i_EnvType, 
+                              Biome      i_EnvType, 
                               UINT       i_Radius) :
         Constraint(i_Map),
         m_EnvType(i_EnvType),
@@ -50,5 +50,5 @@ public:
 
 protected:
     Biome m_EnvType;
-    UINT    m_Radius;
+    UINT  m_Radius;
 };

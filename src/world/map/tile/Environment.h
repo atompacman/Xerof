@@ -26,12 +26,12 @@ enum Biome
 };
 
 static const std::map<std::string, Biome> ENV_TYPES = {
-    { "GRASSLAND",  GRASSLAND   },
-    { "LAKE",       LAKE        },
-    { "OCEAN",      OCEAN       },
-    { "PLAIN",      PLAIN       },
-    { "ROCKY",      ROCKY       },
-    { "TUNDRA",     TUNDRA      }
+    { "GRASSLAND", GRASSLAND },
+    { "LAKE",      LAKE },
+    { "OCEAN",     OCEAN },
+    { "PLAIN",     PLAIN },
+    { "ROCKY",     ROCKY },
+    { "TUNDRA",    TUNDRA }
 };
 
 static const char* ENV_NAMES[] = {
@@ -53,24 +53,24 @@ static const std::list<Biome> LAND_ENV_TYPES = {
 class Environment : public MapElement
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     Environment(Biome i_Type);
-	
-	// GETTERS
-	Biome getBiome() const;
-	Direction getOrientation() const;
+
+    // GETTERS
+    Biome     getBiome() const;
+    Direction getOrientation() const;
 
     // SETTERS
     void setBiome(Biome i_Type);
 
-	// STATUS
-	bool isSolidLand() const;
+    // STATUS
+    bool        isSolidLand() const;
     static bool isSolidLand(Biome i_Type);
 
-	// ASSET
-	AssetID assetFile() const;
+    // ASSET
+    AssetID assetFile() const;
 
 private:
-	Biome   m_Type;
-	Direction m_Orien;
+    Biome    m_Type;
+    Direction m_Orien;
 };

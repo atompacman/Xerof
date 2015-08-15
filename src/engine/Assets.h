@@ -14,7 +14,7 @@
 /*============================================================================||
 | Assets management
 |-----------------------------------------------------------------------------||
-| Load and desallocate assets from disk using a routing file (linking an AssetID 
+| Load and desallocate assets from disk using a routing file (linking an AssetID
 | to a bitmap file).
 \=============================================================================*/
 
@@ -23,17 +23,17 @@
 enum AssetID
 {
     // Environment
-	GRASSLAND_TILE_FILE,
-	OCEAN_TILE_FILE,
-	PLAINS_TILE_FILE,
-	ROCKY_TILE_FILE,
-	TUNDRA_TILE_FILE,
+    GRASSLAND_TILE_FILE,
+    OCEAN_TILE_FILE,
+    PLAINS_TILE_FILE,
+    ROCKY_TILE_FILE,
+    TUNDRA_TILE_FILE,
 
     // Caracters
-	ALPHA_TEST_PACMAN,
-	STICKMAN,
-	SELECTION,
-	APARATUS3,
+    ALPHA_TEST_PACMAN,
+    STICKMAN,
+    SELECTION,
+    APARATUS3,
     ADVENTURER,
 
     // Other
@@ -61,7 +61,7 @@ static ALLEGRO_BITMAP** loadAssets()
 
     while (!fis.eof()) {
         fis >> name >> path >> path;
-        LOG(TRACE) << "Assets loading - " << std::setw(24) 
+        LOG(TRACE) << "Assets loading - " << std::setw(24)
             << std::left << name << " at " << path;
 
         bitmap = al_load_bitmap(path.c_str());
@@ -79,7 +79,7 @@ static ALLEGRO_BITMAP** loadAssets()
         bitmaps[i] = bitmapVec[i];
     }
 
-    LOG(DEBUG) <<"Assets loading - Successfully loaded "<< numAssets <<" files";
+    LOG(DEBUG) <<"Assets loading - Successfully loaded "<< numAssets<< " files";
 
     return bitmaps;
 }
@@ -87,7 +87,7 @@ static ALLEGRO_BITMAP** loadAssets()
 // Load game font
 static ALLEGRO_FONT& loadGameFont()
 {
-    LOG(DEBUG) << "Assets loading - Loading game font at \""<< GAME_FONT<< "\"";
+    LOG(DEBUG) <<"Assets loading - Loading game font at \""<< GAME_FONT << "\"";
 
     al_init_font_addon();
     ALLEGRO_FONT* font(al_load_font(GAME_FONT, 0, 0));
@@ -98,14 +98,13 @@ static ALLEGRO_FONT& loadGameFont()
 }
 
 // Desallocate assets from memory
-static void destroyAssets(ALLEGRO_BITMAP** io_Assets, 
-                          ALLEGRO_FONT&    io_Font)
+static void destroyAssets(ALLEGRO_BITMAP** io_Assets, ALLEGRO_FONT& io_Font)
 {
     LOG(TRACE) << "Desallocation - Assets";
     for (UINT i = 0; i < numAssets; ++i) {
-		al_destroy_bitmap(io_Assets[i]);
-	}
-	delete[] io_Assets;
+        al_destroy_bitmap(io_Assets[i]);
+    }
+    delete[] io_Assets;
 
     al_destroy_font(&io_Font);
 }
