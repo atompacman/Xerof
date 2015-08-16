@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <Direction.h>
 #include <math.h>
-#include <wtypes.h>
+#include <MathUtils.h>
 
 /*============================================================================\\
 | Small class representing a 2D element (x,y)
@@ -194,7 +194,8 @@ static DCoord abs(const DCoord& i_DCoord)
 
 static Coord round(const DCoord& i_DCoord)
 {
-    return Coord((unsigned int)rint(i_DCoord.x), (unsigned int)rint(i_DCoord.y));
+    return Coord((unsigned int)fastRint(i_DCoord.x), 
+                 (unsigned int)fastRint(i_DCoord.y));
 }
 
 static Coord toCoord(const SCoord& i_Coord)
@@ -209,5 +210,5 @@ static DCoord toDCoord(const Coord& i_Coord)
 
 static DCoord roundCoord(const DCoord& i_Coord)
 {
-    return DCoord(rint(i_Coord.x), rint(i_Coord.y));
+    return DCoord(fastRint(i_Coord.x), fastRint(i_Coord.y));
 }

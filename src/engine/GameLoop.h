@@ -54,7 +54,6 @@ private:
                             Action i_Action,
                             Direction      i_Dir);
     bool verifyDestination(const Position& i_Dest) const;
-    bool isOccupied(Coord i_Coord) const;
     void updateMovements();
 
     // END

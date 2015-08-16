@@ -40,7 +40,7 @@ public:
                 if (coord == i_Coord) {
                     continue;
                 }
-                if (m_Map.getTile(coord).getEnvironment().getBiome()==m_EnvType){
+                if(m_Map.getTile(coord).getEnvironment().getBiome()==m_EnvType){
                     ++count;
                 }
             }
