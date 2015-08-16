@@ -1,11 +1,8 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "AI.h"
-#include "..\..\utils\Random.h"
-#include "..\..\world\map\tile\Tile.h"
-/*============================================================================||
+#include <AI.h>
+
+/*============================================================================\\
 | AI made by Atompacman
 |-----------------------------------------------------------------------------||
 | Implements the AI abstract class
@@ -14,6 +11,6 @@
 class AtomAI : public AI
 {
 public:
-	// GIVE ORDER
+    // GIVE ORDER
     virtual Order giveOrder(const HumanPerception& i_HP);
 };

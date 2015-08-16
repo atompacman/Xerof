@@ -1,4 +1,5 @@
-#include "World.h"
+#include <MapGenerator.h>
+#include <World.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

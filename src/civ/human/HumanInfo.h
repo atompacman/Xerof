@@ -1,13 +1,12 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\engine\Assets.h"
-#include "..\..\world\map\tile\MapElement.h"
-#include "MapKnowledge.h"
-#include "Position.h"
-#include "RangeOfSight.h"
-/*============================================================================||
+#include <Elem2D.h>
+#include <MapElement.h>
+#include <MapKnowledge.h>
+#include <Position.h>
+#include <RangeOfSight.h>
+
+/*============================================================================\\
 | Data related to a single human entity
 |-----------------------------------------------------------------------------||
 | Is basically a data container

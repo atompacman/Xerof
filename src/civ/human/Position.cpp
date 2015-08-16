@@ -1,4 +1,5 @@
-#include "Position.h"
+#include <Position.h>
+#include <Random.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -42,7 +43,7 @@ Direction Position::facingDir() const
 
 Coord Position::tileCoord() const
 {
-    return Coord(m_Coord.x, m_Coord.y);
+    return Coord((unsigned int)m_Coord.x, (unsigned int)m_Coord.y);
 }
 
 

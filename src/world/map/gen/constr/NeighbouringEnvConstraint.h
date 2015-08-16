@@ -1,9 +1,9 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Constraint.h"
-/*============================================================================//
+#include <Constraint.h>
+#include <Tile.h>
+
+/*============================================================================\\
 | Abstract class that defines the main method of constraints concerning
 | neighbouring environment: UINT countNeighbourEnv(Coord).
 | The zone that is looked at is a square.

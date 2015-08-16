@@ -1,4 +1,16 @@
-#include "MapGenerator.h"
+#include <assert.h>
+#include <Constraint.h>
+#include <DistanceFromCenter.h>
+#include <Environment.h>
+#include <EnvironmentIs.h>
+#include <Map.h>
+#include <MapConfig.h>
+#include <MapGenerator.h>
+#include <ProgressLogger.h>
+#include <Random.h>
+#include <math.h>
+#include <Tile.h>
+#include <vector>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                  GENERATION                                //
@@ -76,7 +88,7 @@ void MapGenerator::placeBorders()
                 FatalErrorDialog("North border cannot be \
                                   larger than half of the map");
             }
-            for (UINT i = 0; i < border.m_Width * s_Map->m_Dim.x; ++i) {
+            for (unsigned int i = 0; i < border.m_Width * s_Map->m_Dim.x; ++i) {
                 s_Map->m_Tiles[i].setEnvironment(border.m_Env);
             }
             break;
@@ -85,7 +97,7 @@ void MapGenerator::placeBorders()
                 FatalErrorDialog("South border cannot be \
                                   larger than half of the map");
             }
-            for (UINT i(s_Map->m_Dim.x * s_Map->m_Dim.y - 
+            for (unsigned int i(s_Map->m_Dim.x * s_Map->m_Dim.y - 
                 border.m_Width * s_Map->m_Dim.x); 
                 i < s_Map->m_Dim.x * s_Map->m_Dim.y; ++i) {
                 s_Map->m_Tiles[i].setEnvironment(border.m_Env);
@@ -108,7 +120,7 @@ void MapGenerator::placeBorders()
                 FatalErrorDialog("East border cannot be \
                                   larger than half of the map");
             }
-            UINT dimX(s_Map->m_Dim.x);
+            unsigned int dimX(s_Map->m_Dim.x);
             for (coord.y = 0; coord.y < s_Map->m_Dim.y; ++coord.y) {
                 for (coord.x = dimX - border.m_Width; coord.x<dimX; ++coord.x) {
                     s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
@@ -139,9 +151,9 @@ void MapGenerator::fillWithInitEnv()
 void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
 {
     for (const auto& envCnstrnts : i_Phase.m_Cnstrts) {
-        UINT qty(envCnstrnts.second.first);
-        UINT placed(0);
-        UINT tries(0);
+        unsigned int qty(envCnstrnts.second.first);
+        unsigned int placed(0);
+        unsigned int tries(0);
 
         // Progress logging
         std::stringstream ss;
@@ -184,23 +196,23 @@ void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
 void MapGenerator::overpass()
 {
     int nbCaseParcourue = 1;
-    UINT coordX = 0;
-    UINT coordY = 0;
+    unsigned int coordX = 0;
+    unsigned int coordY = 0;
     int diviseur = 2;
     int valeurDeplacement = 0;
     bool addToX = true;
 
     Biome bushBiome = GRASSLAND;
     int bushBiomeCounter = 0;
-    UINT probabilitOfBush = 7;
+    unsigned int probabilitOfBush = 7;
 
     bool lastTileOcean = true;
     int xAroundCoord[8] = { 0, 1,  0,  0, -1, -1, 0, 0 };
     int yAroundCoord[8] = { 1, 0, -1, -1,  0,  0, 1, 1 };
     int xAroundRandCoord[8] = { -1,  0,  1, -1, 1, -1, 0, 1 };
     int yAroundRandCoord[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
-    UINT tempCoordX;
-    UINT tempCoordY;
+    unsigned int tempCoordX;
+    unsigned int tempCoordY;
     bool tileChange = false;
     int randomNumber;
 
@@ -320,7 +332,7 @@ void MapGenerator::overpass()
 
 const Coord MapGenerator::randCoord()
 {
-    UINT x(randUINT(s_ULCorner.x, s_LRCorner.x - 1));
-    UINT y(randUINT(s_ULCorner.y, s_LRCorner.y - 1));
+    unsigned int x(randUINT(s_ULCorner.x, s_LRCorner.x - 1));
+    unsigned int y(randUINT(s_ULCorner.y, s_LRCorner.y - 1));
     return Coord(x, y);
 }

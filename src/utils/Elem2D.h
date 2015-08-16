@@ -1,14 +1,11 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+#include <Direction.h>
 #include <math.h>
-#include <wtypes.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Direction.h"
-#include "MathUtils.h"
-/*============================================================================||
+#include <MathUtils.h>
+
+/*============================================================================\\
 | Small class representing a 2D element (x,y)
 |-----------------------------------------------------------------------------||
 | - Coord  (unsigned int)
@@ -17,10 +14,10 @@
 | - DDimensions (double)
 \=============================================================================*/
 
-#define Coord       Elem2D<UINT>
+#define Coord       Elem2D<unsigned int>
 #define DCoord      Elem2D<double>
 #define SCoord      Elem2D<int>
-#define Dimensions  Elem2D<UINT>
+#define Dimensions  Elem2D<unsigned int>
 #define DDimensions Elem2D<double>
 
 template <typename T>

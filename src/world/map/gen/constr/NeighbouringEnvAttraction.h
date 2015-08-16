@@ -1,10 +1,9 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "ConstraintWithStrength.h"
-#include "NeighbouringEnvConstraint.h"
-/*============================================================================//
+#include <ConstraintWithStrength.h>
+#include <NeighbouringEnvConstraint.h>
+
+/*============================================================================\\
 | The more a spot is surrounded by the same environment, the more probably the
 | env. placement will be.
 |-----------------------------------------------------------------------------||

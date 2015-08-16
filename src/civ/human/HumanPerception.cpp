@@ -1,4 +1,7 @@
-#include "HumanPerception.h"
+#include <HumanInfo.h>
+#include <HumanPerception.h>
+#include <Map.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

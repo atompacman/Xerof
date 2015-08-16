@@ -1,6 +1,11 @@
-#include "MapConfig.h"
+#include <map>
+#include <MapConfig.h>
+#include <Parameters.h>
+#include <rapidjson\error\en.h>
 
 const Limits MapConfig::s_ConfigLimits = loadConfigLimits();
+
+using namespace rapidjson;
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -12,14 +17,14 @@ MapConfig::MapConfig(const char* i_ParamFile)
 
     // Parse map dimensions
     const Value& elem(parseSubElem(root, DIM_ELEM));
-    UINT width(parseUINT(elem, DIM_WIDTH_SUB_ELEM));
+    unsigned int width(parseUINT(elem, DIM_WIDTH_SUB_ELEM));
     if (width < s_ConfigLimits.m_MinMapSize) {
         FatalErrorDialog("Map width is too small");
     }
     if (width > s_ConfigLimits.m_MaxMapSize) {
         FatalErrorDialog("Map width is too large");
     }
-    UINT height(parseUINT(elem, DIM_HEIGHT_SUB_ELEM));
+    unsigned int height(parseUINT(elem, DIM_HEIGHT_SUB_ELEM));
     if (height < s_ConfigLimits.m_MinMapSize) {
         FatalErrorDialog("Map height is too small");
     }

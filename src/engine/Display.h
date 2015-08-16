@@ -1,50 +1,48 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "allegro5\allegro.h"
-#include "allegro5\allegro_font.h"
-#include "allegro5\allegro_image.h"
-#include "allegro5\allegro_primitives.h"
-#include "allegro5\allegro_native_dialog.h"
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\civ\CivController.h"
-#include "Mouse.h"
-/*============================================================================||
+#include <Elem2D.h>
+
+/*============================================================================\\
 | Drawing bitmap graphics
 |-----------------------------------------------------------------------------||
 | Draws on screen the world and civilizations
 \=============================================================================*/
 
+struct ALLEGRO_DISPLAY;
+struct ALLEGRO_BITMAP;
+struct ALLEGRO_FONT;
+class  CivController;
+class  DisplayInfo;
+
 class Display
 {
 public:
-	//CONSTRUCTOR/DESTRUCTOR
-	Display(DisplayInfo& io_DisplayInfo);
-	~Display();
+    //CONSTRUCTOR/DESTRUCTOR
+    Display(DisplayInfo& io_DisplayInfo);
+    ~Display();
 
-	//DRAW
-	void draw();
+    //DRAW
+    void draw();
     void resize();
 
-	//SETTERS
-	void setCivs(CivController** i_Civ);
-	void setFPS(int i_FPS);
+    //SETTERS
+    void setCivs(CivController** i_Civ);
+    void setFPS(int i_FPS);
 
     //GETTERS
     ALLEGRO_DISPLAY& getWindow() const;
     Coord            getWindowSize() const;
 
 private:
-	// Display information that is updated by other classes
-	DisplayInfo& m_DisplayInfo;
+    // Display information that is updated by other classes
+    DisplayInfo& m_DisplayInfo;
 
     // Initialized here
     ALLEGRO_DISPLAY&  m_Window;
     ALLEGRO_BITMAP**  m_Assets;
-	ALLEGRO_FONT&     m_GameFont;
+    ALLEGRO_FONT&     m_GameFont;
 
-	//CONSTRUCTOR/DESTRUCTOR
+    //CONSTRUCTOR/DESTRUCTOR
     static ALLEGRO_DISPLAY& createWindow();
 
     // DRAW
@@ -52,18 +50,4 @@ private:
     void drawHumans();
 };
 
-static float correspondingAngle(Direction i_Dir) {
-    assertNonCenterDir(i_Dir);
-
-    switch (i_Dir) {
-    case UP:			return 0;
-    case UPPER_RIGHT:	return ALLEGRO_PI * 0.25;
-    case RIGHT:			return ALLEGRO_PI * 0.5;
-    case LOWER_RIGHT:	return ALLEGRO_PI * 0.75;
-    case DOWN:			return ALLEGRO_PI * 1.0;
-    case LOWER_LEFT:	return ALLEGRO_PI * 1.25;
-    case LEFT:			return ALLEGRO_PI * 1.5;
-    case UPPER_LEFT:	return ALLEGRO_PI * 1.75;
-    }
-    return 0.0;
-}
+float correspondingAngle(Direction i_Dir);

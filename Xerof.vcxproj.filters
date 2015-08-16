@@ -267,6 +267,15 @@
     <ClCompile Include="src\engine\DisplayInfo.cpp">
       <Filter>src\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Assets.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\JSONUtils.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\gen\config\Phase.cpp">
+      <Filter>src\world\map\gen\config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src_doc_helper.txt">

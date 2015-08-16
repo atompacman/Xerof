@@ -1,14 +1,18 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "HumanInfo.h"
-#include "..\..\world\map\Map.h"
-/*============================================================================||
+#include <Direction.h>
+#include <Environment.h>
+
+/*============================================================================\\
 | The perception of the world from the perspective of a human
 |-----------------------------------------------------------------------------||
 | Used by AIs
 \=============================================================================*/
+
+class  HumanInfo;
+class  Map;
+struct Position;
+class  Tile;
 
 class HumanPerception
 {
