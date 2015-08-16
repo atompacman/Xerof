@@ -221,29 +221,17 @@ void GameLoop::processMovingOrder(HumanInfo&     io_Human,
 
 bool GameLoop::verifyDestination(const Position& i_Dest) const
 {
-    if (!m_World.map().getTile(i_Dest.tileCoord()).isPassable()) {
-		LOG(WARNING) << "ERROR IN AI: Cannot move on water";
-		return false;
-	}
-    if (isOccupied(i_Dest.tileCoord())) {
-		LOG(WARNING) << "ERROR IN AI: Tile is already occupied";
-		return false;
-	}
-	return true;
-}
+    const Tile& destination(m_World.map().getTile(i_Dest.tileCoord()));
 
-bool GameLoop::isOccupied(Coord i_Coord) const
-{
-	for (UINT i = 0; i < NB_CIV; ++i) {
-		const Civilization& civ = m_CivCtrls[i]->getCiv();
-        for (UINT j = 0; j < civ.population(); ++j) {
-            const HumanInfo& human = civ.getHuman(j);
-            if (human.getPosition() == Position(i_Coord, UP)) {
-				return true;
-			}
-		}
-	}
-	return false;
+    if (!destination.isPassable()) {
+        LOG(WARNING) << "ERROR IN AI: Cannot move on water";
+        return false;
+    }
+    if (destination.hasHuman()) {
+        LOG(WARNING) << "ERROR IN AI: Tile is already occupied";
+        return false;
+    }
+    return true;
 }
 
 void GameLoop::updateMovements()
