@@ -1,5 +1,8 @@
-#include "HumanInfo.h"
+#include <Assets.h>
+#include <fstream>
+#include <HumanInfo.h>
 #include <iosfwd>
+#include <RangeOfSight.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

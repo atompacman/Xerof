@@ -1,38 +1,37 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
-#include <assert.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "tile\Tile.h"
-/*============================================================================||
+#include <Elem2D.h>
+
+/*============================================================================\\
 | The map
 |-----------------------------------------------------------------------------||
 | Is essentially an array of tiles that as accessors
 \=============================================================================*/
+
+class Tile;
 
 class Map
 {
 public:
     friend class MapGenerator;
 
-	// CONSTRUCTOR/DESTRUCTOR
-	Map(Dimensions i_Dim);
-	~Map();
+    // CONSTRUCTOR/DESTRUCTOR
+    Map(Dimensions i_Dim);
+    ~Map();
 
-	// GETTERS
-	const Tile&   getTile(Coord i_Coord) const;
-    Tile&         getTile(Coord i_Coord);
-    Coord         randCoord() const;
+    // GETTERS
+    const Tile& getTile(Coord i_Coord) const;
+    Tile&       getTile(Coord i_Coord);
+    Coord       randCoord() const;
 
     // STATUS
-    Dimensions  dim() const;
-    UINT        area() const;
+    Dimensions   dim() const;
+    unsigned int area() const;
 
 private:
     Dimensions m_Dim;
-	Tile*      m_Tiles;
+    Tile*      m_Tiles;
 
     // GETTERS
-    UINT linearize(Coord i_Coord) const;
+    unsigned int linearize(Coord i_Coord) const;
 };

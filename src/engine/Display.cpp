@@ -1,4 +1,16 @@
-#include "Display.h"
+#include <Display.h>
+#include <allegro5\allegro.h>
+#include <allegro5\allegro_font.h>
+#include <allegro5\allegro_image.h>
+#include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_native_dialog.h>
+#include <Assets.h>
+#include <CivController.h>
+#include <Environment.h>
+#include <HumanInfo.h>
+#include <Mouse.h>
+#include <Parameters.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -228,4 +240,21 @@ Coord Display::getWindowSize() const
 {
     return Coord(al_get_display_width (&m_Window), 
                  al_get_display_height(&m_Window));
+}
+
+float correspondingAngle(Direction i_Dir) 
+{
+    assertNonCenterDir(i_Dir);
+
+    switch (i_Dir) {
+    case UP:          return 0;
+    case UPPER_RIGHT: return ALLEGRO_PI * 0.25;
+    case RIGHT:	      return ALLEGRO_PI * 0.5;
+    case LOWER_RIGHT: return ALLEGRO_PI * 0.75;
+    case DOWN:        return ALLEGRO_PI * 1.0;
+    case LOWER_LEFT:  return ALLEGRO_PI * 1.25;
+    case LEFT:        return ALLEGRO_PI * 1.5;
+    case UPPER_LEFT:  return ALLEGRO_PI * 1.75;
+    }
+    return 0.0;
 }

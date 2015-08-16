@@ -1,5 +1,8 @@
-#include "MapKnowledge.h"
 #include <assert.h>
+#include <bitset>
+#include <MapKnowledge.h>
+#include <Position.h>
+#include <RangeOfSight.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -9,7 +12,7 @@ MapKnowledge::MapKnowledge(Dimensions i_MapDim) :
 m_Tiles(new bool*[i_MapDim.y]),
 m_MapDim(i_MapDim)
 {
-    for (UINT i = 0; i < i_MapDim.y; ++i) {
+    for (unsigned int i = 0; i < i_MapDim.y; ++i) {
         m_Tiles[i] = new bool[i_MapDim.x];
         std::fill(m_Tiles[i], m_Tiles[i] + i_MapDim.x, false);
     }
@@ -17,7 +20,7 @@ m_MapDim(i_MapDim)
 
 MapKnowledge::~MapKnowledge()
 {
-    for (UINT i = 0; i < m_MapDim.y; ++i) {
+    for (unsigned int i = 0; i < m_MapDim.y; ++i) {
         delete[] m_Tiles[i];
     }
     delete[] m_Tiles;

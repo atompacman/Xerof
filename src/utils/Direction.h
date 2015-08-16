@@ -1,17 +1,16 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
 #include <map>
-/*============================================================================||
+
+/*============================================================================//
 | Different types of direction
 |-----------------------------------------------------------------------------||
 | - Basic (up, down, left, right)
 | - Diagonal (4 corners)
 | - The "special" center value
 |
-| A Direction is basically a UINT that must be asserted before usage
+| A Direction is basically a unsigned int that must be asserted before usage
 \=============================================================================*/
 
 typedef unsigned int Direction;

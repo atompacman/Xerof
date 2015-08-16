@@ -1,4 +1,6 @@
-#include "RangeOfSight.h"
+#include <iosfwd>
+#include <FatalErrorDialog.h>
+#include <RangeOfSight.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -19,7 +21,7 @@ RangeOfSight::ROSModel::ROSModel(std::ifstream& io_File)
     }
 
     // Save position before reading
-    UINT pos(io_File.tellg());
+    unsigned int pos(io_File.tellg());
 
     // Read model size
     readModelSize(io_File);
@@ -40,8 +42,8 @@ RangeOfSight::ROSModel::ROSModel(std::ifstream& io_File)
 
 void RangeOfSight::ROSModel::readModelSize(std::ifstream& io_File)
 {
-    UINT width(0);
-    UINT height(0);
+    unsigned int width(0);
+    unsigned int height(0);
     std::string line;
     Coord center(0, 0);
     char c(0);
@@ -51,7 +53,7 @@ void RangeOfSight::ROSModel::readModelSize(std::ifstream& io_File)
         if (line.length() % 2 == 0) {
             FatalErrorDialog("Invalid range of sight model file format");
         }
-        UINT len((line.length() + 1) * 0.5);
+        unsigned int len((line.length() + 1) * 0.5);
         if (width == 0) {
             width = len;
         }

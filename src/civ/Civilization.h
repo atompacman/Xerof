@@ -1,33 +1,31 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <HumanInfo.h>
 #include <vector>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "human\HumanInfo.h"
-#include "..\world\map\Map.h"
-#include "..\Parameters.h"
-/*============================================================================||
+
+/*============================================================================\\
 | A group of humans
 |-----------------------------------------------------------------------------||
 | For now, a civ is not bigger than the sum of its parts...
 \=============================================================================*/
+
+class HumanInfo;
 
 class Civilization
 {
     friend class CivController;
 
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     Civilization();
 
-	// GETTERS
-	const HumanInfo& getHuman(UINT i_ID) const;
-    HumanInfo&       getHuman(UINT i_ID);
+    // GETTERS
+    const HumanInfo& getHuman(unsigned int i_ID) const;
+    HumanInfo&       getHuman(unsigned int i_ID);
 
-	// STATUS
-	UINT population() const;
+    // STATUS
+    unsigned int population() const;
 
 private:
-	std::vector<HumanInfo> m_People;
+    std::vector<HumanInfo> m_People;
 };

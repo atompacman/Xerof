@@ -1,4 +1,7 @@
-#include "Tile.h"
+#include <assert.h>
+#include <HumanInfo.h>
+#include <Object.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -12,10 +15,10 @@ m_Human(NULL)
 
 Tile::~Tile()
 {
-    for (UINT i = 0; i < 4; ++i) {
+    for (unsigned int i = 0; i < 4; ++i) {
         //delete[] m_Objs[i];
     }
-	//delete[] m_Objs;
+    //delete[] m_Objs;
 }
 
 
@@ -26,8 +29,8 @@ Tile::~Tile()
 void Tile::setObject(Direction i_Dir, Object* i_Obj)
 {
     assertDiagDir(i_Dir);
-	assert(!hasObject(i_Dir));
-	m_Objs[i_Dir - UPPER_LEFT] = i_Obj;
+    assert(!hasObject(i_Dir));
+    m_Objs[i_Dir - UPPER_LEFT] = i_Obj;
 }
 
 void Tile::setEnvironment(Biome i_Type)
@@ -58,7 +61,7 @@ void Tile::removeObject(Direction i_Dir)
 
 const Environment& Tile::getEnvironment() const
 {
-	return m_Env;
+    return m_Env;
 }
 
 Object* Tile::getObject(Direction i_Dir) const
@@ -90,8 +93,8 @@ bool Tile::hasObject(Direction i_Dir) const
 
 bool Tile::hasObject() const
 {
-	return hasObject(UPPER_LEFT) || hasObject(UPPER_RIGHT) || 
-		   hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
+    return hasObject(UPPER_LEFT) || hasObject(UPPER_RIGHT) ||
+           hasObject(LOWER_LEFT) || hasObject(LOWER_RIGHT);
 }
 
 bool Tile::hasHuman() const
@@ -106,5 +109,5 @@ bool Tile::hasHuman() const
 
 bool Tile::isPassable() const
 {
-	return m_Env.isSolidLand();
+    return m_Env.isSolidLand();
 }

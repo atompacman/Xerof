@@ -1,11 +1,9 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <Constraint.h>
 #include <math.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Constraint.h"
-/*============================================================================//
+
+/*============================================================================\\
 | Any constraint that has a parameter that shapes the probabilty of a tile to
 | be placed depending of the value returned by the constraint.
 |
@@ -22,29 +20,29 @@
 class ConstraintWithStrength : public virtual Constraint
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
-    ConstraintWithStrength(const Map& i_Map, 
-                           double     i_Strength, 
+    // CONSTRUCTOR/DESTRUCTOR
+    ConstraintWithStrength(const Map& i_Map,
+                           double     i_Strength,
                            bool       i_DoNegate) :
         Constraint(i_Map),
         m_Strength(i_Strength),
         m_DoNegate(i_DoNegate)
     {}
 
-	// WEIGHT
+    // WEIGHT
     double getWeightFor(Coord i_Coord) const
-	{
+    {
         if (m_DoNegate) {
             return pow(1 - getSimpleWeightFor(i_Coord), m_Strength);
         }
         else {
             return pow(getSimpleWeightFor(i_Coord), m_Strength);
         }
-	}
+    }
 
     virtual double getSimpleWeightFor(Coord i_Coord) const = 0;
 
 private:
-	double m_Strength;
+    double m_Strength;
     bool   m_DoNegate;
 };
