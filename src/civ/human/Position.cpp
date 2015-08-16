@@ -1,5 +1,5 @@
-#include "Position.h"
-#include "..\..\utils\Random.h"
+#include <Position.h>
+#include <Random.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

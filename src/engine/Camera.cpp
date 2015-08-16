@@ -1,5 +1,5 @@
-#include "Camera.h"
-#include "..\Parameters.h"
+#include <Camera.h>
+#include <Parameters.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

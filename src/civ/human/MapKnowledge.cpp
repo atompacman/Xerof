@@ -1,8 +1,8 @@
-#include "MapKnowledge.h"
 #include <assert.h>
 #include <bitset>
-#include "Position.h"
-#include "RangeOfSight.h"
+#include <MapKnowledge.h>
+#include <Position.h>
+#include <RangeOfSight.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

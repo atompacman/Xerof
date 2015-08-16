@@ -1,9 +1,9 @@
-#include "JSONUtils.h"
-#include "easylogging++.h"
-#include "rapidjson\document.h"
-#include "rapidjson\error\en.h"
-#include "FatalErrorDialog.h"
-#include "..\world\map\tile\Environment.h"
+#include <easylogging++.h>
+#include <Environment.h>
+#include <FatalErrorDialog.h>
+#include <JSONUtils.h>
+#include <rapidjson\document.h>
+#include <rapidjson\error\en.h>
 
 using namespace rapidjson;
 

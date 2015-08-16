@@ -1,7 +1,7 @@
-#include "Tile.h"
 #include <assert.h>
-#include "..\..\..\civ\human\HumanInfo.h"
-#include "Object.h"
+#include <HumanInfo.h>
+#include <Object.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

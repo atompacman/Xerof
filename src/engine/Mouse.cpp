@@ -1,5 +1,5 @@
-#include "Mouse.h"
-#include "..\Parameters.h"
+#include <Mouse.h>
+#include <Parameters.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

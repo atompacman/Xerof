@@ -1,15 +1,14 @@
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
 #define ELPP_DEFAULT_LOG_FILE "logs/xerof.log"
-#include "easylogging++.h"
+
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "engine\GameLoop.h"
-#include "Parameters.h"
-#include "utils\Random.h"
-#include "civ\human\RangeOfSight.h"
-/*============================================================================||
+#include <easylogging++.h>
+#include <GameLoop.h>
+#include <Parameters.h>
+#include <Random.h>
+#include <RangeOfSight.h>
+
+/*============================================================================\\
 | Main entry point of the game
 |-----------------------------------------------------------------------------||
 | Initializes libraries before launching the game loop

@@ -1,9 +1,10 @@
-#include "CivController.h"
 #include <assert.h>
-#include "ai\AtomAI.h"
-#include "..\Parameters.h"
-#include "human\Position.h"
-#include "..\world\World.h"
+#include <AtomAI.h>
+#include <CivController.h>
+#include <Parameters.h>
+#include <Position.h>
+#include <Tile.h>
+#include <World.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

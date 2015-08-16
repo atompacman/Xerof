@@ -1,9 +1,8 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "NeighbouringEnvConstraint.h"
-/*============================================================================//
+#include <NeighbouringEnvConstraint.h>
+
+/*============================================================================\\
 | Limits the number of surrounding tiles of an environment type to be between
 | m_Min and m_Max (binary selection)
 |-----------------------------------------------------------------------------||

@@ -1,14 +1,16 @@
-#include "Display.h"
-#include "allegro5\allegro.h"
-#include "allegro5\allegro_font.h"
-#include "allegro5\allegro_image.h"
-#include "allegro5\allegro_primitives.h"
-#include "allegro5\allegro_native_dialog.h"
-#include "Assets.h"
-#include "..\civ\CivController.h"
-#include "..\civ\human\HumanInfo.h"
-#include "Mouse.h"
-#include "..\Parameters.h"
+#include <Display.h>
+#include <allegro5\allegro.h>
+#include <allegro5\allegro_font.h>
+#include <allegro5\allegro_image.h>
+#include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_native_dialog.h>
+#include <Assets.h>
+#include <CivController.h>
+#include <Environment.h>
+#include <HumanInfo.h>
+#include <Mouse.h>
+#include <Parameters.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

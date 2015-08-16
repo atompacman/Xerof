@@ -1,6 +1,6 @@
-#include "RangeOfSight.h"
 #include <iosfwd>
-#include "..\..\utils\FatalErrorDialog.h"
+#include <FatalErrorDialog.h>
+#include <RangeOfSight.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

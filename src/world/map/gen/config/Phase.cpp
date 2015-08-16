@@ -1,17 +1,17 @@
-#include "Phase.h"
+#include <Constraint.h>
+#include <DistanceFromCenter.h>
+#include <DistanceFromEquator.h>
+#include <Environment.h>
+#include <EnvironmentIs.h>
+#include <EnvironmentIsAmong.h>
+#include <FatalErrorDialog.h>
+#include <JSONUtils.h>
 #include <limits>
+#include <NeighbouringEnvAttraction.h>
+#include <NeighbouringEnvLimits.h>
+#include <Phase.h>
 #include <set>
 #include <string>
-#include "..\constr\Constraint.h"
-#include "..\constr\DistanceFromCenter.h"
-#include "..\constr\DistanceFromEquator.h"
-#include "..\..\tile\Environment.h"
-#include "..\constr\EnvironmentIs.h"
-#include "..\constr\EnvironmentIsAmong.h"
-#include "..\..\..\..\utils\FatalErrorDialog.h"
-#include "..\..\..\..\utils\JSONUtils.h"
-#include "..\constr\NeighbouringEnvAttraction.h"
-#include "..\constr\NeighbouringEnvLimits.h"
 
 using namespace rapidjson;
 

@@ -1,14 +1,12 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <DisplayInfo.h>
+#include <FatalErrorDialog.h>
 #include <list>
+#include <Map.h>
 #include <math.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "DisplayInfo.h"
-#include "..\utils\FatalErrorDialog.h"
-#include "..\world\map\Map.h"
-/*============================================================================||
+
+/*============================================================================\\
 | Variables about the camera controller by the mouse
 |-----------------------------------------------------------------------------||
 | - Hold left button to move camera

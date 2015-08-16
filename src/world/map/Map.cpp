@@ -1,5 +1,7 @@
-#include "Map.h"
-#include "..\..\utils\Random.h"
+#include <assert.h>
+#include <Map.h>
+#include <Random.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

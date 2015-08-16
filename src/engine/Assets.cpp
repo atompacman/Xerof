@@ -1,11 +1,11 @@
-#include "Assets.h"
+#include <allegro5\allegro_font.h>
+#include <allegro5\bitmap.h>
+#include <allegro5\bitmap_io.h>
+#include <Assets.h>
+#include <easylogging++.h>
+#include <FatalErrorDialog.h>
 #include <iomanip>
 #include <string>
-#include "allegro5\allegro_font.h"
-#include "allegro5\bitmap.h"
-#include "allegro5\bitmap_io.h"
-#include "..\lib\easylogging++.h"
-#include "..\utils\FatalErrorDialog.h"
 
 ALLEGRO_BITMAP** loadAssets()
 {

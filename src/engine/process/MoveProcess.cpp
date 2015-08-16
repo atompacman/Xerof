@@ -1,8 +1,9 @@
-#include "MoveProcess.h"
-#include "..\..\civ\human\HumanInfo.h"
-#include "..\..\world\map\Map.h"
-#include "..\..\utils\MathUtils.h"
-#include "..\..\Parameters.h"
+#include <HumanInfo.h>
+#include <Map.h>
+#include <MathUtils.h>
+#include <MoveProcess.h>
+#include <Parameters.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

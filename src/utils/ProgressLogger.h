@@ -1,13 +1,10 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <iomanip>
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "easylogging++.h"
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\Parameters.h"
-/*============================================================================||
+#include <easylogging++.h>
+#include <Parameters.h>
+
+/*============================================================================\\
 | Progress (percentage) logger
 |-----------------------------------------------------------------------------||
 | Build the ProgressLogger with the total number of iterations to process, and

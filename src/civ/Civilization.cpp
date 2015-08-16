@@ -1,6 +1,6 @@
-#include "Civilization.h"
-#include "..\world\map\Map.h"
-#include "..\Parameters.h"
+#include <Civilization.h>
+#include <Map.h>
+#include <Parameters.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

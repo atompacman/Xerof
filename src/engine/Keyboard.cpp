@@ -1,7 +1,7 @@
-#include "Keyboard.h"
 #include <allegro5\events.h>
-#include "DisplayInfo.h"
-#include "..\utils\FatalErrorDialog.h"
+#include <DisplayInfo.h>
+#include <Keyboard.h>
+#include <FatalErrorDialog.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

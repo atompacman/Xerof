@@ -1,6 +1,7 @@
-#include "DisplayInfo.h"
-#include "..\civ\human\HumanInfo.h"
-#include "..\world\map\Map.h"
+#include <DisplayInfo.h>
+#include <HumanInfo.h>
+#include <Map.h>
+#include <Tile.h>
 
 FullMapKnowledge DisplayInfo::s_FullMapKnow = FullMapKnowledge();
 

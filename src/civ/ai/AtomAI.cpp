@@ -1,10 +1,10 @@
-#include "AtomAI.h"
-#include "..\..\utils\Direction.h"
-#include "..\human\HumanPerception.h"
-#include "Order.h"
-#include "..\human\Position.h"
-#include "..\..\utils\Random.h"
-#include "..\..\world\map\tile\Tile.h"
+#include <AtomAI.h>
+#include <Direction.h>
+#include <HumanPerception.h>
+#include <Order.h>
+#include <Position.h>
+#include <Random.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                GIVE ORDER                                  //

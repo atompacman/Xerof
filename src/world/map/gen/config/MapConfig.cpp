@@ -1,7 +1,7 @@
-#include "MapConfig.h"
 #include <map>
-#include "rapidjson\error\en.h"
-#include "..\src\Parameters.h"
+#include <MapConfig.h>
+#include <Parameters.h>
+#include <rapidjson\error\en.h>
 
 const Limits MapConfig::s_ConfigLimits = loadConfigLimits();
 

@@ -1,12 +1,10 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <allegro5\allegro_native_dialog.h>
+#include <easylogging++.h>
 #include <stdio.h>
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "allegro5\allegro_native_dialog.h"
-#include "easylogging++.h"
-/*============================================================================||
+
+/*============================================================================\\
 | Throws a fatal error dialog before stopping the game
 |-----------------------------------------------------------------------------||
 | The official way to crash the game...

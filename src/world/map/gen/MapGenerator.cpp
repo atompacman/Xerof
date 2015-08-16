@@ -1,15 +1,16 @@
-#include "MapGenerator.h"
 #include <assert.h>
-#include <vector>
+#include <Constraint.h>
+#include <DistanceFromCenter.h>
+#include <Environment.h>
+#include <EnvironmentIs.h>
+#include <Map.h>
+#include <MapConfig.h>
+#include <MapGenerator.h>
+#include <ProgressLogger.h>
+#include <Random.h>
 #include <math.h>
-#include "constr\Constraint.h"
-#include "constr\DistanceFromCenter.h"
-#include "constr\EnvironmentIs.h"
-#include "..\Map.h"
-#include "config\MapConfig.h"
-#include "..\src\utils\ProgressLogger.h"
-#include "..\src\utils\Random.h"
-#include "..\tile\Environment.h"
+#include <Tile.h>
+#include <vector>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                  GENERATION                                //

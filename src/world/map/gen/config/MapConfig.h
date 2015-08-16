@@ -1,16 +1,13 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+#include <Border.h>
+#include <Elem2D.h>
 #include <list>
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "rapidjson\document.h"
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Border.h"
-#include "Phase.h"
-#include "..\..\..\..\utils\Elem2D.h"
-/*============================================================================||
+#include <Phase.h>
+#include <rapidjson\document.h>
+
+/*============================================================================\\
 | MAP CONFIG FILE REPRESENTATION
 |-----------------------------------------------------------------------------||
 | Represents the content of a map generation configuration file.

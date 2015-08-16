@@ -1,13 +1,14 @@
-#include "GameLoop.h"
-#include "allegro5\allegro.h"
-#include "..\civ\ai\AI.h"
-#include "..\civ\CivController.h"
-#include "..\civ\human\FullMapKnowledge.h"
-#include "..\civ\human\HumanInfo.h"
-#include "..\civ\human\HumanPerception.h"
-#include "process\MoveProcess.h"
-#include "..\civ\ai\Order.h"
-#include "..\Parameters.h"
+#include <allegro5\allegro.h>
+#include <AI.h>
+#include <CivController.h>
+#include <FullMapKnowledge.h>
+#include <GameLoop.h>
+#include <HumanInfo.h>
+#include <HumanPerception.h>
+#include <MoveProcess.h>
+#include <Order.h>
+#include <Parameters.h>
+#include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -202,7 +203,7 @@ void GameLoop::processAI()
 
 void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
 {
-    PossibleOrders action(i_Order.getAction());
+    Action action(i_Order.getAction());
 
     switch (action) {
     case WALK:
@@ -212,7 +213,7 @@ void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
 }
 
 void GameLoop::processMovingOrder(HumanInfo&     io_Human,
-    PossibleOrders i_Action,
+    Action i_Action,
     Direction      i_Dir)
 {
     assertNonCenterDir(i_Dir);

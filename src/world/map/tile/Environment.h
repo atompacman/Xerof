@@ -1,13 +1,11 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <Direction.h>
 #include <list>
-#include <string>
 #include <map>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\..\utils\Direction.h"
-#include "MapElement.h"
+#include <MapElement.h>
+#include <string>
+
 /*============================================================================||
 | Wrapper around an environment type
 |-----------------------------------------------------------------------------||

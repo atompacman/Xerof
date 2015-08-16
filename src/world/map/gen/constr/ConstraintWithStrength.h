@@ -1,11 +1,9 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <Constraint.h>
 #include <math.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Constraint.h"
-/*============================================================================//
+
+/*============================================================================\\
 | Any constraint that has a parameter that shapes the probabilty of a tile to
 | be placed depending of the value returned by the constraint.
 |

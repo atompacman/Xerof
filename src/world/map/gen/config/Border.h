@@ -1,14 +1,12 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "rapidjson\document.h"
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\..\..\utils\Direction.h"
-#include "..\..\tile\Environment.h"
-#include "..\..\..\..\utils\FatalErrorDialog.h"
-#include "..\..\..\..\utils\JSONUtils.h"
-/*============================================================================//
+#include <Direction.h>
+#include <Environment.h>
+#include <FatalErrorDialog.h>
+#include <JSONUtils.h>
+#include <rapidjson\document.h>
+
+/*============================================================================\\
 | Represents an element from the "Borders" element of the map config file
 |-----------------------------------------------------------------------------||
 | Is made of a side (north, south...) a width and an environment.

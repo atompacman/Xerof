@@ -1,12 +1,12 @@
-#include "Order.h"
 #include <assert.h>
+#include <Order.h>
 #include <wtypes.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Order::Order(PossibleOrders i_Action, int i_Param1, int i_Param2, int i_Param3):
+Order::Order(Action i_Action, int i_Param1, int i_Param2, int i_Param3):
 m_Action(i_Action)
 {
     m_Params[0] = i_Param1;
@@ -19,7 +19,7 @@ m_Action(i_Action)
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-PossibleOrders Order::getAction() const 
+Action Order::getAction() const 
 { 
     return m_Action; 
 }
