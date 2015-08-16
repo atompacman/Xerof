@@ -140,6 +140,7 @@
     <ClCompile Include="src\civ\human\MapKnowledge.cpp" />
     <ClCompile Include="src\civ\human\Position.cpp" />
     <ClCompile Include="src\civ\human\RangeOfSight.cpp" />
+    <ClCompile Include="src\engine\Assets.cpp" />
     <ClCompile Include="src\engine\Camera.cpp" />
     <ClCompile Include="src\engine\Display.cpp" />
     <ClCompile Include="src\engine\DisplayInfo.cpp" />
@@ -147,7 +148,9 @@
     <ClCompile Include="src\engine\Keyboard.cpp" />
     <ClCompile Include="src\engine\Mouse.cpp" />
     <ClCompile Include="src\engine\process\MoveProcess.cpp" />
+    <ClCompile Include="src\utils\JSONUtils.cpp" />
     <ClCompile Include="src\world\map\gen\config\MapConfig.cpp" />
+    <ClCompile Include="src\world\map\gen\config\Phase.cpp" />
     <ClCompile Include="src\world\map\gen\MapGenerator.cpp" />
     <ClCompile Include="src\world\map\Map.cpp" />
     <ClCompile Include="src\world\map\tile\Environment.cpp" />

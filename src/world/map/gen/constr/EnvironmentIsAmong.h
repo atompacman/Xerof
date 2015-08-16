@@ -14,7 +14,7 @@
 class EnvironmentIsAmong : public Constraint
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     EnvironmentIsAmong(const Map& i_Map) :
         Constraint(i_Map),
         m_EnvTypes()
@@ -26,12 +26,12 @@ public:
         m_EnvTypes.insert(i_EnvType);
     }
 
-	// WEIGHT
+    // WEIGHT
     double getWeightFor(Coord i_Coord) const
-	{
+    {
         Biome currEnv(m_Map.getTile(i_Coord).getEnvironment().getBiome());
         return m_EnvTypes.find(currEnv) != m_EnvTypes.end();
-	}
+    }
 
 private:
     std::set<Biome> m_EnvTypes;

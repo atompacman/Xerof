@@ -2,7 +2,6 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\utils\Random.h"
 #include "..\..\utils\Direction.h"
 #include "..\..\utils\Elem2D.h"
 /*============================================================================||
@@ -14,11 +13,11 @@
 struct Position
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     Position(Coord  i_Coord);
     Position(DCoord i_Coord);
     Position(Coord  i_Coord, Direction i_FacingDir);
-	Position(DCoord i_Coord, Direction i_FacingDir);
+    Position(DCoord i_Coord, Direction i_FacingDir);
 
     // GETTERS
     DCoord    coord() const;
@@ -32,8 +31,8 @@ public:
     void setX(double i_X);
     void setY(double i_Y);
 
-	// OPERATORS
-	bool operator==(const Position& i_Other) const;
+    // OPERATORS
+    bool operator==(const Position& i_Other) const;
 
 private:
     DCoord    m_Coord;

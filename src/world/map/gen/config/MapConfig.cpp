@@ -1,6 +1,11 @@
 #include "MapConfig.h"
+#include <map>
+#include "rapidjson\error\en.h"
+#include "..\src\Parameters.h"
 
 const Limits MapConfig::s_ConfigLimits = loadConfigLimits();
+
+using namespace rapidjson;
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

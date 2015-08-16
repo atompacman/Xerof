@@ -37,8 +37,8 @@ public:
         }
     }
 private:
-    unsigned int        m_N;
-    double      m_Step;
-    double      m_Progress;
-    const char* m_Msg;
+    unsigned int m_N;
+    double       m_Step;
+    double       m_Progress;
+    const char*  m_Msg;
 };

@@ -9,21 +9,21 @@
 | Binary selection
 \=============================================================================*/
 
-class EnvironmentIs: public Constraint
+class EnvironmentIs : public Constraint
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     EnvironmentIs(const Map& i_Map, Biome i_Type) :
         Constraint(i_Map),
-        m_Type(i_Type) 
+        m_Type(i_Type)
     {}
 
-	// WEIGHT
+    // WEIGHT
     double getWeightFor(Coord i_Coord) const
-	{
+    {
         return m_Map.getTile(i_Coord).getEnvironment().getBiome() == m_Type;
-	}
+    }
 
 private:
-	Biome m_Type;
+    Biome m_Type;
 };

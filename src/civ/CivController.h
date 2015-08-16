@@ -1,32 +1,32 @@
 #pragma once
 
 //===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
-#include <assert.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "ai\AtomAI.h"
 #include "Civilization.h"
-#include "..\world\World.h"
+#include "../utils/Elem2D.h"
 /*============================================================================||
 | Manages a civilization
 |-----------------------------------------------------------------------------||
 | Supervises civilization initialization and the AI
 \=============================================================================*/
 
+class AI;
+class World;
+
 class CivController
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     CivController(World& i_World);
     ~CivController();
 
-	// DAWN OF CIVILIZATION
-	void placeFirstHuman();
+    // DAWN OF CIVILIZATION
+    void placeFirstHuman();
 
     // ADD
     void addHuman(Coord i_Pos);
 
-	// GETTERS
+    // GETTERS
     const Civilization& getCiv() const;
     Civilization&       getCiv();
     AI*                 getAI() const;

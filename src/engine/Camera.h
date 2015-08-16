@@ -1,9 +1,10 @@
 #pragma once
 
 //===========================================================================\\
+//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
+#include <allegro5\transformations.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\civ\human\HumanInfo.h"
-#include "..\Parameters.h"
+#include "..\utils\Elem2D.h"
 /*============================================================================||
 | Holds variables about camera position and is able to build transformation
 | matrices from them.
@@ -13,11 +14,11 @@
 
 class Camera
 {
-	friend class Mouse;
-	friend class Keyboard;
+    friend class Mouse;
+    friend class Keyboard;
 
 public:
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     Camera(Dimensions i_MapDim);
 
     // APPLY TRANSFORM
@@ -27,7 +28,7 @@ public:
     void updateVisibleTiles(Coord i_WinSize);
 
     // GETTERS
-	unsigned int getResolutionLvl() const;
+    unsigned int getResolutionLvl() const;
     Coord getVisibleTilesULCorner() const;
     Coord getVisibleTilesLRCorner() const;
 

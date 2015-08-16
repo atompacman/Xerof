@@ -1,4 +1,9 @@
 #include "CivController.h"
+#include <assert.h>
+#include "ai\AtomAI.h"
+#include "..\Parameters.h"
+#include "human\Position.h"
+#include "..\world\World.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -22,8 +27,8 @@ CivController::~CivController()
 
 void CivController::placeFirstHuman()
 {
-	Coord startLoc;
-	do {
+    Coord startLoc;
+    do {
         startLoc = m_World.map().randCoord();
     } while (!m_World.map().getTile(startLoc).isPassable());
 

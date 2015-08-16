@@ -4,16 +4,18 @@
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <list>
 #include <string>
+#include <map>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\src\engine\Assets.h"
+#include "..\..\..\utils\Direction.h"
 #include "MapElement.h"
-#include "..\src\utils\Random.h"
 /*============================================================================||
 | Wrapper around an environment type
 |-----------------------------------------------------------------------------||
 | Links an abstract environment type to a physical asset that has an orientation
 | that is random.
 \=============================================================================*/
+
+enum AssetID;
 
 enum Biome
 {
@@ -71,6 +73,6 @@ public:
     AssetID assetFile() const;
 
 private:
-    Biome    m_Type;
+    Biome     m_Type;
     Direction m_Orien;
 };

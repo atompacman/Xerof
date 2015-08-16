@@ -1,4 +1,5 @@
 #include "Map.h"
+#include "..\..\utils\Random.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -11,7 +12,7 @@ m_Tiles(new Tile[m_Dim.x * m_Dim.y])
 
 Map::~Map()
 {
-	delete[] m_Tiles;
+    delete[] m_Tiles;
 }
 
 

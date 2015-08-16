@@ -1,11 +1,8 @@
 #pragma once
 
 //===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
-#include <iosfwd>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
 #include "..\..\utils\Elem2D.h"
-#include "..\..\utils\FatalErrorDialog.h"
 /*============================================================================||
 | Describes what tiles a character can see from its perspective
 |-----------------------------------------------------------------------------||
@@ -35,7 +32,7 @@ public:
         void readModel(std::ifstream& io_File);
     };
 
-	// CONSTRUCTOR/DESTRUCTOR
+    // CONSTRUCTOR/DESTRUCTOR
     RangeOfSight(std::ifstream& i_ROSFile);
 
     // GETTERS

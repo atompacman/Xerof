@@ -32,4 +32,3 @@ public:
 private:
     double m_Equator;
 };
-

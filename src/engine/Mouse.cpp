@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include "..\Parameters.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -9,11 +10,11 @@ m_DisplayInfo(io_DisplayInfo),
 m_Camera(m_DisplayInfo.getCamera()),
 m_State(IDLE),
 m_MoveEventsSincePressed(0),
-m_ClickedTile(0,0)
+m_ClickedTile(0, 0)
 {
-	if (!al_install_mouse()) {
-		FatalErrorDialog("Mouse installation failed.");
-	}
+    if (!al_install_mouse()) {
+        FatalErrorDialog("Mouse installation failed.");
+    }
 }
 
 
@@ -47,8 +48,8 @@ void Mouse::handleReleasedButton(const ALLEGRO_EVENT& i_Event)
         return;
     }
 
-	// Set selection
-	m_DisplayInfo.setSelection(m_ClickedTile);
+    // Set selection
+    m_DisplayInfo.setSelection(m_ClickedTile);
 }
 
 void Mouse::handleMovedCursor(const ALLEGRO_EVENT& i_Event)

@@ -1,4 +1,6 @@
 #include "HumanPerception.h"
+#include "HumanInfo.h"
+#include "..\..\world\map\Map.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

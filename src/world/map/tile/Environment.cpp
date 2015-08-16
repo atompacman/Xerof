@@ -1,4 +1,8 @@
 #include "Environment.h"
+#include <list>
+#include <string>
+#include "..\src\engine\Assets.h"
+#include "..\src\utils\Random.h"
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

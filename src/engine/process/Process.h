@@ -9,6 +9,6 @@
 class Process
 {
 public:
-	// NEXT ITERATION
-	virtual void nextIter() = 0;
+    // NEXT ITERATION
+    virtual void nextIter() = 0;
 };

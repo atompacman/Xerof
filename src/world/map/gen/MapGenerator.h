@@ -1,20 +1,8 @@
-
 #pragma once
 
 //===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
-#include <assert.h>
-#include <vector>
-#include <math.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "constr\Constraint.h"
-#include "constr\DistanceFromCenter.h"
-#include "constr\EnvironmentIs.h"
-#include "..\Map.h"
-#include "config\MapConfig.h"
-#include "..\src\utils\ProgressLogger.h"
-#include "..\src\utils\Random.h"
-#include "..\tile\Environment.h"
+#include "..\..\..\utils\Elem2D.h"
 /*============================================================================||
 | Generates map
 |-----------------------------------------------------------------------------||
@@ -23,10 +11,14 @@
 | to model their probability of being place on the map.
 \=============================================================================*/
 
+class  Map;
+class  MapConfig;
+struct Phase;
+
 class MapGenerator
 {
 public:
-	// GENERATION
+    // GENERATION
     static Map& generate();
     static Map& generate(const char* i_MapConfigFile);
 
@@ -37,11 +29,10 @@ private:
     static Coord      s_ULCorner;
     static Coord      s_LRCorner;
 
-	// GENERATION
+    // GENERATION
     static void placeBorders();
     static void fillWithInitEnv();
     static void executeMapGenPhase(const Phase& i_Phase);
     static void overpass();
     static const Coord randCoord();
 };
-

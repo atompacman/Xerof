@@ -4,7 +4,9 @@
 //  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
 #include "rapidjson\document.h"
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
+#include "..\..\..\..\utils\Direction.h"
 #include "..\..\tile\Environment.h"
+#include "..\..\..\..\utils\FatalErrorDialog.h"
 #include "..\..\..\..\utils\JSONUtils.h"
 /*============================================================================//
 | Represents an element from the "Borders" element of the map config file
@@ -17,9 +19,9 @@
 
 struct Border
 {
-    BasicDir m_Side;
-    UINT	 m_Width;
-    Biome	 m_Env;
+    BasicDir     m_Side;
+    unsigned int m_Width;
+    Biome        m_Env;
 
     // CONSTRUCTOR/DESTRUCTOR
     Border(const char* i_Side, const rapidjson::Value& i_JSONElem)
@@ -34,7 +36,8 @@ struct Border
         m_Side = it->second;
 
         // Parse width
-        const Value& sideElem(parseSubElem(i_JSONElem, it->first.c_str()));
+        const rapidjson::Value& sideElem(
+            parseSubElem(i_JSONElem, it->first.c_str()));
         m_Width = parseUINT(sideElem, WIDTH_ELEM);
 
         // Parse env

@@ -4,6 +4,7 @@
 //  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
+#include "../../utils/Elem2D.h"
 #include "tile\Tile.h"
 /*============================================================================||
 | The map
@@ -16,22 +17,22 @@ class Map
 public:
     friend class MapGenerator;
 
-	// CONSTRUCTOR/DESTRUCTOR
-	Map(Dimensions i_Dim);
-	~Map();
+    // CONSTRUCTOR/DESTRUCTOR
+    Map(Dimensions i_Dim);
+    ~Map();
 
-	// GETTERS
-	const Tile&   getTile(Coord i_Coord) const;
-    Tile&         getTile(Coord i_Coord);
-    Coord         randCoord() const;
+    // GETTERS
+    const Tile& getTile(Coord i_Coord) const;
+    Tile&       getTile(Coord i_Coord);
+    Coord       randCoord() const;
 
     // STATUS
-    Dimensions  dim() const;
-    unsigned int        area() const;
+    Dimensions   dim() const;
+    unsigned int area() const;
 
 private:
     Dimensions m_Dim;
-	Tile*      m_Tiles;
+    Tile*      m_Tiles;
 
     // GETTERS
     unsigned int linearize(Coord i_Coord) const;

@@ -11,12 +11,12 @@
 
 enum MapElemType
 {
-	ENVIRONNEMENT, OBJECT
+    ENVIRONNEMENT, OBJECT
 };
 
 class MapElement
 {
 public:
-	// ASSET
-	virtual AssetID assetFile() const = 0;
+    // ASSET
+    virtual AssetID assetFile() const = 0;
 };
