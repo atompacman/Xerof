@@ -10,7 +10,7 @@
 ALLEGRO_BITMAP** loadAssets()
 {
     LOG(DEBUG) << "Assets loading - Reading datapack content in \""
-        << GRAPHIC_PACK_CONTENT_FILE << "\"";
+               << GRAPHIC_PACK_CONTENT_FILE << "\"";
 
     std::ifstream fis(GRAPHIC_PACK_CONTENT_FILE);
     std::string name, path;
@@ -29,7 +29,7 @@ ALLEGRO_BITMAP** loadAssets()
         path = DATAPACK_DIR + path;
 
         LOG(TRACE) << "Assets loading - " << std::setw(24)
-            << std::left << name << " at " << path;
+                   << std::left << name << " at " << path;
 
         bitmap = al_load_bitmap(path.c_str());
 

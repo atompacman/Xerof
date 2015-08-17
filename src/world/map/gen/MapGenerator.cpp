@@ -64,14 +64,19 @@ void MapGenerator::placeBorders()
     s_ULCorner = Coord(0, 0);
     s_LRCorner = Coord(s_Map->m_Dim);
 
+    // Get map size
+    unsigned int mapW(s_Map->width());
+    unsigned int mapH(s_Map->height());
+
+
     // Borders overlap each other (the last one has the priority)
     for (Border border : s_Config->m_Borders) {
         // Adjust generation zone
         switch (border.m_Side) {
         case UP:    s_ULCorner.y = border.m_Width; break;
-        case DOWN:  s_LRCorner.y = s_Map->m_Dim.y - border.m_Width; break;
+        case DOWN:  s_LRCorner.y = mapH - border.m_Width; break;
         case LEFT:  s_ULCorner.x = border.m_Width; break;
-        case RIGHT: s_LRCorner.x = s_Map->m_Dim.x - border.m_Width; break;
+        case RIGHT: s_LRCorner.x = mapW - border.m_Width; break;
         }
 
         // Skip ocean borders because tiles are ocean at initialization
@@ -84,47 +89,46 @@ void MapGenerator::placeBorders()
         Coord coord;
         switch (border.m_Side) {
         case UP:
-            if (border.m_Width > s_Map->m_Dim.y * 0.5) {
+            if (border.m_Width >= mapH * 0.5) {
                 FatalErrorDialog("North border cannot be \
                                   larger than half of the map");
             }
-            for (unsigned int i = 0; i < border.m_Width * s_Map->m_Dim.x; ++i) {
-                s_Map->m_Tiles[i].setEnvironment(border.m_Env);
+            for (    coord.y = 0; coord.y < border.m_Width; ++coord.y) {
+                for (coord.x = 0; coord.x < mapW;           ++coord.x) {
+                    (*s_Map)(coord).setEnvironment(border.m_Env);
+                }
             }
             break;
         case DOWN:
-            if (border.m_Width > s_Map->m_Dim.y * 0.5) {
+            if (border.m_Width >= mapH * 0.5) {
                 FatalErrorDialog("South border cannot be \
                                   larger than half of the map");
             }
-            for (unsigned int i(s_Map->m_Dim.x * s_Map->m_Dim.y - 
-                border.m_Width * s_Map->m_Dim.x); 
-                i < s_Map->m_Dim.x * s_Map->m_Dim.y; ++i) {
-                s_Map->m_Tiles[i].setEnvironment(border.m_Env);
+            for (    coord.y = mapH - border.m_Width; coord.y < mapH;++coord.y){
+                for (coord.x = 0; coord.x < s_Map->width(); ++coord.x) {
+                    (*s_Map)(coord).setEnvironment(border.m_Env);
+                }
             }
             break;
         case LEFT:
-            if (border.m_Width > s_Map->m_Dim.x * 0.5) {
+            if (border.m_Width > mapW * 0.5) {
                 FatalErrorDialog("West border cannot be \
                                   larger than half of the map");
             }
-            for (coord.y = 0; coord.y < s_Map->m_Dim.y; ++coord.y) {
+            for (coord.y = 0; coord.y < mapH; ++coord.y) {
                 for (coord.x = 0; coord.x < border.m_Width; ++coord.x) {
-                    s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
-                        setEnvironment(border.m_Env);
+                    (*s_Map)(coord).setEnvironment(border.m_Env);
                 }
             }
             break;
         case RIGHT:
-            if (border.m_Width > s_Map->m_Dim.x * 0.5) {
+            if (border.m_Width > mapW * 0.5) {
                 FatalErrorDialog("East border cannot be \
                                   larger than half of the map");
             }
-            unsigned int dimX(s_Map->m_Dim.x);
-            for (coord.y = 0; coord.y < s_Map->m_Dim.y; ++coord.y) {
-                for (coord.x = dimX - border.m_Width; coord.x<dimX; ++coord.x) {
-                    s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
-                        setEnvironment(border.m_Env);
+            for (coord.y = 0; coord.y < mapH; ++coord.y) {
+                for (coord.x = mapW - border.m_Width; coord.x<mapW; ++coord.x) {
+                    (*s_Map)(coord).setEnvironment(border.m_Env);
                 }
             }
             break;
@@ -142,8 +146,7 @@ void MapGenerator::fillWithInitEnv()
     Coord coord;
     for (coord.y = s_ULCorner.y; coord.y < s_LRCorner.y; ++coord.y) {
         for (coord.x = s_ULCorner.x; coord.x < s_LRCorner.x; ++coord.x) {
-            s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x].
-                setEnvironment(s_Config->m_InitEnvType);
+            (*s_Map)(coord).setEnvironment(s_Config->m_InitEnvType);
         }
     }
 }
@@ -179,8 +182,7 @@ void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
             // Generate a probability
             if (randProb() < totalProb) {
                 // Set the env.
-                s_Map->m_Tiles[coord.x + coord.y * s_Map->m_Dim.x]
-                    .setEnvironment(envCnstrnts.first);
+                (*s_Map)(coord).setEnvironment(envCnstrnts.first);
                 ++placed;
                 progressLogger.next();
             }
@@ -269,7 +271,7 @@ void MapGenerator::overpass()
         if (coordX < s_Map->m_Dim.x && coordY < s_Map->m_Dim.y)
         {
             // add the bushes
-            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
+            if ((*s_Map)(Coord(coordX, coordY)).getEnvironment()
                 .getBiome() == bushBiome)
             {
                 // place bushes following a binomial distribution
@@ -280,8 +282,7 @@ void MapGenerator::overpass()
             }
 
             // Modification of lonely ocean biome
-            if (s_Map->getTile(Coord(coordX, coordY)).getEnvironment()
-                .getBiome() == OCEAN)
+            if ((*s_Map)(coordX, coordY).getEnvironment().getBiome() == OCEAN)
             {
                 tempCoordX = coordX;
                 tempCoordY = coordY;
@@ -297,8 +298,8 @@ void MapGenerator::overpass()
                     if (tempCoordX < s_Map->m_Dim.x 
                         && tempCoordY < s_Map->m_Dim.y)
                     {
-                        if (s_Map->getTile(Coord(tempCoordX, tempCoordY))
-                            .getEnvironment().getBiome() == OCEAN)
+                        if ((*s_Map)(tempCoordX, tempCoordY).getEnvironment()
+                            .getBiome() == OCEAN)
                         {
                             tileChange = false;
                         }
@@ -318,8 +319,8 @@ void MapGenerator::overpass()
                     if (tempCoordX < s_Map->m_Dim.x 
                         && tempCoordY < s_Map->m_Dim.y)
                     {
-                        s_Map->getTile(Coord(coordX, coordY)).setEnvironment(
-                            s_Map->getTile(Coord(tempCoordX, tempCoordY))
+                        (*s_Map)(coordX, coordY).setEnvironment(
+                            (*s_Map)(tempCoordX, tempCoordY)
                             .getEnvironment().getBiome());
                     }
                 }

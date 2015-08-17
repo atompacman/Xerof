@@ -30,8 +30,8 @@ void CivController::placeFirstHuman()
 {
     Coord startLoc;
     do {
-        startLoc = m_World.map().randCoord();
-    } while (!m_World.map().getTile(startLoc).isPassable());
+        startLoc = m_World.map().getRandomCoord();
+    } while (!m_World.map()(startLoc).isPassable());
 
     addHuman(startLoc);
 }
@@ -47,13 +47,13 @@ void CivController::addHuman(Coord i_Pos)
     assert(m_Civ.m_People.size() < CIV_MAX_POP);
 
     // Get tile where human will be
-    Tile& tile(m_World.map().getTile(i_Pos));
+    Tile& tile(m_World.map()(i_Pos));
 
     // Assert it is human-passable
     assert(tile.isPassable());
 
     // Add it to the civ
-    m_Civ.m_People.emplace_back(Position(i_Pos), m_World.map().dim());
+    m_Civ.m_People.emplace_back(Position(i_Pos), m_World.map().dimensions());
 
     // Add a reference in the map
     tile.setHuman(&m_Civ.m_People.back());

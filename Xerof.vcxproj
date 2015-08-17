@@ -103,6 +103,7 @@
     <ClInclude Include="src\engine\process\Process.h" />
     <ClInclude Include="src\Parameters.h" />
     <ClInclude Include="src\resource.h" />
+    <ClInclude Include="src\utils\Array2D.h" />
     <ClInclude Include="src\utils\Direction.h" />
     <ClInclude Include="src\utils\Elem2D.h" />
     <ClInclude Include="src\utils\FatalErrorDialog.h" />

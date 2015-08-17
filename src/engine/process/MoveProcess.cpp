@@ -75,10 +75,10 @@ void MoveProcess::nextIter()
     // If character steps in destination tile
     if (changedTile) {
         // Remove human from previous tile
-        m_Map.getTile(m_InitTile).setHuman(NULL);
+        m_Map(m_InitTile).setHuman(NULL);
 
         // Set human on new tile
-        m_Map.getTile(m_DestTile).setHuman(&m_Human);
+        m_Map(m_DestTile).setHuman(&m_Human);
 
         // (Potentially) discover tiles around its new position
         m_Human.discoverSurroundingTiles();

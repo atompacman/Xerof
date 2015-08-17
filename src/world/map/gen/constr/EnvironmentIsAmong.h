@@ -28,7 +28,7 @@ public:
     // WEIGHT
     double getWeightFor(Coord i_Coord) const
     {
-        Biome currEnv(m_Map.getTile(i_Coord).getEnvironment().getBiome());
+        Biome currEnv(m_Map(i_Coord).getEnvironment().getBiome());
         return m_EnvTypes.find(currEnv) != m_EnvTypes.end();
     }
 

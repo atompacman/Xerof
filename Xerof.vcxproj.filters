@@ -196,6 +196,9 @@
     <ClInclude Include="src\resource.h">
       <Filter>resources</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\Array2D.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\civ\ai\AtomAI.cpp">

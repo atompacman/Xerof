@@ -21,7 +21,7 @@ public:
                        bool       i_Attraction) :
                            Constraint(i_Map),
         ConstraintWithStrength(i_Map, i_Strength, i_Attraction),
-        m_MapCenter(toDCoord(m_Map.dim()) * 0.5),
+        m_MapCenter(toDCoord(m_Map.dimensions()) * 0.5),
         m_ConvFactor(m_MapCenter * M_SQRT2)
     {}
 

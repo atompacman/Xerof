@@ -31,8 +31,8 @@ public:
         UINT count(0);
         UINT begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
         UINT begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
-        UINT endX(min(i_Coord.x + m_Radius + 1, m_Map.dim().x));
-        UINT endY(min(i_Coord.y + m_Radius + 1, m_Map.dim().y));
+        UINT endX(min(i_Coord.x + m_Radius + 1, m_Map.width()));
+        UINT endY(min(i_Coord.y + m_Radius + 1, m_Map.height()));
         Coord coord;
 
         for (coord.y = begY; coord.y < endY; ++coord.y) {
@@ -40,7 +40,7 @@ public:
                 if (coord == i_Coord) {
                     continue;
                 }
-                if(m_Map.getTile(coord).getEnvironment().getBiome()==m_EnvType){
+                if(m_Map(coord).getEnvironment().getBiome() == m_EnvType){
                     ++count;
                 }
             }
