@@ -10,7 +10,7 @@ FullMapKnowledge DisplayInfo::s_FullMapKnow = FullMapKnowledge();
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 DisplayInfo::DisplayInfo(Map& i_Map, HumanInfo* i_SelectedHuman) :
-m_Camera(i_Map.dim()),
+m_Camera(i_Map.dimensions()),
 m_SelectedHuman(i_SelectedHuman),
 m_FollowSelection(false),
 m_Map(i_Map),
@@ -81,13 +81,13 @@ void DisplayInfo::clearSelection()
 void DisplayInfo::setSelection(Coord i_SelectTile)
 {
     // If clicked tile is out of the map, clear selection
-    if (!(i_SelectTile < m_Map.dim())) {
+    if (!(i_SelectTile < m_Map.dimensions())) {
         clearSelection();
         return;
     }
 
     // Get selected human
-    HumanInfo* currSelect(m_Map.getTile(i_SelectTile).getHuman());
+    HumanInfo* currSelect(m_Map(i_SelectTile).getHuman());
 
     // If there is no human on selected tile
     if (currSelect == NULL) {

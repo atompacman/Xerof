@@ -40,7 +40,7 @@ private:
     ALLEGRO_EVENT_QUEUE* m_Queue;
     ALLEGRO_TIMER*       m_ScreenRefresher;
 
-    unsigned int          m_NumMoveProcs;
+    unsigned int  m_NumMoveProcs;
     MoveProcess** m_MoveProcs;
 
     // CONSTRUCTOR/DESTRUCTOR
@@ -50,9 +50,9 @@ private:
     void updateGame();
     void processAI();
     void processOrder(HumanInfo& io_Human, const Order& i_Order);
-    void processMovingOrder(HumanInfo&     io_Human,
-                            Action i_Action,
-                            Direction      i_Dir);
+    void processMovingOrder(HumanInfo& io_Human,
+                            Action     i_Action,
+                            Direction  i_Dir);
     bool verifyDestination(const Position& i_Dest) const;
     void updateMovements();
 

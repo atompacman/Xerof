@@ -29,13 +29,13 @@ const Position& HumanPerception::getPosition() const
 
 bool HumanPerception::isWithinMapLimits(Direction i_Dir) const
 {
-	return incrementedToDirection(m_Info.m_Pos.tileCoord(),i_Dir) < m_Map.dim();
+    return incrementedToDirection(m_Info.m_Pos.tileCoord(), i_Dir) 
+        < m_Map.dimensions();
 }
 
 const Tile& HumanPerception::getTileInDir(Direction i_Dir) const
 {
-    return m_Map.getTile(incrementedToDirection(
-        m_Info.m_Pos.tileCoord(), i_Dir));
+    return m_Map(incrementedToDirection(m_Info.m_Pos.tileCoord(), i_Dir));
 }
 
 const Tile& HumanPerception::getTileInFront() const

@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(AdditionalIncludeDirectories)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
@@ -103,6 +103,7 @@
     <ClInclude Include="src\engine\process\Process.h" />
     <ClInclude Include="src\Parameters.h" />
     <ClInclude Include="src\resource.h" />
+    <ClInclude Include="src\utils\Array2D.h" />
     <ClInclude Include="src\utils\Direction.h" />
     <ClInclude Include="src\utils\Elem2D.h" />
     <ClInclude Include="src\utils\FatalErrorDialog.h" />

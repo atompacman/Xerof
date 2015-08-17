@@ -231,7 +231,7 @@ void GameLoop::processMovingOrder(HumanInfo&     io_Human,
 
 bool GameLoop::verifyDestination(const Position& i_Dest) const
 {
-    const Tile& destination(m_World.map().getTile(i_Dest.tileCoord()));
+    const Tile& destination(m_World.map()(i_Dest.tileCoord()));
 
     if (!destination.isPassable()) {
         LOG(WARNING) << "ERROR IN AI: Cannot move on water";

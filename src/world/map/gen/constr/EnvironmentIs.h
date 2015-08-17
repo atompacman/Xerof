@@ -21,7 +21,7 @@ public:
     // WEIGHT
     double getWeightFor(Coord i_Coord) const
     {
-        return m_Map.getTile(i_Coord).getEnvironment().getBiome() == m_Type;
+        return m_Map(i_Coord).getEnvironment().getBiome() == m_Type;
     }
 
 private:

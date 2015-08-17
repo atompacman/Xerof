@@ -118,7 +118,7 @@ void Display::drawEnvironment()
             }
 
             // Get tile
-            const Tile tile(m_DisplayInfo.getMap().getTile(tileCoord));
+            const Tile tile(m_DisplayInfo.getMap()(tileCoord));
 
             // Get environment
             Environment env(tile.getEnvironment());
@@ -166,7 +166,7 @@ void Display::drawHumans()
             }
 
             // Get human on tile
-            Tile& tile(m_DisplayInfo.getMap().getTile(tileCoord));
+            Tile& tile(m_DisplayInfo.getMap()(tileCoord));
             const HumanInfo* human(tile.getHuman());
 
             if (human != NULL) {
