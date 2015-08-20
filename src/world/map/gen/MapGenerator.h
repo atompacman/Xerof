@@ -12,6 +12,7 @@
 
 class  Map;
 class  MapConfig;
+enum   Biome;
 struct Phase;
 
 class MapGenerator
@@ -33,5 +34,6 @@ private:
     static void fillWithInitEnv();
     static void executeMapGenPhase(const Phase& i_Phase);
     static void overpass();
+    static void aloneTileRemoval(const Biome& changedBiome, const Coord& readCoord);
     static const Coord randCoord();
 };
