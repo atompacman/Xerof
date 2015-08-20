@@ -212,9 +212,9 @@ void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
     }
 }
 
-void GameLoop::processMovingOrder(HumanInfo&     io_Human,
-    Action i_Action,
-    Direction      i_Dir)
+void GameLoop::processMovingOrder(HumanInfo& io_Human,
+                                  Action     i_Action,
+                                  Direction  i_Dir)
 {
     assertNonCenterDir(i_Dir);
 
@@ -225,7 +225,7 @@ void GameLoop::processMovingOrder(HumanInfo&     io_Human,
         m_MoveProcs[m_NumMoveProcs] = new MoveProcess(io_Human,
             dest,
             m_World.map());
-        ++m_NumMoveProcs;
+            ++m_NumMoveProcs;
     }
 }
 

@@ -208,7 +208,26 @@ static DCoord toDCoord(const Coord& i_Coord)
     return DCoord(i_Coord.x, i_Coord.y);
 }
 
+static SCoord toSCoord(const Coord& i_Coord)
+{
+    return SCoord(i_Coord.x, i_Coord.y);
+}
+
 static DCoord roundCoord(const DCoord& i_Coord)
 {
     return DCoord(fastRint(i_Coord.x), fastRint(i_Coord.y));
+}
+
+static SCoord rotateCoord(const SCoord& i_Coord, Direction i_Dir)
+{
+    // Direction must be UP, LEFT, DOWN or RIGHT(0, 90, 180, 270 degres)
+    assertBasicDir(i_Dir);
+
+    switch (i_Dir % 4) {
+    case UP   : return i_Coord;
+    case RIGHT: return SCoord( i_Coord.y, -i_Coord.x);
+    case DOWN : return SCoord(-i_Coord.x, -i_Coord.y);
+    case LEFT : return SCoord(-i_Coord.y,  i_Coord.x);
+    default   : return SCoord();
+    }
 }
