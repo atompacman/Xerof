@@ -10,6 +10,7 @@
 #include <HumanInfo.h>
 #include <Mouse.h>
 #include <Parameters.h>
+#include <Random.h>
 #include <Tile.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
@@ -105,6 +106,7 @@ void Display::drawEnvironment()
     UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
     UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
                                            * ALPHA_OVERLAPPING[resLvl]);
+    double scaling((double)overlapTileSize / (double)tileSizeOnTexture);
     const MapKnowledge& mapKnowledge(m_DisplayInfo.getMapKnowledge());
 
     // Draw visible tiles
@@ -124,20 +126,27 @@ void Display::drawEnvironment()
             const Tile tile(m_DisplayInfo.getMap()(tileCoord));
 
             // Get environment
-            Environment env(tile.getEnvironment());
+            const Environment& env(tile.getEnvironment());
 
-            // Draw environment bitmap on screen
-            al_draw_scaled_bitmap(
+            // Create tile sub-bitmap
+            ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
                 m_Assets[env.assetFile()],
                 textureULCorner.x,
                 textureULCorner.y,
                 tileSizeOnTexture,
-                tileSizeOnTexture,
+                tileSizeOnTexture));
+
+            // Draw environment bitmap on screen
+            al_draw_scaled_rotated_bitmap(
+                subBitmap,
+                tileSizeOnTexture * 0.5,
+                tileSizeOnTexture * 0.5,
                 tileCoord.x * tileSizeOnMap,
                 tileCoord.y * tileSizeOnMap,
-                overlapTileSize,
-                overlapTileSize,
-                env.getOrientation());
+                scaling,
+                scaling,
+                correspondingAngle(env.getOrientation()),
+                env.getFlip());
         }
     }
 }
@@ -153,8 +162,8 @@ void Display::drawHumans()
     UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
     UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
                                             * ALPHA_OVERLAPPING[resLvl]);
-    double humanScaling = (double)overlapTileSize / (double)tileSizeOnTexture;
-    UINT toCenterHuman = (overlapTileSize - tileSizeOnMap) * 0.5;
+    double humanScaling((double)overlapTileSize / (double)tileSizeOnTexture);
+    UINT toCenterHuman((overlapTileSize - tileSizeOnMap) * 0.5);
     const MapKnowledge& mapKnowledge(m_DisplayInfo.getMapKnowledge());
 
     // Draw visible tiles
