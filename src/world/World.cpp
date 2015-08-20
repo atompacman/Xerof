@@ -6,8 +6,10 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 World::World() :
-m_Map(MapGenerator::generate())
-{}
+m_Map()
+{
+    MapGenerator::generate(m_Map);
+}
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //

@@ -15,25 +15,18 @@ class  MapConfig;
 enum   Biome;
 struct Phase;
 
-class MapGenerator
+namespace MapGenerator
 {
-public:
     // GENERATION
-    static Map& generate();
-    static Map& generate(const char* i_MapConfigFile);
-
-private:
-    // Temporary
-    static Map*       s_Map;
-    static MapConfig* s_Config;
-    static Coord      s_ULCorner;
-    static Coord      s_LRCorner;
+    void generate(Map& o_Map);
+    void generate(Map& o_Map, const char* i_MapConfigFile);
 
     // GENERATION
-    static void placeBorders();
-    static void fillWithInitEnv();
-    static void executeMapGenPhase(const Phase& i_Phase);
-    static void overpass();
-    static void aloneTileRemoval(const Biome& changedBiome, const Coord& readCoord);
-    static const Coord randCoord();
+    void placeBorders();
+    void fillWithInitEnv();
+    void executeMapGenPhase(const Phase& i_Phase);
+    void runOverpass();
+    void removeLonelyTiles(const Biome& i_ChangedBiome, 
+                           const Coord& i_ReadCoord);
+    const Coord randCoord();
 };
