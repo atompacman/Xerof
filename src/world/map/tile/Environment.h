@@ -1,13 +1,11 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <Direction.h>
 #include <list>
+#include <map>
+#include <MapElement.h>
 #include <string>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\src\engine\Assets.h"
-#include "MapElement.h"
-#include "..\src\utils\Random.h"
+
 /*============================================================================||
 | Wrapper around an environment type
 |-----------------------------------------------------------------------------||
@@ -15,7 +13,9 @@
 | that is random.
 \=============================================================================*/
 
-enum EnvType
+enum AssetID;
+
+enum Biome
 {
     GRASSLAND,
     LAKE,
@@ -25,13 +25,13 @@ enum EnvType
     TUNDRA
 };
 
-static const std::map<std::string, EnvType> ENV_TYPES = {
-    { "GRASSLAND",  GRASSLAND   },
-    { "LAKE",       LAKE        },
-    { "OCEAN",      OCEAN       },
-    { "PLAIN",      PLAIN       },
-    { "ROCKY",      ROCKY       },
-    { "TUNDRA",     TUNDRA      }
+static const std::map<std::string, Biome> ENV_TYPES = {
+    { "GRASSLAND", GRASSLAND },
+    { "LAKE",      LAKE },
+    { "OCEAN",     OCEAN },
+    { "PLAIN",     PLAIN },
+    { "ROCKY",     ROCKY },
+    { "TUNDRA",    TUNDRA }
 };
 
 static const char* ENV_NAMES[] = {
@@ -43,7 +43,7 @@ static const char* ENV_NAMES[] = {
     "TUNDRA"
 };
 
-static const std::list<EnvType> LAND_ENV_TYPES = {
+static const std::list<Biome> LAND_ENV_TYPES = {
     GRASSLAND,
     PLAIN,
     ROCKY,
@@ -53,24 +53,26 @@ static const std::list<EnvType> LAND_ENV_TYPES = {
 class Environment : public MapElement
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
-    Environment(EnvType i_Type);
-	
-	// GETTERS
-	EnvType getType() const;
-	Direction getOrientation() const;
+    // CONSTRUCTOR/DESTRUCTOR
+    Environment(Biome i_Type);
+
+    // GETTERS
+    Biome        getBiome() const;
+    Direction    getOrientation() const;
+    unsigned int getFlip() const;
 
     // SETTERS
-    void setEnvType(EnvType i_Type);
+    void setBiome(Biome i_Type);
 
-	// STATUS
-	bool isSolidLand() const;
-    static bool isSolidLand(EnvType i_Type);
+    // STATUS
+    bool        isSolidLand() const;
+    static bool isSolidLand(Biome i_Type);
 
-	// ASSET
-	AssetID assetFile() const;
+    // ASSET
+    AssetID assetFile() const;
 
 private:
-	EnvType   m_Type;
-	Direction m_Orien;
+    Biome        m_Type;
+    Direction    m_Orien;
+    unsigned int m_Flip;
 };

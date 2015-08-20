@@ -1,10 +1,9 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "ConstraintWithStrength.h"
-#include "NeighbouringEnvConstraint.h"
-/*============================================================================//
+#include <ConstraintWithStrength.h>
+#include <NeighbouringEnvConstraint.h>
+
+/*============================================================================\\
 | The more a spot is surrounded by the same environment, the more probably the
 | env. placement will be.
 |-----------------------------------------------------------------------------||
@@ -20,7 +19,7 @@ class NeighbouringEnvAttraction : public NeighbouringEnvConstraint,
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvAttraction(const Map& i_Map,
-                              EnvType    i_EnvType,
+                              Biome      i_EnvType,
                               UINT       i_Radius,
                               double     i_Strength) :
         Constraint(i_Map),

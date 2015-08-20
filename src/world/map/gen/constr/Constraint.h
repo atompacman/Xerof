@@ -1,14 +1,11 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <Elem2D.h>
+#include <Map.h>
+#include <rapidjson\document.h>
 #include <stdlib.h>
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "rapidjson\document.h"
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\src\utils\Elem2D.h"
-#include "..\..\Map.h"
-/*============================================================================//
+
+/*============================================================================\\
 | Constraint abstract class
 |-----------------------------------------------------------------------------||
 | Constraints computes the probabilty [0, 1] of an environment to be placed at a

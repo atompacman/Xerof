@@ -1,30 +1,54 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
+#include <DisplayInfo.h>
+#include <FatalErrorDialog.h>
+#include <list>
+#include <Map.h>
 #include <math.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\utils\FatalErrorDialog.h"
-#include "..\Parameters.h"
-/*============================================================================||
+
+/*============================================================================\\
 | Variables about the camera controller by the mouse
 |-----------------------------------------------------------------------------||
 | - Hold left button to move camera
-| - Hold right button to zoom
+| - Hold right button to zoom and rotate camera
 | - Wheel to zoom
 \=============================================================================*/
 
-struct Mouse
+#define MAX_MOVE_EVENT_FOR_CLICK 10
+
+enum MouseState {
+    IDLE,
+    LEFT_BUTTON_PRESSED,
+    RIGHT_BUTTON_PRESSED
+};
+
+class Mouse
 {
-	int         m_State;
-	double      m_Zoom;
-    double      m_Rotate;
-    DCoord      m_Pos;
-    const Coord m_MaxPos;
+public:
+    // CONSTRUCTOR/DESTRUCTOR
+    Mouse(DisplayInfo& io_DisplayInfo);
 
-	//CONSTRUCTOR/DESTRUCTOR
-    Mouse(Dimensions i_MapDim, UINT i_TileSize);
+    // EVENT HANDLING
+    void handlePressedButton(const ALLEGRO_EVENT& i_Event);
+    void handleReleasedButton(const ALLEGRO_EVENT& i_Event);
+    void handleMovedCursor(const ALLEGRO_EVENT& i_Event);
 
-	//EVENT HANDLING
-	void handleMouseEvent(const ALLEGRO_EVENT& i_Event);
+private:
+    // Display information handled by this peripheral
+    DisplayInfo& m_DisplayInfo;
+
+    // The camera (extracted from DisplayInfo for quicker access)
+    Camera& m_Camera;
+
+    // Current pressed button (or no button pressed)
+    MouseState m_State;
+
+    // Used for selection clicks
+    unsigned int m_MoveEventsSincePressed;
+
+    // Last clicked tile
+    Coord m_ClickedTile;
+
+    // EVENT HANDLING
+    Coord computeSelectedTile(unsigned int i_x, unsigned int i_y) const;
 };

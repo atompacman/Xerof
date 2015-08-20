@@ -1,0 +1,4 @@
+CROSS			cross.ros
+FLASHLIGHT		flashlight.ros
+STRAIGHT		straight.ros
+90DEGRE			90degre.ros

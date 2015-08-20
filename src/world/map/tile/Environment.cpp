@@ -1,12 +1,15 @@
-#include "Environment.h"
+#include <Assets.h>
+#include <Environment.h>
+#include <Random.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-Environment::Environment(EnvType i_Type) :
+Environment::Environment(Biome i_Type) :
 m_Type(i_Type),
-m_Orien(randBasicDir())
+m_Orien(randBasicDir()),
+m_Flip(randUINT(3))
 {}
 
 
@@ -14,7 +17,7 @@ m_Orien(randBasicDir())
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-EnvType Environment::getType() const
+Biome Environment::getBiome() const
 {
     return m_Type;
 }
@@ -24,13 +27,18 @@ Direction Environment::getOrientation() const
     return m_Orien;
 }
 
+unsigned int Environment::getFlip() const
+{
+    return m_Flip;
+}
+
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                   SETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Environment::setEnvType(EnvType i_Type)
+void Environment::setBiome(Biome i_Type)
 {
     m_Type = i_Type;
 }
@@ -45,7 +53,7 @@ bool Environment::isSolidLand() const
     return isSolidLand(m_Type);
 }
 
-bool Environment::isSolidLand(EnvType i_Type)
+bool Environment::isSolidLand(Biome i_Type)
 {
     return i_Type != LAKE && i_Type != OCEAN;
 }
@@ -58,11 +66,11 @@ bool Environment::isSolidLand(EnvType i_Type)
 AssetID Environment::assetFile() const
 {
     switch (m_Type) {
-    case GRASSLAND: return GRASSLAND_TILE_FILE;
-    case OCEAN:		return OCEAN_TILE_FILE;
-    case PLAIN:		return PLAINS_TILE_FILE;
-    case ROCKY:		return ROCKY_TILE_FILE;
-    case TUNDRA:	return TUNDRA_TILE_FILE;
+    case GRASSLAND: return BIOME_GRASSLAND;
+    case OCEAN:     return BIOME_OCEAN;
+    case PLAIN:     return BIOME_PLAINS;
+    case ROCKY:     return BIOME_ROCKY;
+    case TUNDRA:    return BIOME_TUNDRA;
     }
     return SELECTION;
 }

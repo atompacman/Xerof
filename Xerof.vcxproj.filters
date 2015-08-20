@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{c8b900bd-0577-4e5e-be67-81a51ff0b6db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\civ">
+      <UniqueIdentifier>{7f864e04-51da-4fcb-aed5-f6a3ccd0015b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\civ\ai">
+      <UniqueIdentifier>{49cb241c-2f24-48f1-b5cd-22eb50893548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\civ\human">
+      <UniqueIdentifier>{8431f5f3-8d59-4473-a1da-dbdfae2bef1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine">
+      <UniqueIdentifier>{5df19069-af62-4425-8e2f-a2c6e0e402e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\process">
+      <UniqueIdentifier>{e9b9c2c0-c943-444c-815a-0c178fad14cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{c946a3c0-a876-484a-8d33-c13bf9598d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world">
+      <UniqueIdentifier>{248eb8a2-4ddb-4df8-b679-20010850ec64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world\map">
+      <UniqueIdentifier>{d7703ba7-8213-40fb-b7ed-b57e64450485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world\map\gen">
+      <UniqueIdentifier>{750260c5-aaf4-42c0-96d0-c37a46782a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world\map\gen\config">
+      <UniqueIdentifier>{de76f0e1-5ff8-469b-8a93-52cef8cb5e16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world\map\gen\constr">
+      <UniqueIdentifier>{90cb18e2-e756-43ee-abfa-8bcb4fc7306c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world\map\tile">
+      <UniqueIdentifier>{2eecf355-a668-4bb5-8651-f4b53667eb5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{5cec5939-e712-469f-badd-9ad0fc3558df}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\easylogging++.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\ai\AI.h">
+      <Filter>src\civ\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\ai\AtomAI.h">
+      <Filter>src\civ\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\ai\Order.h">
+      <Filter>src\civ\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\Position.h">
+      <Filter>src\civ\human</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\CivController.h">
+      <Filter>src\civ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\Civilization.h">
+      <Filter>src\civ</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\process\MoveProcess.h">
+      <Filter>src\engine\process</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\process\Process.h">
+      <Filter>src\engine\process</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Assets.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Display.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\GameLoop.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Keyboard.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Mouse.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Direction.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Elem2D.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\FatalErrorDialog.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\JSONUtils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\MathUtils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\ProgressLogger.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Random.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\World.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\MapGenerator.h">
+      <Filter>src\world\map\gen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\config\MapConfig.h">
+      <Filter>src\world\map\gen\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\Constraint.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\DistanceFromCenter.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\EnvironmentIs.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\Map.h">
+      <Filter>src\world\map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\tile\Environment.h">
+      <Filter>src\world\map\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\tile\MapElement.h">
+      <Filter>src\world\map\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\tile\Object.h">
+      <Filter>src\world\map\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\tile\Tile.h">
+      <Filter>src\world\map\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Parameters.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\config\Border.h">
+      <Filter>src\world\map\gen\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\config\Phase.h">
+      <Filter>src\world\map\gen\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\DistanceFromEquator.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\ConstraintWithStrength.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvLimits.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvAttraction.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvConstraint.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\gen\constr\EnvironmentIsAmong.h">
+      <Filter>src\world\map\gen\constr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Camera.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\HumanPerception.h">
+      <Filter>src\civ\human</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\HumanInfo.h">
+      <Filter>src\civ\human</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\MapKnowledge.h">
+      <Filter>src\civ\human</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\FullMapKnowledge.h">
+      <Filter>src\civ\human</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\DisplayInfo.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Array2D.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\RangeOfSight.h">
+      <Filter>src\civ\human</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\civ\ai\AtomAI.cpp">
+      <Filter>src\civ\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\ai\Order.cpp">
+      <Filter>src\civ\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\human\Position.cpp">
+      <Filter>src\civ\human</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\CivController.cpp">
+      <Filter>src\civ</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\Civilization.cpp">
+      <Filter>src\civ</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\process\MoveProcess.cpp">
+      <Filter>src\engine\process</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Display.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\GameLoop.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Keyboard.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Mouse.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\World.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\gen\MapGenerator.cpp">
+      <Filter>src\world\map\gen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\Map.cpp">
+      <Filter>src\world\map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\tile\Environment.cpp">
+      <Filter>src\world\map\tile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\tile\Tile.cpp">
+      <Filter>src\world\map\tile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Xerof.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\gen\config\MapConfig.cpp">
+      <Filter>src\world\map\gen\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Camera.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\human\HumanPerception.cpp">
+      <Filter>src\civ\human</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\human\HumanInfo.cpp">
+      <Filter>src\civ\human</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\human\MapKnowledge.cpp">
+      <Filter>src\civ\human</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\DisplayInfo.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Assets.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\JSONUtils.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\map\gen\config\Phase.cpp">
+      <Filter>src\world\map\gen\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\human\RangeOfSight.cpp">
+      <Filter>src\civ\human</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src_doc_helper.txt">
+      <Filter>resources</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\xerof.ico">
+      <Filter>resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xerof.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

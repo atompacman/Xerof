@@ -1,13 +1,11 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+#include <Direction.h>
 #include <math.h>
-#include <wtypes.h>
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Direction.h"
-/*============================================================================||
+#include <MathUtils.h>
+
+/*============================================================================\\
 | Small class representing a 2D element (x,y)
 |-----------------------------------------------------------------------------||
 | - Coord  (unsigned int)
@@ -16,9 +14,10 @@
 | - DDimensions (double)
 \=============================================================================*/
 
-#define Coord       Elem2D<UINT>
+#define Coord       Elem2D<unsigned int>
 #define DCoord      Elem2D<double>
-#define Dimensions  Elem2D<UINT>
+#define SCoord      Elem2D<int>
+#define Dimensions  Elem2D<unsigned int>
 #define DDimensions Elem2D<double>
 
 template <typename T>
@@ -195,10 +194,40 @@ static DCoord abs(const DCoord& i_DCoord)
 
 static Coord round(const DCoord& i_DCoord)
 {
-    return Coord((UINT)rint(i_DCoord.x), (UINT)rint(i_DCoord.y));
+    return Coord((unsigned int)fastRint(i_DCoord.x), 
+                 (unsigned int)fastRint(i_DCoord.y));
+}
+
+static Coord toCoord(const SCoord& i_Coord)
+{
+    return Coord(i_Coord.x, i_Coord.y);
 }
 
 static DCoord toDCoord(const Coord& i_Coord)
 {
     return DCoord(i_Coord.x, i_Coord.y);
+}
+
+static SCoord toSCoord(const Coord& i_Coord)
+{
+    return SCoord(i_Coord.x, i_Coord.y);
+}
+
+static DCoord roundCoord(const DCoord& i_Coord)
+{
+    return DCoord(fastRint(i_Coord.x), fastRint(i_Coord.y));
+}
+
+static SCoord rotateCoord(const SCoord& i_Coord, Direction i_Dir)
+{
+    // Direction must be UP, LEFT, DOWN or RIGHT(0, 90, 180, 270 degres)
+    assertBasicDir(i_Dir);
+
+    switch (i_Dir % 4) {
+    case UP   : return i_Coord;
+    case RIGHT: return SCoord( i_Coord.y, -i_Coord.x);
+    case DOWN : return SCoord(-i_Coord.x, -i_Coord.y);
+    case LEFT : return SCoord(-i_Coord.y,  i_Coord.x);
+    default   : return SCoord();
+    }
 }

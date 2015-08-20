@@ -1,17 +1,16 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
 #include <map>
-/*============================================================================||
+
+/*============================================================================//
 | Different types of direction
 |-----------------------------------------------------------------------------||
 | - Basic (up, down, left, right)
 | - Diagonal (4 corners)
 | - The "special" center value
 |
-| A Direction is basically a UINT that must be asserted before usage
+| A Direction is basically a unsigned int that must be asserted before usage
 \=============================================================================*/
 
 typedef unsigned int Direction;
@@ -41,17 +40,32 @@ static const std::map<std::string, BasicDir> CARDINAL_DIRS = {
     { "WEST",   LEFT  }
 };
 
+static bool isBasicDir(Direction i_Dir)
+{
+    return i_Dir <= LEFT;
+}
+
+static bool isDiagonal(Direction i_Dir)
+{
+    return UPPER_RIGHT <= i_Dir && i_Dir <= UPPER_LEFT;
+}
+
+static bool isNonCenterDir(Direction i_Dir)
+{
+    return i_Dir < CENTER;
+}
+
 static void assertBasicDir(Direction i_Dir)
 {
-    assert(i_Dir <= LEFT);
+    assert(isBasicDir(i_Dir));
 }
 
 static void assertDiagDir(Direction i_Dir)
 {
-    assert(UPPER_RIGHT <= i_Dir && i_Dir <= UPPER_LEFT);
+    assert(isDiagonal(i_Dir));
 }
 
 static void assertNonCenterDir(Direction i_Dir)
 {
-    assert(i_Dir < CENTER);
+    assert(isNonCenterDir(i_Dir));
 }

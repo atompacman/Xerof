@@ -1,24 +1,17 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   STL   =   =   =   =   =   =   =   =   = ||
 #include <assert.h>
+#include <Border.h>
+#include <Elem2D.h>
 #include <list>
-#include <map>
-//  | =   =   =   =   =   =   =   =   LIB   =   =   =   =   =   =   =   =   = ||
-#include "rapidjson\document.h"
-#include "rapidjson\error\en.h"
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "Border.h"
-#include "..\src\Parameters.h"
-#include "Phase.h"
-/*============================================================================||
+#include <Phase.h>
+#include <rapidjson\document.h>
+
+/*============================================================================\\
 | MAP CONFIG FILE REPRESENTATION
 |-----------------------------------------------------------------------------||
 | Represents the content of a map generation configuration file.
 \=============================================================================*/
-
-using namespace rapidjson;
 
 // JSON configuration file elements
 #define CONFIG_ROOT_ELEM    "XerofMapGeneratorConfig"
@@ -36,15 +29,15 @@ using namespace rapidjson;
 
 struct Limits
 {
-    UINT m_MinMapSize;
-    UINT m_MaxMapSize;
+    unsigned int m_MinMapSize;
+    unsigned int m_MaxMapSize;
 };
 
 class MapConfig
 {
 public:
-    Dimensions 		  m_Dim;
-    EnvType			  m_InitEnvType;
+    Dimensions        m_Dim;
+    Biome             m_InitEnvType;
     std::list<Border> m_Borders;
     std::list<Phase>  m_Phases;
 
@@ -54,10 +47,9 @@ public:
 
 private:
     // Temporary
-    Document m_Doc;
+    rapidjson::Document m_Doc;
 
     // LOAD CONFIGURATION LIMITS
     static const Limits s_ConfigLimits;
     static Limits loadConfigLimits();
 };
-

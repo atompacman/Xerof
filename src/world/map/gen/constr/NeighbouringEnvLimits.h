@@ -1,9 +1,8 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "NeighbouringEnvConstraint.h"
-/*============================================================================//
+#include <NeighbouringEnvConstraint.h>
+
+/*============================================================================\\
 | Limits the number of surrounding tiles of an environment type to be between
 | m_Min and m_Max (binary selection)
 |-----------------------------------------------------------------------------||
@@ -19,7 +18,7 @@ class NeighbouringEnvLimits : public NeighbouringEnvConstraint
 public:
     // CONSTRUCTOR/DESTRUCTOR
     NeighbouringEnvLimits(const Map& i_Map,
-                          EnvType    i_EnvType,
+                          Biome      i_EnvType,
                           UINT       i_Min,
                           UINT       i_Max,
                           UINT       i_Radius) :

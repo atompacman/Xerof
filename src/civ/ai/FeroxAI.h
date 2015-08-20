@@ -2,25 +2,18 @@
 
 //===========================================================================\\
 //  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\civ\human\Human.h"
-#include "Process.h"
+#include "AI.h"
+#include "..\..\utils\Random.h"
+#include "..\..\world\map\tile\Tile.h"
 /*============================================================================||
-| All processes involving a Human
+| AI made by Atompacman
 |-----------------------------------------------------------------------------||
-| - Human movement
+| Implements the AI abstract class
 \=============================================================================*/
 
-class HumanProcess : public Process
+class FeroxAI : public AI
 {
 public:
-    // CONSTRUCTOR/DESTRUCTOR
-    HumanProcess(Human* i_Human) :
-        m_Human(*i_Human)
-    {}
-
-	// NEXT ITERATION
-	virtual void nextIter() = 0;
-
-protected:
-    Human& m_Human;
+    // GIVE ORDER
+    virtual Order giveOrder(const HumanPerception& i_HP);
 };

@@ -1,9 +1,8 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   c=   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "ConstraintWithStrength.h"
-/*============================================================================//
+#include <ConstraintWithStrength.h>
+
+/*============================================================================\\
 | A tile has more chance to spawn close or far from the equator
 |-----------------------------------------------------------------------------||
 | Parameters:
@@ -20,7 +19,7 @@ public:
                         bool       i_Attraction) :
         Constraint(i_Map),
         ConstraintWithStrength(i_Map, i_Strength, i_Attraction),
-        m_Equator((double) i_Map.dim().y * 0.5)
+        m_Equator((double) i_Map.height() * 0.5)
     {}
 
     // WEIGHT
@@ -32,4 +31,3 @@ public:
 private:
     double m_Equator;
 };
-

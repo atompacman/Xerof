@@ -1,28 +1,33 @@
 #pragma once
 
-//===========================================================================\\
-//  | =   =   =   =   =   =   =   =   SRC   =   =   =   =   =   =   =   =   = ||
-#include "..\..\utils\Elem2D.h"
-#include "HumanProcess.h"
-#include "..\..\Parameters.h"
-#include "..\..\civ\human\Position.h"
-/*============================================================================||
+#include <Elem2D.h>
+#include <Process.h>
+
+/*============================================================================\\
 | A movement than occurs over many frames
 |-----------------------------------------------------------------------------||
 | Title says it all
 \=============================================================================*/
 
-class MoveProcess : public HumanProcess
+class  HumanInfo;
+struct Position;
+class  Map;
+
+class MoveProcess : public Process
 {
 public:
-	// CONSTRUCTOR/DESTRUCTOR
-    MoveProcess(Human* i_Human, const Position& i_Dest);
+    // CONSTRUCTOR/DESTRUCTOR
+    MoveProcess(HumanInfo& i_Human, const Position& i_Dest, Map& i_Map);
 
-	// NEXT ITERATION
+    // NEXT ITERATION
     virtual void nextIter();
 
 private:
-    static const double s_ERROR;
+    static const double s_DELTA;
 
-	DCoord m_Delta;
+    HumanInfo& m_Human;
+    Coord      m_InitTile;
+    Coord      m_DestTile;
+    DCoord     m_Delta;
+    Map&       m_Map;
 };
