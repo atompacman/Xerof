@@ -188,7 +188,7 @@ void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
             }
             else if (++tries > i_Phase.m_MaxTries) {
                 LOG(ERROR) << "Maximum number of tries reached."
-                           << " Skipping phase for this environent.";
+                           << " Skipping phase for this environment.";
                 break;
             }
         }
@@ -197,138 +197,119 @@ void MapGenerator::executeMapGenPhase(const Phase& i_Phase)
 
 void MapGenerator::overpass()
 {
-    int nbCaseParcourue = 1;
-    unsigned int coordX = 0;
-    unsigned int coordY = 0;
-    int diviseur = 2;
-    int valeurDeplacement = 0;
+    int numTileTraveled = 1;
+    Coord readCoord(0, 0);
+    int divisor = 2;
+    int addedToCoord = 0;
     bool addToX = true;
-
-    Biome bushBiome = GRASSLAND;
-    int bushBiomeCounter = 0;
-    unsigned int probabilitOfBush = 7;
-
-    bool lastTileOcean = true;
-    int xAroundCoord[8] = { 0, 1,  0,  0, -1, -1, 0, 0 };
-    int yAroundCoord[8] = { 1, 0, -1, -1,  0,  0, 1, 1 };
-    int xAroundRandCoord[8] = { -1,  0,  1, -1, 1, -1, 0, 1 };
-    int yAroundRandCoord[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
-    unsigned int tempCoordX;
-    unsigned int tempCoordY;
-    bool tileChange = false;
-    int randomNumber;
 
     LOG(INFO) << "Start of overpass";
 
     // We stop reading when we reach the bottom right corner
-    while (coordX < s_LRCorner.x || coordY < s_LRCorner.y){
+    while (readCoord.x < s_LRCorner.x || readCoord.y < s_LRCorner.y){
 
         // calculation of the next coordinate
-        // si le nombre est impaire l'addition est toujours la meme
-        if (nbCaseParcourue % 2 != 0)
+
+        // if the number of tile traveled is even the addition is the same
+        if (numTileTraveled % 2 != 0)
         {
-            ++coordX;
+            ++readCoord.x;
         }
         else 
         {
-            while (nbCaseParcourue % diviseur == 0)
+            // find the highest n of 2^n that can divide the numTileTraveled
+            while (numTileTraveled % divisor == 0)
             {
-                diviseur *= 2;
+                divisor *= 2;
             }
+            // multiplied once too much
+            divisor = (log2(divisor)) - 1;
+            
 
-            // on a multiplié une fois de trop donc on réduit l'exposant de 1
-            diviseur = (log2(diviseur)) - 1;
-
-            if (diviseur % 2 == 0)
+            if (divisor % 2 == 0)
             {
                 addToX = false;
             }
             else
             {
                 addToX = true;
-                ++diviseur;
+                ++divisor;
             }
 
-            valeurDeplacement = (pow(2, (diviseur / 2))) - 1;
+            addedToCoord = (pow(2, (divisor / 2))) - 1;
 
             if (addToX)
             {
-                coordX -= valeurDeplacement;
-                ++coordY;
+                readCoord.x -= addedToCoord;
+                ++readCoord.y;
             }
             else
             {
-                coordY -= valeurDeplacement;
-                ++coordX;
+                readCoord.y -= addedToCoord;
+                ++readCoord.x;
             }
 
-            diviseur = 2;
+            divisor = 2;
         }
 
-        ++nbCaseParcourue;
+        ++numTileTraveled;
 
-        // if we are outside the map nothing is done
-        if (coordX < s_Map->m_Dim.x && coordY < s_Map->m_Dim.y)
+        aloneTileRemoval(OCEAN, readCoord);
+    }
+
+    LOG(INFO) << "End of overpass";
+}
+
+void MapGenerator::aloneTileRemoval(const Biome& changedBiome,
+                                    const Coord& readCoord){
+
+    Coord surroundingCoord[8] = { Coord(-1, -1), Coord(0, -1), Coord(1, -1),
+        Coord(-1, 0), Coord(1, 0), Coord(-1, 1), Coord(0, 1), Coord(1, 1) };
+    Coord tempCoord;
+    bool tileChange = false;
+    int randomNumber;
+
+    // if we are outside the map nothing is done
+    if (readCoord < s_Map->m_Dim)
+    {
+
+        // Modification of lonely ocean biome
+        if ((*s_Map)(readCoord).getEnvironment().getBiome() == changedBiome)
         {
-            // add the bushes
-            if ((*s_Map)(Coord(coordX, coordY)).getEnvironment()
-                .getBiome() == bushBiome)
+            tileChange = true;
+
+            // we travel the surrounding tile to look for a second ocean
+            for (int i = 0; i < 8; ++i)
             {
-                // place bushes following a binomial distribution
-                if (randUINT(1, probabilitOfBush) == 1)
+                tempCoord = readCoord + surroundingCoord[i];
+
+                // verification to make sure we're not outside the map limit
+                if (tempCoord < s_Map->m_Dim)
                 {
-                    // Add a bush to the tile
+                    if ((*s_Map)(tempCoord).getEnvironment().getBiome() 
+                        == changedBiome)
+                    {
+                        tileChange = false;
+                    }
                 }
+
             }
-
-            // Modification of lonely ocean biome
-            if ((*s_Map)(coordX, coordY).getEnvironment().getBiome() == OCEAN)
+            // If tile change we find a random biome from surrounding tile
+            if (tileChange)
             {
-                tempCoordX = coordX;
-                tempCoordY = coordY;
-                tileChange = true;
+                randomNumber = randUINT(0, 7);
 
-                // we travel the surrounding tile to look for a second ocean
-                for (int i = 0; i < 8; ++i)
+                tempCoord = readCoord + surroundingCoord[randomNumber];
+
+                // verification to make sure we're not outside the map limit
+                if (tempCoord < s_Map->m_Dim)
                 {
-                    tempCoordX += xAroundCoord[i];
-                    tempCoordY += yAroundCoord[i];
-
-                    // verification to make sur we're not outside the map limit
-                    if (tempCoordX < s_Map->m_Dim.x 
-                        && tempCoordY < s_Map->m_Dim.y)
-                    {
-                        if ((*s_Map)(tempCoordX, tempCoordY).getEnvironment()
-                            .getBiome() == OCEAN)
-                        {
-                            tileChange = false;
-                        }
-                    }
-
-                }
-                // if the tile change we find a random tile around and change 
-                // the biome to the selected tile biome
-                if (tileChange)
-                {
-                    randomNumber = randUINT(0, 7);
-
-                    tempCoordX = coordX + xAroundRandCoord[randomNumber];
-                    tempCoordY = coordY + yAroundRandCoord[randomNumber];
-
-                    // verification to make sur we're not outside the map limit
-                    if (tempCoordX < s_Map->m_Dim.x 
-                        && tempCoordY < s_Map->m_Dim.y)
-                    {
-                        (*s_Map)(coordX, coordY).setEnvironment(
-                            (*s_Map)(tempCoordX, tempCoordY)
-                            .getEnvironment().getBiome());
-                    }
+                    (*s_Map)(readCoord).setEnvironment((*s_Map)(tempCoord)
+                        .getEnvironment().getBiome());
                 }
             }
         }
     }
-
-    LOG(INFO) << "End of overpass";
 }
 
 const Coord MapGenerator::randCoord()
