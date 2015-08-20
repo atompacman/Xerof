@@ -16,9 +16,9 @@ public:
         MapKnowledge(Dimensions(0,0))
     {}
 
-    // IS KNOWN
-    bool isKnown(Coord i_Coord) const
+    // GET VISIBILITY
+    virtual Visibility getVisibility(Coord i_Coord) const
     {
-        return true;
+        return Visibility::VISIBLE;
     }
 };

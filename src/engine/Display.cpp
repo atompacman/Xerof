@@ -10,7 +10,11 @@
 #include <HumanInfo.h>
 #include <Mouse.h>
 #include <Parameters.h>
+#include <Random.h>
 #include <Tile.h>
+
+const ALLEGRO_COLOR VISIBLE_TINT    = al_map_rgb_f(1.0, 1.0, 1.0);
+const ALLEGRO_COLOR FOG_OF_WAR_TINT = al_map_rgb_f(0.4, 0.4, 0.4);
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -105,6 +109,11 @@ void Display::drawEnvironment()
     UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
     UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
                                            * ALPHA_OVERLAPPING[resLvl]);
+    UINT toCenterTile((overlapTileSize - tileSizeOnMap) * 0.5);
+    double scaling((double)overlapTileSize / (double)tileSizeOnTexture);
+    const MapKnowledge& mapKnowledge(m_DisplayInfo.getMapKnowledge());
+    const Map& map(m_DisplayInfo.getMap());
+
     // Draw visible tiles
     Coord tileCoord;
     for (    tileCoord.y = tileULCorner.y;
@@ -113,28 +122,34 @@ void Display::drawEnvironment()
              tileCoord.x < tileLRCorner.x; ++tileCoord.x) {
 
             // Check if tile is known by the selected character
-            if (!m_DisplayInfo.getMapKnowledge().isKnown(tileCoord)) {
+            Visibility visibility(mapKnowledge.getVisibility(tileCoord));
+            if (visibility == Visibility::UNEXPLORED) {
                 continue;
             }
 
-            // Get tile
-            const Tile tile(m_DisplayInfo.getMap()(tileCoord));
-
             // Get environment
-            Environment env(tile.getEnvironment());
+            const Environment& env(map(tileCoord).getEnvironment());
 
-            // Draw environment bitmap on screen
-            al_draw_scaled_bitmap(
+            // Create tile sub-bitmap
+            ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
                 m_Assets[env.assetFile()],
                 textureULCorner.x,
                 textureULCorner.y,
                 tileSizeOnTexture,
-                tileSizeOnTexture,
-                tileCoord.x * tileSizeOnMap,
-                tileCoord.y * tileSizeOnMap,
-                overlapTileSize,
-                overlapTileSize,
-                env.getOrientation());
+                tileSizeOnTexture));
+
+            // Draw environment bitmap on screen
+            al_draw_tinted_scaled_rotated_bitmap(
+                subBitmap,
+                visibility==Visibility::FOG_OF_WAR?FOG_OF_WAR_TINT:VISIBLE_TINT,
+                tileSizeOnTexture * 0.5,
+                tileSizeOnTexture * 0.5,
+                (tileCoord.x + 0.5) * tileSizeOnMap + toCenterTile,
+                (tileCoord.y + 0.5) * tileSizeOnMap + toCenterTile,
+                scaling,
+                scaling,
+                correspondingAngle(env.getOrientation()),
+                env.getFlip());
         }
     }
 }
@@ -150,8 +165,10 @@ void Display::drawHumans()
     UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
     UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
                                             * ALPHA_OVERLAPPING[resLvl]);
-    double humanScaling = (double)overlapTileSize / (double)tileSizeOnTexture;
-    UINT toCenterHuman = (overlapTileSize - tileSizeOnMap) * 0.5;
+    double humanScaling((double)overlapTileSize / (double)tileSizeOnTexture);
+    UINT toCenterHuman((overlapTileSize - tileSizeOnMap) * 0.5);
+    const MapKnowledge& mapKnowledge(m_DisplayInfo.getMapKnowledge());
+    const Map& map(m_DisplayInfo.getMap());
 
     // Draw visible tiles
     Coord tileCoord;
@@ -161,49 +178,52 @@ void Display::drawHumans()
             tileCoord.x < tileLRCorner.x; ++tileCoord.x) {
 
             // Check if tile is known by the selected character
-            if (!m_DisplayInfo.getMapKnowledge().isKnown(tileCoord)) {
+            Visibility visibility(mapKnowledge.getVisibility(tileCoord));
+            if (visibility == Visibility::UNEXPLORED) {
                 continue;
             }
 
             // Get human on tile
-            Tile& tile(m_DisplayInfo.getMap()(tileCoord));
-            const HumanInfo* human(tile.getHuman());
+            const HumanInfo* human(map(tileCoord).getHuman());
+            if (human == NULL) {
+                continue;
+            }
+            const Position& humanPos(human->getPosition());
 
-            if (human != NULL) {
-                // Create caracter sub-bitmap
-                ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
-                    m_Assets[human->assetFile()],
+            // Create caracter sub-bitmap
+            ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
+                m_Assets[human->assetFile()],
+                textureULCorner.x,
+                textureULCorner.y,
+                tileSizeOnTexture,
+                tileSizeOnTexture));
+
+            // Draw rotated human bitmap
+            al_draw_tinted_scaled_rotated_bitmap(
+                subBitmap,
+                visibility==Visibility::FOG_OF_WAR?FOG_OF_WAR_TINT:VISIBLE_TINT,
+                tileSizeOnTexture * 0.5,
+                tileSizeOnTexture * 0.5,
+                humanPos.coord().x*tileSizeOnMap + toCenterHuman,
+                humanPos.coord().y*tileSizeOnMap + toCenterHuman,
+                humanScaling,
+                humanScaling,
+                correspondingAngle(humanPos.facingDir()),
+                0);
+
+            // Draw selection box
+            if (human->isSelected()) {
+                al_draw_scaled_bitmap(
+                    m_Assets[SELECTION],
                     textureULCorner.x,
                     textureULCorner.y,
                     tileSizeOnTexture,
-                    tileSizeOnTexture));
-
-                // Draw rotated human bitmap
-                al_draw_scaled_rotated_bitmap(
-                    subBitmap,
-                    tileSizeOnTexture * 0.5,
-                    tileSizeOnTexture * 0.5,
-                    human->getPosition().coord().x*tileSizeOnMap+toCenterHuman,
-                    human->getPosition().coord().y*tileSizeOnMap+toCenterHuman,
-                    humanScaling,
-                    humanScaling,
-                    correspondingAngle(human->getPosition().facingDir()),
-                    0);
-
-                // Draw selection box
-                if (human->isSelected()) {
-                    al_draw_scaled_bitmap(
-                        m_Assets[SELECTION],
-                        textureULCorner.x,
-                        textureULCorner.y,
-                        tileSizeOnTexture,
-                        tileSizeOnTexture,
-                        human->getPosition().tileCoord().x * tileSizeOnMap,
-                        human->getPosition().tileCoord().y * tileSizeOnMap,
-                        overlapTileSize,
-                        overlapTileSize,
-                        DOWN);
-                }
+                    tileSizeOnTexture,
+                    humanPos.tileCoord().x * tileSizeOnMap,
+                    humanPos.tileCoord().y * tileSizeOnMap,
+                    overlapTileSize,
+                    overlapTileSize,
+                    DOWN);
             }
         }
     }

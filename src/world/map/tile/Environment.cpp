@@ -8,7 +8,8 @@
 
 Environment::Environment(Biome i_Type) :
 m_Type(i_Type),
-m_Orien(randBasicDir())
+m_Orien(randBasicDir()),
+m_Flip(randUINT(3))
 {}
 
 
@@ -24,6 +25,11 @@ Biome Environment::getBiome() const
 Direction Environment::getOrientation() const
 {
     return m_Orien;
+}
+
+unsigned int Environment::getFlip() const
+{
+    return m_Flip;
 }
 
 
