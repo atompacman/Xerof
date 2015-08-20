@@ -20,10 +20,10 @@ m_LRCorner()
 {
     std::string line;
 
-    // Skip comments
-    while (io_File.peek() == '#') {
+    // Skip comments and blank lines
+    do {
         getline(io_File, line);
-    }
+    } while (line.empty() || line[0] == '#');
 
     // Save position before reading
     unsigned int pos(io_File.tellg());
@@ -49,6 +49,11 @@ void RangeOfSight::Window::findWindowCorners(std::ifstream& io_File)
 
     while (io_File.peek() != '#' && !io_File.eof()) {
         getline(io_File, line);
+
+        if (line.empty()) {
+            break;
+        }
+
         if (line.length() % 2 == 0) {
             FatalErrorDialog(ERR_MSG + "pair number of characters in a line");
         }
@@ -86,7 +91,6 @@ void RangeOfSight::Window::readWindow(std::ifstream& io_File)
 
     for (unsigned int y(0); y < m_Dim.y; ++y) {
         for (unsigned int x(0); x < m_Dim.x; ++x) {
-            int u(io_File.tellg());
             io_File >> c;
             switch (c) {
             case '.':
@@ -95,7 +99,7 @@ void RangeOfSight::Window::readWindow(std::ifstream& io_File)
             case 'X': case '^': case '7':
                 operator()(x, y) = true;
                 break;
-            case '\n': case '\r':
+            case '\n': case '\r': case '\0':
                 continue;
             default:
                 FatalErrorDialog(ERR_MSG + "invalid character");
