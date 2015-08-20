@@ -21,9 +21,9 @@ m_LRCorner()
     std::string line;
 
     // Skip comments and blank lines
-    do {
+    while (io_File.peek() != '.') {
         getline(io_File, line);
-    } while (line.empty() || line[0] == '#');
+    }
 
     // Save position before reading
     unsigned int pos(io_File.tellg());
