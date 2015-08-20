@@ -13,11 +13,6 @@
 class Map : public Array2D<Tile>
 {
 public:
-    friend class MapGenerator;
-
-    // CONSTRUCTOR/DESTRUCTOR
-    Map(Dimensions i_Dim);
-
     // GETTERS
     Coord getRandomCoord() const;
 };
