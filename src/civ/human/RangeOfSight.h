@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Array2D.h>
 #include <Elem2D.h>
 
 /*============================================================================\\
@@ -11,34 +12,37 @@
 class RangeOfSight
 {
 public:
-
-    class ROSModel
-    {
-        friend class MapKnowledge;
-    public:
-        // CONSTRUCTOR/DESTRUCTOR
-        ROSModel(std::ifstream& io_File);
-        ~ROSModel();
-
-    private:
-        bool** m_Tiles;
-        SCoord m_ULCorner;
-        SCoord m_LRCorner;
-        Coord  m_Dim;
-
-        // CONSTRUCTOR/DESTRUCTOR
-        void readModelSize(std::ifstream& io_File);
-        void readModel(std::ifstream& io_File);
-    };
-
     // CONSTRUCTOR/DESTRUCTOR
     RangeOfSight(std::ifstream& i_ROSFile);
 
+    /**
+    @brief
+    Checks if a character-relative coordinate is visible for the current model
+    in a given direction.
+    @param
+    [in] i_Coord - A character-relative coordinate (character is at (0,0))
+    [in] i_Direction - Facing direction of character
+    @retval
+    True if visible
+    */
+    bool isVisible(SCoord i_Coord, Direction i_Direction) const;
+
     // GETTERS
-    const RangeOfSight::ROSModel& getStraigthModel() const;
-    const RangeOfSight::ROSModel& getDiagonalModel() const;
+    SCoord getWindowULCorner(Direction i_Direction) const;
+    SCoord getWindowLRCorner(Direction i_Direction) const;
 
 private:
-    ROSModel m_StraigthModel;
-    ROSModel m_DiagonalModel;
+    struct Window : public Array2D<bool>
+    {
+        SCoord m_ULCorner;
+        SCoord m_LRCorner;
+
+        // CONSTRUCTOR/DESTRUCTOR
+        Window(std::ifstream& io_File);
+        void findWindowCorners(std::ifstream& io_File);
+        void readWindow(std::ifstream& io_File);
+    };
+
+    Window m_StraigthWin;
+    Window m_DiagonalWin;
 };

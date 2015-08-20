@@ -105,6 +105,8 @@ void Display::drawEnvironment()
     UINT tileSizeOnTexture(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]);
     UINT overlapTileSize(tileSizeOnMap + 2 * TILE_GRADIENT_SIZE[resLvl]
                                            * ALPHA_OVERLAPPING[resLvl]);
+    const MapKnowledge& mapKnowledge(m_DisplayInfo.getMapKnowledge());
+
     // Draw visible tiles
     Coord tileCoord;
     for (    tileCoord.y = tileULCorner.y;
@@ -113,7 +115,8 @@ void Display::drawEnvironment()
              tileCoord.x < tileLRCorner.x; ++tileCoord.x) {
 
             // Check if tile is known by the selected character
-            if (!m_DisplayInfo.getMapKnowledge().isKnown(tileCoord)) {
+            Visibility visibility(mapKnowledge.getVisibility(tileCoord));
+            if (visibility == Visibility::UNEXPLORED) {
                 continue;
             }
 
@@ -152,6 +155,7 @@ void Display::drawHumans()
                                             * ALPHA_OVERLAPPING[resLvl]);
     double humanScaling = (double)overlapTileSize / (double)tileSizeOnTexture;
     UINT toCenterHuman = (overlapTileSize - tileSizeOnMap) * 0.5;
+    const MapKnowledge& mapKnowledge(m_DisplayInfo.getMapKnowledge());
 
     // Draw visible tiles
     Coord tileCoord;
@@ -161,7 +165,8 @@ void Display::drawHumans()
             tileCoord.x < tileLRCorner.x; ++tileCoord.x) {
 
             // Check if tile is known by the selected character
-            if (!m_DisplayInfo.getMapKnowledge().isKnown(tileCoord)) {
+            Visibility visibility(mapKnowledge.getVisibility(tileCoord));
+            if (visibility == Visibility::UNEXPLORED) {
                 continue;
             }
 

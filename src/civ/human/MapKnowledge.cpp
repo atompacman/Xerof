@@ -9,32 +9,32 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 MapKnowledge::MapKnowledge(Dimensions i_MapDim) :
-m_Tiles(new bool*[i_MapDim.y]),
-m_MapDim(i_MapDim)
-{
-    for (unsigned int i = 0; i < i_MapDim.y; ++i) {
-        m_Tiles[i] = new bool[i_MapDim.x];
-        std::fill(m_Tiles[i], m_Tiles[i] + i_MapDim.x, false);
-    }
-}
-
-MapKnowledge::~MapKnowledge()
-{
-    for (unsigned int i = 0; i < m_MapDim.y; ++i) {
-        delete[] m_Tiles[i];
-    }
-    delete[] m_Tiles;
-}
+Array2D<bool>(i_MapDim),
+m_LastTile(),
+m_LastDir(),
+m_LastROS(NULL)
+{}
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                 IS KNOWN                                   //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-bool MapKnowledge::isKnown(Coord i_Coord) const
+Visibility MapKnowledge::getVisibility(Coord i_Coord) const
 {
-    assert(i_Coord < m_MapDim);
-    return m_Tiles[i_Coord.y][i_Coord.x];
+    assert(i_Coord < m_Dim);
+
+    // If tile was never explored
+    if (!operator()(i_Coord)) {
+        return Visibility::UNEXPLORED;
+    }
+
+    // If tile is visible
+    if (m_LastROS->isVisible(toSCoord(i_Coord) - m_LastTile, m_LastDir)) {
+        return Visibility::VISIBLE;
+    }
+
+    return Visibility::FOG_OF_WAR;
 }
 
 
@@ -42,77 +42,23 @@ bool MapKnowledge::isKnown(Coord i_Coord) const
 //                                DISCOVER                                    //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void MapKnowledge::discover(const Position&     i_Pos,
-                            const RangeOfSight& i_ROS)
+void MapKnowledge::discover(const Position& i_Pos, const RangeOfSight& i_ROS)
 {
-    assertNonCenterDir(i_Pos.facingDir());
-    bool isDiag(isDiagonal(i_Pos.facingDir()));
-    const RangeOfSight::ROSModel& rosModel(isDiag ? i_ROS.getDiagonalModel() :
-                                                    i_ROS.getStraigthModel());
-    switch (isDiag ? i_Pos.facingDir() - 4 : i_Pos.facingDir()) {
-    case UP   : discoverUp   (i_Pos.tileCoord(), rosModel); break;
-    case RIGHT: discoverRight(i_Pos.tileCoord(), rosModel); break;
-    case DOWN : discoverDown (i_Pos.tileCoord(), rosModel); break;
-    case LEFT : discoverLeft (i_Pos.tileCoord(), rosModel); break;
-    }
-}
+    m_LastTile = toSCoord(i_Pos.tileCoord());
+    m_LastDir = i_Pos.facingDir();
+    m_LastROS = &i_ROS;
+    SCoord ulCorner(i_ROS.getWindowULCorner(m_LastDir));
+    SCoord lrCorner(i_ROS.getWindowLRCorner(m_LastDir));
 
-void MapKnowledge::discoverUp(const Coord&                  i_Coord,
-                              const RangeOfSight::ROSModel& i_ROSmodel)
-{
-    Coord map, ros;
-    for (    map.y = i_Coord.y + i_ROSmodel.m_ULCorner.y,
-             ros.y = 0; ros.y < i_ROSmodel.m_Dim.y; ++ros.y, ++map.y) {
-        for (map.x = i_Coord.x + i_ROSmodel.m_ULCorner.x,
-             ros.x = 0; ros.x < i_ROSmodel.m_Dim.x; ++ros.x, ++map.x) {
-            if (map < m_MapDim) {
-                m_Tiles[map.y][map.x] |= i_ROSmodel.m_Tiles[ros.y][ros.x];
+    SCoord centered;
+    for (    centered.y = ulCorner.y; centered.y < lrCorner.y; ++centered.y) {
+        for (centered.x = ulCorner.x; centered.x < lrCorner.x; ++centered.x) {
+            Coord onMap(toCoord(m_LastTile + centered));
+            if (!(onMap < m_Dim)) {
+                continue;
             }
-        }
-    }
-}
-
-void MapKnowledge::discoverRight(const Coord&                  i_Coord,
-                                 const RangeOfSight::ROSModel& i_ROSmodel)
-{
-    Coord map, ros;
-    for (    map.x = i_Coord.x - i_ROSmodel.m_ULCorner.y,
-             ros.y = 0; ros.y < i_ROSmodel.m_Dim.y; ++ros.y, --map.x) {
-        for (map.y = i_Coord.y + i_ROSmodel.m_ULCorner.x,
-             ros.x = 0; ros.x < i_ROSmodel.m_Dim.x; ++ros.x, ++map.y) {
-            if (map < m_MapDim) {
-                m_Tiles[map.y][map.x] |= i_ROSmodel.m_Tiles[ros.y][ros.x];
-            }
-        }
-    }
-}
-
-void MapKnowledge::discoverDown(const Coord&                  i_Coord,
-                                const RangeOfSight::ROSModel& i_ROSmodel)
-{
-    Coord map, ros;
-    for (    map.y = i_Coord.y - i_ROSmodel.m_ULCorner.y,
-             ros.y = 0; ros.y < i_ROSmodel.m_Dim.y; ++ros.y, --map.y) {
-        for (map.x = i_Coord.x - i_ROSmodel.m_ULCorner.x,
-             ros.x = 0; ros.x < i_ROSmodel.m_Dim.x; ++ros.x, --map.x) {
-            if (map < m_MapDim) {
-                m_Tiles[map.y][map.x] |= i_ROSmodel.m_Tiles[ros.y][ros.x];
-            }
-        }
-    }
-}
-
-void MapKnowledge::discoverLeft(const Coord&                  i_Coord,
-                                const RangeOfSight::ROSModel& i_ROSmodel)
-{
-    Coord map, ros;
-    for (    map.x = i_Coord.x + i_ROSmodel.m_ULCorner.y,
-             ros.y = 0; ros.y < i_ROSmodel.m_Dim.y; ++ros.y, ++map.x) {
-        for (map.y = i_Coord.y - i_ROSmodel.m_ULCorner.x,
-             ros.x = 0; ros.x < i_ROSmodel.m_Dim.x; ++ros.x, --map.y) {
-            if (map < m_MapDim) {
-                m_Tiles[map.y][map.x] |= i_ROSmodel.m_Tiles[ros.y][ros.x];
-            }
+            std::vector<bool>::reference curr(operator()(onMap));
+            curr = curr || i_ROS.isVisible(centered, m_LastDir);
         }
     }
 }

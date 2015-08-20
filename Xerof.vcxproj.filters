@@ -181,9 +181,6 @@
     <ClInclude Include="src\civ\human\HumanInfo.h">
       <Filter>src\civ\human</Filter>
     </ClInclude>
-    <ClInclude Include="src\civ\human\RangeOfSight.h">
-      <Filter>src\civ\human</Filter>
-    </ClInclude>
     <ClInclude Include="src\civ\human\MapKnowledge.h">
       <Filter>src\civ\human</Filter>
     </ClInclude>
@@ -198,6 +195,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\Array2D.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\civ\human\RangeOfSight.h">
+      <Filter>src\civ\human</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,9 +261,6 @@
     <ClCompile Include="src\civ\human\HumanInfo.cpp">
       <Filter>src\civ\human</Filter>
     </ClCompile>
-    <ClCompile Include="src\civ\human\RangeOfSight.cpp">
-      <Filter>src\civ\human</Filter>
-    </ClCompile>
     <ClCompile Include="src\civ\human\MapKnowledge.cpp">
       <Filter>src\civ\human</Filter>
     </ClCompile>
@@ -278,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="src\world\map\gen\config\Phase.cpp">
       <Filter>src\world\map\gen\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\civ\human\RangeOfSight.cpp">
+      <Filter>src\civ\human</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

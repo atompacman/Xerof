@@ -2,16 +2,21 @@
 #include <FatalErrorDialog.h>
 #include <RangeOfSight.h>
 
+const std::string ERR_MSG("Invalid range of sight model file format: ");
+
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 RangeOfSight::RangeOfSight(std::ifstream& i_ROSFile) :
-m_StraigthModel(i_ROSFile),
-m_DiagonalModel(i_ROSFile)
+m_StraigthWin(i_ROSFile),
+m_DiagonalWin(i_ROSFile)
 {}
 
-RangeOfSight::ROSModel::ROSModel(std::ifstream& io_File)
+RangeOfSight::Window::Window(std::ifstream& io_File) :
+Array2D<bool>(),
+m_ULCorner(),
+m_LRCorner()
 {
     std::string line;
 
@@ -24,92 +29,105 @@ RangeOfSight::ROSModel::ROSModel(std::ifstream& io_File)
     unsigned int pos(io_File.tellg());
 
     // Read model size
-    readModelSize(io_File);
+    findWindowCorners(io_File);
+
+    // Resize 2D boolean array
+    clearAndResize(toCoord(m_LRCorner - m_ULCorner));
 
     // Return to beginning of model
     io_File.seekg(pos);
 
-    // Create the sight matrix
-    m_Tiles = new bool*[m_LRCorner.y - m_ULCorner.y];
-    for (int y(0); y < m_LRCorner.y - m_ULCorner.y; ++y) {
-        m_Tiles[y] = new bool[m_LRCorner.x - m_ULCorner.x];
-    }
-    m_Dim = toCoord(m_LRCorner - m_ULCorner);
-
     // Read model
-    readModel(io_File);
+    readWindow(io_File);
 }
 
-void RangeOfSight::ROSModel::readModelSize(std::ifstream& io_File)
+void RangeOfSight::Window::findWindowCorners(std::ifstream& io_File)
 {
-    unsigned int width(0);
-    unsigned int height(0);
+    SCoord center(0, 0);
+    SCoord dim(0, 0);
     std::string line;
-    Coord center(0, 0);
-    char c(0);
 
     while (io_File.peek() != '#' && !io_File.eof()) {
         getline(io_File, line);
         if (line.length() % 2 == 0) {
-            FatalErrorDialog("Invalid range of sight model file format");
+            FatalErrorDialog(ERR_MSG + "pair number of characters in a line");
         }
         unsigned int len((line.length() + 1) * 0.5);
-        if (width == 0) {
-            width = len;
+        if (dim.x == 0) {
+            dim.x = len;
         }
-        else if (width != len) {
-            FatalErrorDialog("Invalid range of sight model file format");
+        else if (dim.x != len) {
+            FatalErrorDialog(ERR_MSG + "inconsitant line lengths");
         }
         int pos(line.find('^'));
         if (pos != -1) {
-            center = Coord((pos + 1) * 0.5, height);
+            center = SCoord((pos + 1) * 0.5, dim.y);
         }
         else {
             pos = line.find('7');
             if (pos != -1) {
-                center = Coord((pos + 1) * 0.5, height);
+                center = SCoord((pos + 1) * 0.5, dim.y);
             }
         }
-
-        ++height;
-    }
-    if (center == Coord(0, 0)) {
-        FatalErrorDialog("Invalid range of sight model file format");
+        ++dim.y;
     }
 
-    m_ULCorner = SCoord(-(int)center.x, -(int)center.y);
-    m_LRCorner = SCoord(width - (int)center.x, height - (int)center.y);
+    if (center == SCoord(0, 0)) {
+        FatalErrorDialog(ERR_MSG + "no character position indicator");
+    }
+
+    m_ULCorner = center * -1;
+    m_LRCorner = m_ULCorner + dim;
 }
 
-void RangeOfSight::ROSModel::readModel(std::ifstream& io_File)
+void RangeOfSight::Window::readWindow(std::ifstream& io_File)
 {
     char c(0);
 
-    for (int y(0); y < m_LRCorner.y - m_ULCorner.y; ++y) {
-        for (int x(0); x < m_LRCorner.x - m_ULCorner.x; ++x) {
+    for (unsigned int y(0); y < m_Dim.y; ++y) {
+        for (unsigned int x(0); x < m_Dim.x; ++x) {
+            int u(io_File.tellg());
             io_File >> c;
             switch (c) {
             case '.':
-                m_Tiles[y][x] = false;
+                operator()(x,y) = false;
                 break;
             case 'X': case '^': case '7':
-                m_Tiles[y][x] = true;
+                operator()(x, y) = true;
+                break;
             case '\n': case '\r':
                 continue;
             default:
-                FatalErrorDialog("Invalid range of sight model file format");
+                FatalErrorDialog(ERR_MSG + "invalid character");
             }
         }
     }
     io_File.read(&c, 1);
 }
 
-RangeOfSight::ROSModel::~ROSModel()
+
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+//                                IS VISIBLE                                  //
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+bool RangeOfSight::isVisible(SCoord i_Coord, Direction i_Direction) const
 {
-    for (int y(0); y < m_LRCorner.y - m_ULCorner.y; ++y) {
-        delete[] m_Tiles[y];
+    // Rotate coordinate according to direction
+    assertNonCenterDir(i_Direction);
+    i_Coord = rotateCoord(i_Coord, i_Direction % 4);
+
+    // Select appropriate window
+    const Window& win(isDiagonal(i_Direction) ? m_DiagonalWin : m_StraigthWin);
+
+    // De-center coordinate
+    Coord decentered(toCoord(i_Coord - win.m_ULCorner));
+
+    // Check if rotated coord is within window range
+    if (!(decentered < win.dimensions())) {
+        return false;
     }
-    delete[] m_Tiles;
+
+    return win(decentered);
 }
 
 
@@ -117,12 +135,32 @@ RangeOfSight::ROSModel::~ROSModel()
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const RangeOfSight::ROSModel& RangeOfSight::getStraigthModel() const
+SCoord RangeOfSight::getWindowULCorner(Direction i_Direction) const
 {
-    return m_StraigthModel;
+    // Select appropriate window
+    assertNonCenterDir(i_Direction);
+    const Window& win(isDiagonal(i_Direction) ? m_DiagonalWin : m_StraigthWin);
+
+    switch (i_Direction % 4) {
+    case UP   : return win.m_ULCorner;
+    case RIGHT: return SCoord(-win.m_LRCorner.y + 1, win.m_ULCorner.x    );
+    case DOWN : return SCoord(-win.m_LRCorner.x + 1,-win.m_LRCorner.y + 1);
+    case LEFT : return SCoord( win.m_ULCorner.y    ,-win.m_LRCorner.x + 1);
+    default   : return SCoord();
+    }
 }
 
-const RangeOfSight::ROSModel& RangeOfSight::getDiagonalModel() const
+SCoord RangeOfSight::getWindowLRCorner(Direction i_Direction) const
 {
-    return m_DiagonalModel;
+    // Select appropriate window
+    assertNonCenterDir(i_Direction);
+    const Window& win(isDiagonal(i_Direction) ? m_DiagonalWin : m_StraigthWin);
+
+    switch (i_Direction % 4) {
+    case UP   : return win.m_LRCorner;
+    case RIGHT: return SCoord(-win.m_ULCorner.y + 1, win.m_LRCorner.x    );
+    case DOWN : return SCoord(-win.m_ULCorner.x + 1,-win.m_ULCorner.y + 1);
+    case LEFT : return SCoord( win.m_LRCorner.y    ,-win.m_ULCorner.x + 1);
+    default   : return SCoord();
+    }
 }
