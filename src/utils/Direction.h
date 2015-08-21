@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <map>
+#include <Random.h>
 
 /*============================================================================//
 | Different types of direction
@@ -31,7 +32,7 @@ enum DiagonalDir
     UPPER_LEFT  = 7,
 };
 
-#define CENTER 9
+#define CENTER 8
 
 static const std::map<std::string, BasicDir> CARDINAL_DIRS = {
     { "NORTH",  UP    },
@@ -55,6 +56,11 @@ static bool isNonCenterDir(Direction i_Dir)
     return i_Dir < CENTER;
 }
 
+static bool isDirection(Direction i_Dir)
+{
+    return i_Dir <= CENTER;
+}
+
 static void assertBasicDir(Direction i_Dir)
 {
     assert(isBasicDir(i_Dir));
@@ -69,3 +75,44 @@ static void assertNonCenterDir(Direction i_Dir)
 {
     assert(isNonCenterDir(i_Dir));
 }
+
+static void assertDir(Direction i_Dir)
+{
+    assert(isDirection(i_Dir));
+}
+
+static BasicDir randBasicDir()
+{
+    return BasicDir(randUINT(LEFT));
+}
+
+static DiagonalDir randDiagDir()
+{
+    return DiagonalDir(randUINT(UPPER_RIGHT, UPPER_LEFT));
+}
+
+static Direction randDirNoCenter()
+{
+    return randUINT(UPPER_LEFT);
+}
+
+struct Disposition
+{
+    BasicDir m_BasicDir;
+    bool     m_Flip;
+
+    Disposition(BasicDir i_BasicDir, bool i_Flip) :
+        m_BasicDir(i_BasicDir),
+        m_Flip(i_Flip)
+    {}
+
+    Disposition(BasicDir i_BasicDir) :
+        m_BasicDir(i_BasicDir),
+        m_Flip(randBool())
+    {}
+
+    Disposition() :
+        m_BasicDir(randBasicDir()),
+        m_Flip(randBool())
+    {}
+};

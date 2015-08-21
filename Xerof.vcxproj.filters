@@ -199,6 +199,9 @@
     <ClInclude Include="src\civ\human\RangeOfSight.h">
       <Filter>src\civ\human</Filter>
     </ClInclude>
+    <ClInclude Include="src\world\map\tile\ObjectOnGround.h">
+      <Filter>src\world\map\tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\civ\ai\AtomAI.cpp">

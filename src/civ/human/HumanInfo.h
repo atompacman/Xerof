@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Assets.h>
 #include <Elem2D.h>
 #include <MapElement.h>
 #include <MapKnowledge.h>

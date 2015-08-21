@@ -7,9 +7,8 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 Environment::Environment(Biome i_Type) :
-m_Type(i_Type),
-m_Orien(randBasicDir()),
-m_Flip(randUINT(3))
+m_Biome(i_Type),
+m_Dispo()
 {}
 
 
@@ -19,28 +18,22 @@ m_Flip(randUINT(3))
 
 Biome Environment::getBiome() const
 {
-    return m_Type;
+    return m_Biome;
 }
 
-Direction Environment::getOrientation() const
+Disposition Environment::getDisposition() const
 {
-    return m_Orien;
+    return m_Dispo;
 }
-
-unsigned int Environment::getFlip() const
-{
-    return m_Flip;
-}
-
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                                   SETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void Environment::setBiome(Biome i_Type)
+void Environment::setBiome(Biome i_Biome)
 {
-    m_Type = i_Type;
+    m_Biome = i_Biome;
 }
 
 
@@ -50,12 +43,12 @@ void Environment::setBiome(Biome i_Type)
 
 bool Environment::isSolidLand() const
 {
-    return isSolidLand(m_Type);
+    return isSolidLand(m_Biome);
 }
 
-bool Environment::isSolidLand(Biome i_Type)
+bool Environment::isSolidLand(Biome i_Biome)
 {
-    return i_Type != LAKE && i_Type != OCEAN;
+    return i_Biome != LAKE && i_Biome != OCEAN;
 }
 
 
@@ -65,7 +58,7 @@ bool Environment::isSolidLand(Biome i_Type)
 
 AssetID Environment::assetFile() const
 {
-    switch (m_Type) {
+    switch (m_Biome) {
     case GRASSLAND: return BIOME_GRASSLAND;
     case OCEAN:     return BIOME_OCEAN;
     case PLAIN:     return BIOME_PLAINS;

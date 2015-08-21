@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <ctime>
-#include <Direction.h>
 #include <stdlib.h>
 
 /*============================================================================\\
@@ -37,17 +36,12 @@ static unsigned int randUINT(unsigned int i_Max)
     return randUINT(0, i_Max);
 }
 
+static bool randBool()
+{
+    return randUINT(0, 1) == 0;
+}
+
 static double randProb()
 {
     return (double)rand() / (RAND_MAX);
-}
-
-static Direction randBasicDir()
-{
-    return randUINT(LEFT);
-}
-
-static Direction randDirNoCenter()
-{
-    return randUINT(UPPER_LEFT);
 }

@@ -81,7 +81,7 @@ namespace MapGenerator
             }
 
             // Skip ocean borders because tiles are ocean at initialization
-            if (border.m_Env == OCEAN) {
+            if (border.m_Biome == OCEAN) {
                 // Tiles are already ocean
                 continue;
             }
@@ -96,7 +96,7 @@ namespace MapGenerator
                 }
                 for (coord.y = 0; coord.y < border.m_Width; ++coord.y) {
                     for (coord.x = 0; coord.x < mapW; ++coord.x) {
-                        (*s_Map)(coord).setEnvironment(border.m_Env);
+                        (*s_Map)(coord).setBiome(border.m_Biome);
                     }
                 }
                 break;
@@ -107,7 +107,7 @@ namespace MapGenerator
                 }
                 for (coord.y = mapH-border.m_Width; coord.y < mapH; ++coord.y) {
                     for (coord.x = 0; coord.x < s_Map->width(); ++coord.x) {
-                        (*s_Map)(coord).setEnvironment(border.m_Env);
+                        (*s_Map)(coord).setBiome(border.m_Biome);
                     }
                 }
                 break;
@@ -118,7 +118,7 @@ namespace MapGenerator
                 }
                 for (coord.y = 0; coord.y < mapH; ++coord.y) {
                     for (coord.x = 0; coord.x < border.m_Width; ++coord.x) {
-                        (*s_Map)(coord).setEnvironment(border.m_Env);
+                        (*s_Map)(coord).setBiome(border.m_Biome);
                     }
                 }
                 break;
@@ -129,7 +129,7 @@ namespace MapGenerator
                 }
                 for (coord.y = 0; coord.y < mapH; ++coord.y) {
                     for (coord.x = mapW-border.m_Width; coord.x<mapW;++coord.x){
-                        (*s_Map)(coord).setEnvironment(border.m_Env);
+                        (*s_Map)(coord).setBiome(border.m_Biome);
                     }
                 }
                 break;
@@ -147,7 +147,7 @@ namespace MapGenerator
         Coord coord;
         for (coord.y = s_ULCorner.y; coord.y < s_LRCorner.y; ++coord.y) {
             for (coord.x = s_ULCorner.x; coord.x < s_LRCorner.x; ++coord.x) {
-                (*s_Map)(coord).setEnvironment(s_Config->m_InitEnvType);
+                (*s_Map)(coord).setBiome(s_Config->m_InitEnvType);
             }
         }
     }
@@ -183,7 +183,7 @@ namespace MapGenerator
                 // Generate a probability
                 if (randProb() < totalProb) {
                     // Set the env.
-                    (*s_Map)(coord).setEnvironment(envCnstrnts.first);
+                    (*s_Map)(coord).setBiome(envCnstrnts.first);
                     ++placed;
                     progressLogger.next();
                 }
@@ -306,7 +306,7 @@ namespace MapGenerator
                     // verification to make sure we're not outside the map limit
                     if (tempCoord < s_Map->dimensions())
                     {
-                        (*s_Map)(i_ReadCoord).setEnvironment((*s_Map)(tempCoord)
+                        (*s_Map)(i_ReadCoord).setBiome((*s_Map)(tempCoord)
                             .getEnvironment().getBiome());
                     }
                 }

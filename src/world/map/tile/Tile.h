@@ -1,7 +1,10 @@
 #pragma once
-#pragma warning( disable : 4351 )
+// new behavior: elements of array 'm_Objs' will be default initialized
+#pragma warning(disable : 4351)
 
 #include <Environment.h>
+#include <ObjectOnGround.h>
+#include <set>
 
 /*============================================================================\\
 | A tile on the map
@@ -19,29 +22,26 @@ public:
     Tile();
 
     // SETTERS
-    void setObject(Direction i_Dir, Object* i_Obj);
-    void setEnvironment(Biome i_Type);
+    void addObject(Object* i_Obj);
+    void setObject(Object* i_Obj, Direction i_PosOnTile);
+    void setBiome(Biome i_Biome);
     void setHuman(HumanInfo* i_Human);
 
-    // REMOVE
-    void removeObject(Direction i_Dir);
-
     // GETTERS
-    const Environment& getEnvironment() const;
-    Object*            getObject(Direction i_Dir) const;
-    const HumanInfo*   getHuman() const;
-    HumanInfo*         getHuman();
-
-    // HAS
-    bool hasObject(Direction i_Dir) const;
-    bool hasObject() const;
-    bool hasHuman() const;
+    const Environment&              getEnvironment()     const;
+    std::set<const Object*>         getObjects()         const;
+    std::set<const ObjectOnGround*> getObjectsOnGround() const;
+    const HumanInfo*                getHuman()           const;
+    HumanInfo*                      getHuman();
 
     // STATUS
-    bool isPassable() const;
+    bool hasObject()                      const;
+    bool hasObject(Direction i_PosOnTile) const;
+    bool hasHuman()                       const;
+    bool isPassable()                     const;
 
 private:
-    Environment m_Env;
-    HumanInfo*  m_Human;
-    Object*     m_Objs[4];
+    Environment    m_Env;
+    ObjectOnGround m_Objs[4];
+    HumanInfo*     m_Human;
 };

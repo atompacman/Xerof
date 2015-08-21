@@ -148,8 +148,8 @@ void Display::drawEnvironment()
                 (tileCoord.y + 0.5) * tileSizeOnMap + toCenterTile,
                 scaling,
                 scaling,
-                correspondingAngle(env.getOrientation()),
-                env.getFlip());
+                correspondingAngle(env.getDisposition().m_BasicDir),
+                env.getDisposition().m_Flip);
         }
     }
 }

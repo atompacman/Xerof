@@ -1,17 +1,12 @@
 #pragma once
 
-#include <Assets.h>
-
 /*============================================================================\\
 | Anything that as an asset attached to it
 |-----------------------------------------------------------------------------||
 | This class should be expanded and renamed
 \=============================================================================*/
 
-enum MapElemType
-{
-    ENVIRONNEMENT, OBJECT
-};
+enum AssetID;
 
 class MapElement
 {

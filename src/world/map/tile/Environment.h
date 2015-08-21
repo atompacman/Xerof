@@ -57,9 +57,8 @@ public:
     Environment(Biome i_Type);
 
     // GETTERS
-    Biome        getBiome() const;
-    Direction    getOrientation() const;
-    unsigned int getFlip() const;
+    Biome       getBiome() const;
+    Disposition getDisposition() const;
 
     // SETTERS
     void setBiome(Biome i_Type);
@@ -72,7 +71,6 @@ public:
     AssetID assetFile() const;
 
 private:
-    Biome        m_Type;
-    Direction    m_Orien;
-    unsigned int m_Flip;
+    Biome       m_Biome;
+    Disposition m_Dispo;
 };
