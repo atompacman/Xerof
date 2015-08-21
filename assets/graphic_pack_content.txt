@@ -9,5 +9,8 @@ TUNDRA              = biome/tundra.tga
 CHARACTER           = character/character.tga
 SELECTION           = character/selection.tga
 
+################# OBJECTS #################
+BUSH				= object/bush.tga
+
 ################### OTHER ###################
 WINDOW_ICON         = other/icon.tga

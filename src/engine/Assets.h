@@ -28,6 +28,9 @@ enum AssetID
     CHARACTER,
     SELECTION,
 
+    // Object
+    BUSH,
+
     // Others
     WINDOW_ICON
 };
