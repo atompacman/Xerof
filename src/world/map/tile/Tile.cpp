@@ -20,23 +20,34 @@ m_Human(NULL)
 
 void Tile::addObject(Object* i_Obj)
 {
+    assert(tryToAddObject(i_Obj));
+}
+
+bool Tile::tryToAddObject(Object* i_Obj)
+{
     switch (i_Obj->getSize()) {
     case ObjSize::SMALL:
         for (Direction pos = UPPER_RIGHT; pos <= UPPER_LEFT; ++pos) {
             if (!hasObject(pos)) {
                 setObject(i_Obj, pos);
+                return true;
             }
         }
-        assert(false);
+        return false;
     case ObjSize::MEDIUM:
         for (Direction pos = UP; pos <= LEFT; ++pos) {
             if (!hasObject(pos)) {
                 setObject(i_Obj, pos);
+                return true;
             }
         }
-        assert(false);
+        return false;
     case ObjSize::BIG:
-        setObject(i_Obj, CENTER);
+        if (!hasObject()) {
+            setObject(i_Obj, CENTER);
+            return true;
+        }
+        return false;
     }
 }
 
@@ -180,6 +191,28 @@ bool Tile::hasObject(Direction i_PosOnTile) const
     case UPPER_LEFT:
         return m_Objs[0].getObject() != NULL;
     default:
+        return hasObject();
+    }
+}
+
+bool Tile::hasPlaceFor(Object* i_Obj) const
+{
+    switch (i_Obj->getSize()) {
+    case ObjSize::SMALL:
+        for (Direction pos = UPPER_RIGHT; pos <= UPPER_LEFT; ++pos) {
+            if (!hasObject(pos)) {
+                return true;
+            }
+        }
+        return false;
+    case ObjSize::MEDIUM:
+        for (Direction pos = UP; pos <= LEFT; ++pos) {
+            if (!hasObject(pos)) {
+                return true;
+            }
+        }
+        return false;
+    case ObjSize::BIG:
         return hasObject();
     }
 }

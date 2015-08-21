@@ -23,6 +23,7 @@ public:
 
     // SETTERS
     void addObject(Object* i_Obj);
+    bool tryToAddObject(Object* i_Obj);
     void setObject(Object* i_Obj, Direction i_PosOnTile);
     void setBiome(Biome i_Biome);
     void setHuman(HumanInfo* i_Human);
@@ -37,6 +38,7 @@ public:
     // STATUS
     bool hasObject()                      const;
     bool hasObject(Direction i_PosOnTile) const;
+    bool hasPlaceFor(Object* i_Obj)       const;
     bool hasHuman()                       const;
     bool isPassable()                     const;
 
