@@ -9,17 +9,9 @@
 
 Tile::Tile() :
 m_Env(OCEAN),
-m_Objs(new Object*[4]),
-m_Human(NULL)
+m_Human(NULL),
+m_Objs()
 {}
-
-Tile::~Tile()
-{
-    for (unsigned int i = 0; i < 4; ++i) {
-        //delete[] m_Objs[i];
-    }
-    //delete[] m_Objs;
-}
 
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //

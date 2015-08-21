@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable : 4351 )
 
 #include <Environment.h>
 
@@ -16,7 +17,6 @@ class Tile
 public:
     // CONSTRUCTOR/DESTRUCTOR
     Tile();
-    ~Tile();
 
     // SETTERS
     void setObject(Direction i_Dir, Object* i_Obj);
@@ -42,6 +42,6 @@ public:
 
 private:
     Environment m_Env;
-    Object**    m_Objs;
     HumanInfo*  m_Human;
+    Object*     m_Objs[4];
 };
