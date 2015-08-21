@@ -47,6 +47,9 @@
     <Filter Include="resources">
       <UniqueIdentifier>{5cec5939-e712-469f-badd-9ad0fc3558df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\world\map\obj">
+      <UniqueIdentifier>{061e1a7d-f91b-4a5e-a54e-fbdb582ca12e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\easylogging++.h">
@@ -139,9 +142,6 @@
     <ClInclude Include="src\world\map\tile\MapElement.h">
       <Filter>src\world\map\tile</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\map\tile\Object.h">
-      <Filter>src\world\map\tile</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\map\tile\Tile.h">
       <Filter>src\world\map\tile</Filter>
     </ClInclude>
@@ -201,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="src\world\map\tile\ObjectOnGround.h">
       <Filter>src\world\map\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\map\obj\Object.h">
+      <Filter>src\world\map\obj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

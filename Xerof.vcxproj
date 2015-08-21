@@ -44,7 +44,7 @@
     <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\world\map\obj;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -68,7 +68,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\world\map\obj;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,9 +125,9 @@
     <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvLimits.h" />
     <ClInclude Include="src\world\map\gen\MapGenerator.h" />
     <ClInclude Include="src\world\map\Map.h" />
+    <ClInclude Include="src\world\map\obj\Object.h" />
     <ClInclude Include="src\world\map\tile\Environment.h" />
     <ClInclude Include="src\world\map\tile\MapElement.h" />
-    <ClInclude Include="src\world\map\tile\Object.h" />
     <ClInclude Include="src\world\map\tile\ObjectOnGround.h" />
     <ClInclude Include="src\world\map\tile\Tile.h" />
     <ClInclude Include="src\world\World.h" />
