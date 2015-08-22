@@ -9,27 +9,27 @@
 | Used by AIs
 \=============================================================================*/
 
-class  HumanInfo;
+class  Individual;
 class  Map;
 struct Position;
 class  Tile;
 
-class HumanPerception
+class WorldPerception
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR 
-    HumanPerception(const HumanInfo& i_Info, const Map& i_Map);
+    WorldPerception(const Individual& i_Info, const Map& i_Map);
 
     // GETTERS
     const Position& getPosition() const;
 
     // SURROUNDINGS
     bool        isWithinMapLimits(Direction i_Dir) const;
-    const Tile& getTileInDir(Direction i_Dir) const;
-    const Tile& getTileInFront() const;
-    Biome       getBiomeInFront() const;
+    const Tile& getTileInDir(Direction i_Dir)      const;
+    const Tile& getTileInFront()                   const;
+    Biome       getBiomeInFront()                  const;
 
 private:
-    const HumanInfo& m_Info;
+    const Individual& m_Info;
     const Map&       m_Map;
 };

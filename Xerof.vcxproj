@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\ai;$(ProjectDir)\src\civilization;$(ProjectDir)\src\element;$(ProjectDir)\src\element\character;$(ProjectDir)\src\element\character\individual;$(ProjectDir)\src\element\environment;$(ProjectDir)\src\element\object;$(ProjectDir)\src\engine;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\world;$(ProjectDir)\src\world\generation;$(ProjectDir)\src\world\generation\configuration;$(ProjectDir)\src\world\generation\constraint;$(ProjectDir)\src\utils;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
     <SourcePath>$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\world\map\obj;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(ProjectDir)\src\ai;$(ProjectDir)\src\civilization;$(ProjectDir)\src\element;$(ProjectDir)\src\element\character;$(ProjectDir)\src\element\character\individual;$(ProjectDir)\src\element\environment;$(ProjectDir)\src\element\object;$(ProjectDir)\src\engine;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\world;$(ProjectDir)\src\world\generation;$(ProjectDir)\src\world\generation\configuration;$(ProjectDir)\src\world\generation\constraint;$(ProjectDir)\src\utils;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\src\world;$(ProjectDir)\src\world\map;$(ProjectDir)\src\world\map\tile;$(ProjectDir)\src\world\map\gen;$(ProjectDir)\src\world\map\gen\constr;$(ProjectDir)\src\world\map\gen\config;$(ProjectDir)\src\utils;$(ProjectDir)\src\engine;$(ProjectDir)\src\civ;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\civ\human;$(ProjectDir)\src\civ\ai;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src;$(ProjectDir)\src\ai;$(ProjectDir)\src\civilization;$(ProjectDir)\src\element;$(ProjectDir)\src\element\character;$(ProjectDir)\src\element\character\individual;$(ProjectDir)\src\element\environment;$(ProjectDir)\src\element\object;$(ProjectDir)\src\engine;$(ProjectDir)\src\engine\process;$(ProjectDir)\src\world;$(ProjectDir)\src\world\generation;$(ProjectDir)\src\world\generation\configuration;$(ProjectDir)\src\world\generation\constraint;$(ProjectDir)\src\utils;$(ProjectDir)\lib;$(ProjectDir)\lib\allegro-5.0.10-msvc-11.0\include;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -81,17 +81,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="lib\easylogging++.h" />
-    <ClInclude Include="src\civ\ai\AI.h" />
-    <ClInclude Include="src\civ\ai\AtomAI.h" />
-    <ClInclude Include="src\civ\ai\Order.h" />
-    <ClInclude Include="src\civ\CivController.h" />
-    <ClInclude Include="src\civ\Civilization.h" />
-    <ClInclude Include="src\civ\human\FullMapKnowledge.h" />
-    <ClInclude Include="src\civ\human\HumanInfo.h" />
-    <ClInclude Include="src\civ\human\HumanPerception.h" />
-    <ClInclude Include="src\civ\human\MapKnowledge.h" />
-    <ClInclude Include="src\civ\human\Position.h" />
-    <ClInclude Include="src\civ\human\RangeOfSight.h" />
+    <ClInclude Include="src\ai\AI.h" />
+    <ClInclude Include="src\ai\AtomAI.h" />
+    <ClInclude Include="src\ai\WorldPerception.h" />
+    <ClInclude Include="src\ai\Order.h" />
+    <ClInclude Include="src\civilization\CivController.h" />
+    <ClInclude Include="src\civilization\Civilization.h" />
+    <ClInclude Include="src\element\character\Character.h" />
+    <ClInclude Include="src\element\character\individual\FullMapKnowledge.h" />
+    <ClInclude Include="src\element\character\individual\Individual.h" />
+    <ClInclude Include="src\element\character\individual\MapKnowledge.h" />
+    <ClInclude Include="src\element\character\individual\RangeOfSight.h" />
+    <ClInclude Include="src\element\environment\Environment.h" />
+    <ClInclude Include="src\element\GraphicalElement.h" />
+    <ClInclude Include="src\element\object\Object.h" />
+    <ClInclude Include="src\element\object\Plant.h" />
     <ClInclude Include="src\engine\Assets.h" />
     <ClInclude Include="src\engine\Camera.h" />
     <ClInclude Include="src\engine\Display.h" />
@@ -109,39 +113,34 @@
     <ClInclude Include="src\utils\FatalErrorDialog.h" />
     <ClInclude Include="src\utils\JSONUtils.h" />
     <ClInclude Include="src\utils\MathUtils.h" />
+    <ClInclude Include="src\utils\Position.h" />
     <ClInclude Include="src\utils\ProgressLogger.h" />
     <ClInclude Include="src\utils\Random.h" />
-    <ClInclude Include="src\world\map\gen\config\Border.h" />
-    <ClInclude Include="src\world\map\gen\config\MapConfig.h" />
-    <ClInclude Include="src\world\map\gen\config\Phase.h" />
-    <ClInclude Include="src\world\map\gen\constr\ConstraintWithStrength.h" />
-    <ClInclude Include="src\world\map\gen\constr\DistanceFromEquator.h" />
-    <ClInclude Include="src\world\map\gen\constr\EnvironmentIsAmong.h" />
-    <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvConstraint.h" />
-    <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvAttraction.h" />
-    <ClInclude Include="src\world\map\gen\constr\Constraint.h" />
-    <ClInclude Include="src\world\map\gen\constr\DistanceFromCenter.h" />
-    <ClInclude Include="src\world\map\gen\constr\EnvironmentIs.h" />
-    <ClInclude Include="src\world\map\gen\constr\NeighbouringEnvLimits.h" />
-    <ClInclude Include="src\world\map\gen\MapGenerator.h" />
-    <ClInclude Include="src\world\map\Map.h" />
-    <ClInclude Include="src\world\map\obj\Object.h" />
-    <ClInclude Include="src\world\map\tile\Environment.h" />
-    <ClInclude Include="src\world\map\tile\MapElement.h" />
-    <ClInclude Include="src\world\map\tile\ObjectOnGround.h" />
-    <ClInclude Include="src\world\map\tile\Tile.h" />
+    <ClInclude Include="src\world\generation\configuration\Border.h" />
+    <ClInclude Include="src\world\generation\configuration\MapConfig.h" />
+    <ClInclude Include="src\world\generation\configuration\Phase.h" />
+    <ClInclude Include="src\world\generation\constraint\Constraint.h" />
+    <ClInclude Include="src\world\generation\constraint\ConstraintWithStrength.h" />
+    <ClInclude Include="src\world\generation\constraint\DistanceFromCenter.h" />
+    <ClInclude Include="src\world\generation\constraint\DistanceFromEquator.h" />
+    <ClInclude Include="src\world\generation\constraint\EnvironmentIs.h" />
+    <ClInclude Include="src\world\generation\constraint\EnvironmentIsAmong.h" />
+    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvAttraction.h" />
+    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvConstraint.h" />
+    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvLimits.h" />
+    <ClInclude Include="src\world\generation\MapGenerator.h" />
+    <ClInclude Include="src\world\Map.h" />
+    <ClInclude Include="src\world\Tile.h" />
     <ClInclude Include="src\world\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\civ\ai\AtomAI.cpp" />
-    <ClCompile Include="src\civ\ai\Order.cpp" />
-    <ClCompile Include="src\civ\CivController.cpp" />
-    <ClCompile Include="src\civ\Civilization.cpp" />
-    <ClCompile Include="src\civ\human\HumanInfo.cpp" />
-    <ClCompile Include="src\civ\human\HumanPerception.cpp" />
-    <ClCompile Include="src\civ\human\MapKnowledge.cpp" />
-    <ClCompile Include="src\civ\human\Position.cpp" />
-    <ClCompile Include="src\civ\human\RangeOfSight.cpp" />
+    <ClCompile Include="src\ai\AtomAI.cpp" />
+    <ClCompile Include="src\ai\WorldPerception.cpp" />
+    <ClCompile Include="src\ai\Order.cpp" />
+    <ClCompile Include="src\civilization\CivController.cpp" />
+    <ClCompile Include="src\civilization\Civilization.cpp" />
+    <ClCompile Include="src\element\character\individual\MapKnowledge.cpp" />
+    <ClCompile Include="src\element\character\individual\RangeOfSight.cpp" />
     <ClCompile Include="src\engine\Assets.cpp" />
     <ClCompile Include="src\engine\Camera.cpp" />
     <ClCompile Include="src\engine\Display.cpp" />
@@ -151,12 +150,11 @@
     <ClCompile Include="src\engine\Mouse.cpp" />
     <ClCompile Include="src\engine\process\MoveProcess.cpp" />
     <ClCompile Include="src\utils\JSONUtils.cpp" />
-    <ClCompile Include="src\world\map\gen\config\MapConfig.cpp" />
-    <ClCompile Include="src\world\map\gen\config\Phase.cpp" />
-    <ClCompile Include="src\world\map\gen\MapGenerator.cpp" />
-    <ClCompile Include="src\world\map\Map.cpp" />
-    <ClCompile Include="src\world\map\tile\Environment.cpp" />
-    <ClCompile Include="src\world\map\tile\Tile.cpp" />
+    <ClCompile Include="src\utils\Position.cpp" />
+    <ClCompile Include="src\world\generation\configuration\MapConfig.cpp" />
+    <ClCompile Include="src\world\generation\configuration\Phase.cpp" />
+    <ClCompile Include="src\world\generation\MapGenerator.cpp" />
+    <ClCompile Include="src\world\Tile.cpp" />
     <ClCompile Include="src\world\World.cpp" />
     <ClCompile Include="src\Xerof.cpp" />
   </ItemGroup>

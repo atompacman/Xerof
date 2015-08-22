@@ -1,30 +1,30 @@
-#include <HumanInfo.h>
+#include <Individual.h>
 #include <Map.h>
 #include <MathUtils.h>
 #include <MoveProcess.h>
 #include <Parameters.h>
 #include <Tile.h>
 
+const double MoveProcess::s_DELTA = 0.5 / TARGET_FPS;
+
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const double MoveProcess::s_DELTA = 0.5 / TARGET_FPS;
-
-MoveProcess::MoveProcess(HumanInfo&      i_Human,
+MoveProcess::MoveProcess(Individual&     i_Indiv,
                          const Position& i_Dest,
                          Map&            i_Map) :
-    m_Human(i_Human),
-    m_InitTile(i_Human.getPosition().tileCoord()),
+    m_Individual(i_Indiv),
+    m_InitTile(i_Indiv.getPosition().tileCoord()),
     m_DestTile(i_Dest.tileCoord()),
-    m_Delta((i_Dest.coord() - i_Human.getPosition().coord()) / TARGET_FPS),
+    m_Delta((i_Dest.coord() - i_Indiv.getPosition().coord()) / TARGET_FPS),
     m_Map(i_Map)
 {
     // Turn head in the direction told by destination
-    m_Human.getPosition().setDir(i_Dest.facingDir());
+    m_Individual.getPosition().setDir(i_Dest.facingDir());
 
     // Explore the map in this new direction
-    m_Human.discoverSurroundingTiles();
+    m_Individual.discoverSurroundingTiles();
 }
 
 
@@ -35,7 +35,7 @@ MoveProcess::MoveProcess(HumanInfo&      i_Human,
 void MoveProcess::nextIter()
 {
     // Get current position
-    Position& pos(m_Human.getPosition());
+    Position& pos(m_Individual.getPosition());
     DCoord roundPos(roundCoord(pos.coord()));
 
     // Move in facing direction
@@ -75,12 +75,12 @@ void MoveProcess::nextIter()
     // If character steps in destination tile
     if (changedTile) {
         // Remove human from previous tile
-        m_Map(m_InitTile).setHuman(NULL);
+        m_Map(m_InitTile).setIndividual(NULL);
 
         // Set human on new tile
-        m_Map(m_DestTile).setHuman(&m_Human);
+        m_Map(m_DestTile).setIndividual(&m_Individual);
 
         // (Potentially) discover tiles around its new position
-        m_Human.discoverSurroundingTiles();
+        m_Individual.discoverSurroundingTiles();
     }
 }

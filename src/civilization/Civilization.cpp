@@ -15,12 +15,12 @@ m_People()
 //                                   GETTERS                                  //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-const HumanInfo& Civilization::getHuman(unsigned int i_ID) const
+const Individual& Civilization::getIndividual(unsigned int i_ID) const
 {
     return m_People.at(i_ID);
 }
 
-HumanInfo& Civilization::getHuman(unsigned int i_ID)
+Individual& Civilization::getIndividual(unsigned int i_ID)
 {
     return m_People.at(i_ID);
 }

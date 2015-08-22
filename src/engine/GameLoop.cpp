@@ -3,12 +3,12 @@
 #include <CivController.h>
 #include <FullMapKnowledge.h>
 #include <GameLoop.h>
-#include <HumanInfo.h>
-#include <HumanPerception.h>
+#include <Individual.h>
 #include <MoveProcess.h>
 #include <Order.h>
 #include <Parameters.h>
 #include <Tile.h>
+#include <WorldPerception.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //
@@ -18,7 +18,7 @@ GameLoop::GameLoop() :
 m_World(),
 m_CivCtrls(initCivCtrls()),
 
-m_DisplayInfo(m_World.map(), &m_CivCtrls[0]->getCiv().getHuman(0)),
+m_DisplayInfo(m_World.map(), &m_CivCtrls[0]->getCiv().getIndividual(0)),
 m_Mouse(m_DisplayInfo),
 m_Keyboard(m_DisplayInfo),
 m_Disp(m_DisplayInfo),
@@ -54,7 +54,7 @@ CivController** GameLoop::initCivCtrls()
 {
     m_CivCtrls = new CivController*[NB_CIV];
     for (int i = 0; i < NB_CIV; ++i) {
-        (m_CivCtrls[i] = new CivController(m_World))->placeFirstHuman();
+        (m_CivCtrls[i] = new CivController(m_World))->placeFirstIndividual();
     }
     return m_CivCtrls;
 }
@@ -97,7 +97,7 @@ void GameLoop::startGame()
         }
 
         switch (ev.type) {
-            //--------------------------------- KEYBOARD ---------------------------------//
+//--------------------------------- KEYBOARD ---------------------------------//
             // When a key is physicaly pressed
         case ALLEGRO_EVENT_KEY_DOWN:
             exitGame = !m_Keyboard.handlePressedKey(ev);
@@ -113,7 +113,7 @@ void GameLoop::startGame()
             exitGame = !m_Keyboard.handleTypedCharacter(ev);
             break;
 
-            //---------------------------------- MOUSE -----------------------------------//
+//---------------------------------- MOUSE -----------------------------------//
             // When there is a click
         case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
             m_Mouse.handlePressedButton(ev);
@@ -129,7 +129,7 @@ void GameLoop::startGame()
             m_Mouse.handleMovedCursor(ev);
             break;
 
-            //---------------------------------- DISPLAY ---------------------------------//
+//---------------------------------- DISPLAY ---------------------------------//
             // When main window is closed
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             exitGame = true;
@@ -190,18 +190,18 @@ void GameLoop::updateGame()
 void GameLoop::processAI()
 {
     for (unsigned int i = 0; i < NB_CIV; ++i) {
-        for (unsigned int j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j) {
-            HumanInfo& human = m_CivCtrls[i]->getCiv().getHuman(j);
-            if (!human.isReady()) {
+        for (unsigned int j = 0; j < m_CivCtrls[i]->getCiv().population(); ++j){
+            Individual& indiv = m_CivCtrls[i]->getCiv().getIndividual(j);
+            if (!indiv.isReady()) {
                 continue;
             }
-            HumanPerception persep(human, m_World.map());
-            processOrder(human, m_CivCtrls[i]->getAI()->giveOrder(persep));
+            WorldPerception persep(indiv, m_World.map());
+            processOrder(indiv, m_CivCtrls[i]->getAI()->giveOrder(persep));
         }
     }
 }
 
-void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
+void GameLoop::processOrder(Individual& io_Human, const Order& i_Order)
 {
     Action action(i_Order.getAction());
 
@@ -212,7 +212,7 @@ void GameLoop::processOrder(HumanInfo& io_Human, const Order& i_Order)
     }
 }
 
-void GameLoop::processMovingOrder(HumanInfo& io_Human,
+void GameLoop::processMovingOrder(Individual& io_Human,
                                   Action     i_Action,
                                   Direction  i_Dir)
 {
@@ -223,9 +223,9 @@ void GameLoop::processMovingOrder(HumanInfo& io_Human,
 
     if (verifyDestination(dest)) {
         m_MoveProcs[m_NumMoveProcs] = new MoveProcess(io_Human,
-            dest,
-            m_World.map());
-            ++m_NumMoveProcs;
+                                                      dest,
+                                                      m_World.map());
+                                                      ++m_NumMoveProcs;
     }
 }
 
@@ -237,7 +237,7 @@ bool GameLoop::verifyDestination(const Position& i_Dest) const
         LOG(WARNING) << "ERROR IN AI: Cannot move on water";
         return false;
     }
-    if (destination.hasHuman()) {
+    if (destination.hasIndividual()) {
         LOG(WARNING) << "ERROR IN AI: Tile is already occupied";
         return false;
     }

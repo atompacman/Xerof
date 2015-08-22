@@ -1,6 +1,6 @@
 #pragma once
 
-#include <HumanInfo.h>
+#include <Individual.h>
 #include <vector>
 
 /*============================================================================\\
@@ -8,8 +8,6 @@
 |-----------------------------------------------------------------------------||
 | For now, a civ is not bigger than the sum of its parts...
 \=============================================================================*/
-
-class HumanInfo;
 
 class Civilization
 {
@@ -20,12 +18,12 @@ public:
     Civilization();
 
     // GETTERS
-    const HumanInfo& getHuman(unsigned int i_ID) const;
-    HumanInfo&       getHuman(unsigned int i_ID);
+    const Individual& getIndividual(unsigned int i_ID) const;
+    Individual&       getIndividual(unsigned int i_ID);
 
     // STATUS
     unsigned int population() const;
 
 private:
-    std::vector<HumanInfo> m_People;
+    std::vector<Individual> m_People;
 };

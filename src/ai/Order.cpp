@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <Order.h>
-#include <wtypes.h>
 
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 //                          CONSTRUCTOR/DESTRUCTOR                            //

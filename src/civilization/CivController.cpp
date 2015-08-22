@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <AtomAI.h>
 #include <CivController.h>
+#include <fstream>
 #include <Parameters.h>
 #include <Position.h>
 #include <Tile.h>
@@ -26,14 +27,14 @@ CivController::~CivController()
 //                            DAWN OF CIVILIZATION                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void CivController::placeFirstHuman()
+void CivController::placeFirstIndividual()
 {
     Coord startLoc;
     do {
         startLoc = m_World.map().getRandomCoord();
     } while (!m_World.map()(startLoc).isPassable());
 
-    addHuman(startLoc);
+    addIndividual(startLoc);
 }
 
 
@@ -41,7 +42,7 @@ void CivController::placeFirstHuman()
 //                                     ADD                                    //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-void CivController::addHuman(Coord i_Pos)
+void CivController::addIndividual(Coord i_Pos)
 {
     // Assert max pop is not reached
     assert(m_Civ.m_People.size() < CIV_MAX_POP);
@@ -53,10 +54,11 @@ void CivController::addHuman(Coord i_Pos)
     assert(tile.isPassable());
 
     // Add it to the civ
-    m_Civ.m_People.emplace_back(Position(i_Pos), m_World.map().dimensions());
+    m_Civ.m_People.emplace_back(Position(i_Pos), m_World.map().dimensions(),
+       *(new RangeOfSight(std::ifstream("config/range_of_sight/90degre.ros"))));
 
     // Add a reference in the map
-    tile.setHuman(&m_Civ.m_People.back());
+    tile.setIndividual(&m_Civ.m_People.back());
 }
 
 

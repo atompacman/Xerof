@@ -67,7 +67,7 @@ unsigned int Phase::parseQuantityElem(const Value& i_QtyElem, UINT i_Area)
 void Phase::parseEnvTypeProps(const Value& i_EnvPropElem, unsigned int qty)
 {
     unsigned int numParsedElem(0);
-    for (std::pair<std::string, Biome> envType : ENV_TYPES) {
+    for (std::pair<std::string, Biome> envType : STR_TO_BIOME) {
         auto envElem(i_EnvPropElem.FindMember(envType.first.c_str()));
         unsigned int envQty(0);
 
@@ -107,7 +107,7 @@ void Phase::parseCnstrts(const Value& i_CnstrtElem, const Map& i_Map)
                 }
                 EnvironmentIsAmong* eia(new EnvironmentIsAmong(i_Map));
                 for (UINT i = 0; i < it->value.Size(); ++i) {
-                    eia->addEnv(ENV_TYPES.at(it->value[i].GetString()));
+                    eia->addEnv(STR_TO_BIOME.at(it->value[i].GetString()));
                 }
                 cnstrnts.push_back(eia);
             }

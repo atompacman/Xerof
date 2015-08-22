@@ -1,18 +1,16 @@
 #pragma once
 
-#include <Array2D.h>
-#include <Elem2D.h>
-#include <Tile.h>
+#include <AI.h>
 
 /*============================================================================\\
-| The map
+| AI made by Atompacman
 |-----------------------------------------------------------------------------||
-| Is essentially an array of tiles that as accessors
+| Implements the AI abstract class
 \=============================================================================*/
 
-class Map : public Array2D<Tile>
+class AtomAI : public AI
 {
 public:
-    // GETTERS
-    Coord getRandomCoord() const;
+    // GIVE ORDER
+    virtual Order giveOrder(const WorldPerception& i_HP);
 };

@@ -105,8 +105,8 @@ const char* parseString(const Value& i_Value, const char* i_Elem)
 
 Biome parseEnvType(const Value& i_Value, const char* i_Elem)
 {
-    auto it(ENV_TYPES.find(parseString(i_Value, i_Elem)));
-    if (it == ENV_TYPES.end()) {
+    auto it(STR_TO_BIOME.find(parseString(i_Value, i_Elem)));
+    if (it == STR_TO_BIOME.end()) {
         std::stringstream ss;
         ss << "Parameter \"" << i_Elem << "\" is not a valid environment";
         FatalErrorDialog(ss.str());

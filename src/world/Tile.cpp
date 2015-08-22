@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <HumanInfo.h>
+#include <Individual.h>
 #include <Object.h>
 #include <Tile.h>
 
@@ -10,7 +10,7 @@
 Tile::Tile() :
 m_Env(OCEAN),
 m_Objs(),
-m_Human(NULL)
+m_Individual(NULL)
 {}
 
 
@@ -42,7 +42,7 @@ bool Tile::tryToAddObject(Object* i_Obj)
             }
         }
         return false;
-    case ObjSize::BIG:
+    default:
         if (!hasObject()) {
             setObject(i_Obj, CENTER);
             return true;
@@ -62,40 +62,16 @@ void Tile::setObject(Object* i_Obj, Direction i_PosOnTile)
 
     // Place object
     switch (i_PosOnTile) {
-    case UP:
-        m_Objs[0].setObject(i_Obj);
-        m_Objs[1].setObject(i_Obj);
-        break;
-    case UPPER_RIGHT:
-        m_Objs[1].setObject(i_Obj);
-        break;    
-    case RIGHT:
-        m_Objs[1].setObject(i_Obj);
-        m_Objs[3].setObject(i_Obj);
-        break;
-    case LOWER_RIGHT:
-        m_Objs[3].setObject(i_Obj);
-        break;
-    case DOWN:
-        m_Objs[2].setObject(i_Obj);
-        m_Objs[3].setObject(i_Obj);
-        break;
-    case LOWER_LEFT:
-        m_Objs[2].setObject(i_Obj);
-        break;
-    case LEFT:
-        m_Objs[0].setObject(i_Obj);
-        m_Objs[2].setObject(i_Obj);
-        break;
-    case UPPER_LEFT:
-        m_Objs[0].setObject(i_Obj);
-        break;
-    default:
-        m_Objs[0].setObject(i_Obj);
-        m_Objs[1].setObject(i_Obj);
-        m_Objs[2].setObject(i_Obj);
-        m_Objs[3].setObject(i_Obj);
-        break;
+    case UP:          m_Objs[0] = m_Objs[1] = i_Obj; break;
+    case UPPER_RIGHT: m_Objs[1]             = i_Obj; break;    
+    case RIGHT:       m_Objs[1] = m_Objs[3] = i_Obj; break;
+    case LOWER_RIGHT: m_Objs[3]             = i_Obj; break;
+    case DOWN:        m_Objs[2] = m_Objs[3] = i_Obj; break;
+    case LOWER_LEFT:  m_Objs[2]             = i_Obj; break;
+    case LEFT:        m_Objs[0] = m_Objs[2] = i_Obj; break;
+    case UPPER_LEFT:  m_Objs[0]             = i_Obj; break;
+    default:          m_Objs[0] = m_Objs[1] = 
+                      m_Objs[2] = m_Objs[3] = i_Obj; break;
     }
 }
 
@@ -104,9 +80,9 @@ void Tile::setBiome(Biome i_Biome)
     m_Env.setBiome(i_Biome);
 }
 
-void Tile::setHuman(HumanInfo* i_Human)
+void Tile::setIndividual(Individual* i_Individual)
 {
-    m_Human = i_Human;
+    m_Individual = i_Individual;
 }
 
 
@@ -123,33 +99,21 @@ std::set<const Object*> Tile::getObjects() const
 {
     std::set<const Object*> objs;
     for (unsigned int i = 0; i < 4; ++i) {
-        const Object* obj(m_Objs[i].getObject());
-        if (obj != NULL) {
-            objs.emplace(obj);
+        if (m_Objs[i] != NULL) {
+            objs.emplace(m_Objs[i]);
         }
     }
     return objs;
 }
 
-std::set<const ObjectOnGround*> Tile::getObjectsOnGround() const
+const Individual* Tile::getIndividual() const
 {
-    std::set<const ObjectOnGround*> objs;
-    for (unsigned int i = 0; i < 4; ++i) {
-        if (m_Objs[i].getObject() != NULL) {
-            objs.emplace(&m_Objs[i]);
-        }
-    }
-    return objs;
+    return m_Individual;
 }
 
-const HumanInfo* Tile::getHuman() const
+Individual* Tile::getIndividual()
 {
-    return m_Human;
-}
-
-HumanInfo* Tile::getHuman()
-{
-    return m_Human;
+    return m_Individual;
 }
 
 
@@ -160,7 +124,7 @@ HumanInfo* Tile::getHuman()
 bool Tile::hasObject() const
 {
     for (unsigned int i = 0; i < 4; ++i) {
-        if (m_Objs[i].getObject() != NULL) {
+        if (m_Objs[i] != NULL) {
             return true;
         }
     }
@@ -170,28 +134,15 @@ bool Tile::hasObject() const
 bool Tile::hasObject(Direction i_PosOnTile) const
 {
     switch (i_PosOnTile) {
-    case UP:
-        return m_Objs[0].getObject() != NULL && 
-               m_Objs[1].getObject() != NULL;
-    case UPPER_RIGHT:
-        return m_Objs[1].getObject() != NULL;
-    case RIGHT:
-        return m_Objs[1].getObject() != NULL && 
-               m_Objs[3].getObject() != NULL;
-    case LOWER_RIGHT:
-        return m_Objs[3].getObject() != NULL;
-    case DOWN:
-        return m_Objs[2].getObject() != NULL && 
-               m_Objs[3].getObject() != NULL;
-    case LOWER_LEFT:
-        return m_Objs[2].getObject() != NULL;
-    case LEFT:
-        return m_Objs[0].getObject() != NULL && 
-               m_Objs[2].getObject() != NULL;
-    case UPPER_LEFT:
-        return m_Objs[0].getObject() != NULL;
-    default:
-        return hasObject();
+    case UP:          return m_Objs[0] != NULL && m_Objs[1] != NULL;
+    case UPPER_RIGHT: return m_Objs[1] != NULL;
+    case RIGHT:       return m_Objs[1] != NULL && m_Objs[3] != NULL;
+    case LOWER_RIGHT: return m_Objs[3] != NULL;
+    case DOWN:        return m_Objs[2] != NULL && m_Objs[3] != NULL;
+    case LOWER_LEFT:  return m_Objs[2] != NULL;
+    case LEFT:        return m_Objs[0] != NULL && m_Objs[2] != NULL;
+    case UPPER_LEFT:  return m_Objs[0] != NULL;
+    default:          return hasObject();
     }
 }
 
@@ -212,14 +163,14 @@ bool Tile::hasPlaceFor(Object* i_Obj) const
             }
         }
         return false;
-    case ObjSize::BIG:
+    default:
         return hasObject();
     }
 }
 
-bool Tile::hasHuman() const
+bool Tile::hasIndividual() const
 {
-    return m_Human != NULL;
+    return m_Individual != NULL;
 }
 
 bool Tile::isPassable() const
@@ -228,10 +179,9 @@ bool Tile::isPassable() const
         return false;
     }
     for (unsigned int i = 0; i < 4; ++i) {
-        const Object* obj(m_Objs[i].getObject());
-        if (obj != NULL && !obj->isPassable()) {
+        if (m_Objs[i] != NULL && !m_Objs[i]->isPassable()) {
             return false;
         }
     }
-    return m_Human == NULL;
+    return m_Individual == NULL;
 }

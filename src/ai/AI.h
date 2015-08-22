@@ -7,12 +7,12 @@
 | only knows what the Human knows.
 \=============================================================================*/
 
-class HumanPerception;
+class WorldPerception;
 class Order;
 
 class AI
 {
 public:
     // MOVE HUMAN
-    virtual Order giveOrder(const HumanPerception& i_HP) = 0;
+    virtual Order giveOrder(const WorldPerception& i_Percep) = 0;
 };

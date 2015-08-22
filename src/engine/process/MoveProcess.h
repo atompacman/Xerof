@@ -9,7 +9,7 @@
 | Title says it all
 \=============================================================================*/
 
-class  HumanInfo;
+class  Individual;
 struct Position;
 class  Map;
 
@@ -17,7 +17,7 @@ class MoveProcess : public Process
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    MoveProcess(HumanInfo& i_Human, const Position& i_Dest, Map& i_Map);
+    MoveProcess(Individual& i_Indiv, const Position& i_Dest, Map& i_Map);
 
     // NEXT ITERATION
     virtual void nextIter();
@@ -25,9 +25,9 @@ public:
 private:
     static const double s_DELTA;
 
-    HumanInfo& m_Human;
-    Coord      m_InitTile;
-    Coord      m_DestTile;
-    DCoord     m_Delta;
-    Map&       m_Map;
+    Individual& m_Individual;
+    Coord       m_InitTile;
+    Coord       m_DestTile;
+    DCoord      m_Delta;
+    Map&        m_Map;
 };

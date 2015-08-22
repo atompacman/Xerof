@@ -20,10 +20,10 @@ public:
     ~CivController();
 
     // DAWN OF CIVILIZATION
-    void placeFirstHuman();
+    void placeFirstIndividual();
 
     // ADD
-    void addHuman(Coord i_Pos);
+    void addIndividual(Coord i_Pos);
 
     // GETTERS
     const Civilization& getCiv() const;

@@ -1,5 +1,5 @@
 #include <DisplayInfo.h>
-#include <HumanInfo.h>
+#include <Individual.h>
 #include <Map.h>
 #include <Tile.h>
 
@@ -9,15 +9,15 @@ FullMapKnowledge DisplayInfo::s_FullMapKnow = FullMapKnowledge();
 //                          CONSTRUCTOR/DESTRUCTOR                            //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-DisplayInfo::DisplayInfo(Map& i_Map, HumanInfo* i_SelectedHuman) :
+DisplayInfo::DisplayInfo(Map& i_Map, Individual* i_SelectedIndiv) :
 m_Camera(i_Map.dimensions()),
-m_SelectedHuman(i_SelectedHuman),
+m_SelectedHuman(i_SelectedIndiv),
 m_FollowSelection(false),
 m_Map(i_Map),
 m_MapKnow(NULL)
 {
     // Select initial human
-    i_SelectedHuman->select();
+    i_SelectedIndiv->select();
 
     // Zoom on initial selected human
     m_Camera.setPosition(m_SelectedHuman->getPosition().coord());
@@ -48,7 +48,7 @@ Map& DisplayInfo::getMap()
     return m_Map;
 }
 
-const HumanInfo* DisplayInfo::getSelectedChar() const
+const Individual* DisplayInfo::getSelectedChar() const
 {
     return m_SelectedHuman;
 }
@@ -87,7 +87,7 @@ void DisplayInfo::setSelection(Coord i_SelectTile)
     }
 
     // Get selected human
-    HumanInfo* currSelect(m_Map(i_SelectTile).getHuman());
+    Individual* currSelect(m_Map(i_SelectTile).getIndividual());
 
     // If there is no human on selected tile
     if (currSelect == NULL) {

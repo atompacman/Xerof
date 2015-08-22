@@ -13,7 +13,7 @@
 \=============================================================================*/
 
 class CivController;
-class HumanPerception;
+class WorldPerception;
 class MoveProcess;
 class Order;
 enum  Action;
@@ -49,8 +49,8 @@ private:
     // UPDATE
     void updateGame();
     void processAI();
-    void processOrder(HumanInfo& io_Human, const Order& i_Order);
-    void processMovingOrder(HumanInfo& io_Human,
+    void processOrder(Individual& io_Human, const Order& i_Order);
+    void processMovingOrder(Individual& io_Human,
                             Action     i_Action,
                             Direction  i_Dir);
     bool verifyDestination(const Position& i_Dest) const;

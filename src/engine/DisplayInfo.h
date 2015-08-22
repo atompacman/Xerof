@@ -11,21 +11,21 @@
 | - Map
 \=============================================================================*/
 
-class HumanInfo;
+class Individual;
 class Map;
 
 class DisplayInfo
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    DisplayInfo(Map& i_Map, HumanInfo* i_SelectedHuman);
+    DisplayInfo(Map& i_Map, Individual* i_SelectedIndiv);
 
     // GETTERS
     const Camera&       getCamera() const;
     Camera&             getCamera();
     const Map&          getMap() const;
     Map&                getMap();
-    const HumanInfo*    getSelectedChar() const;
+    const Individual*    getSelectedChar() const;
     bool                doFollowSelection() const;
     const MapKnowledge& getMapKnowledge() const;
 
@@ -40,7 +40,7 @@ private:
     Camera m_Camera;
 
     // Selected human
-    HumanInfo* m_SelectedHuman;
+    Individual* m_SelectedHuman;
 
     // If camera follows selected human
     bool m_FollowSelection;

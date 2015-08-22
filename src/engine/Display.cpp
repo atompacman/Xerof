@@ -7,7 +7,7 @@
 #include <Assets.h>
 #include <CivController.h>
 #include <Environment.h>
-#include <HumanInfo.h>
+#include <Individual.h>
 #include <Mouse.h>
 #include <Parameters.h>
 #include <Random.h>
@@ -184,15 +184,15 @@ void Display::drawHumans()
             }
 
             // Get human on tile
-            const HumanInfo* human(map(tileCoord).getHuman());
-            if (human == NULL) {
+            const Individual* indiv(map(tileCoord).getIndividual());
+            if (indiv == NULL) {
                 continue;
             }
-            const Position& humanPos(human->getPosition());
+            const Position& indivPos(indiv->getPosition());
 
             // Create caracter sub-bitmap
             ALLEGRO_BITMAP* subBitmap(al_create_sub_bitmap(
-                m_Assets[human->assetFile()],
+                m_Assets[indiv->assetFile()],
                 textureULCorner.x,
                 textureULCorner.y,
                 tileSizeOnTexture,
@@ -204,23 +204,23 @@ void Display::drawHumans()
                 visibility==Visibility::FOG_OF_WAR?FOG_OF_WAR_TINT:VISIBLE_TINT,
                 tileSizeOnTexture * 0.5,
                 tileSizeOnTexture * 0.5,
-                humanPos.coord().x*tileSizeOnMap + toCenterHuman,
-                humanPos.coord().y*tileSizeOnMap + toCenterHuman,
+                indivPos.coord().x*tileSizeOnMap + toCenterHuman,
+                indivPos.coord().y*tileSizeOnMap + toCenterHuman,
                 humanScaling,
                 humanScaling,
-                correspondingAngle(humanPos.facingDir()),
+                correspondingAngle(indivPos.facingDir()),
                 0);
 
             // Draw selection box
-            if (human->isSelected()) {
+            if (indiv->isSelected()) {
                 al_draw_scaled_bitmap(
                     m_Assets[SELECTION],
                     textureULCorner.x,
                     textureULCorner.y,
                     tileSizeOnTexture,
                     tileSizeOnTexture,
-                    humanPos.tileCoord().x * tileSizeOnMap,
-                    humanPos.tileCoord().y * tileSizeOnMap,
+                    indivPos.tileCoord().x * tileSizeOnMap,
+                    indivPos.tileCoord().y * tileSizeOnMap,
                     overlapTileSize,
                     overlapTileSize,
                     DOWN);
