@@ -34,7 +34,7 @@ MapConfig::MapConfig(const char* i_ParamFile)
     m_Dim = Dimensions(width, height);
 
     // Parse init env type
-    m_InitEnvType = parseEnvType(root, INIT_LAND_TYPE_ELEM);
+    m_InitialBiome = parseEnvType(root, INIT_LAND_TYPE_ELEM);
 
     // Parse borders
     const Value& bordersElem(parseSubElem(root, BORDERS_ELEM));

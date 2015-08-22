@@ -1,6 +1,9 @@
 #pragma once
 
+#include <Border.h>
 #include <Elem2D.h>
+#include <Parameters.h>
+#include <list>
 
 /*============================================================================\\
 | Generates map
@@ -10,20 +13,19 @@
 | to model their probability of being place on the map.
 \=============================================================================*/
 
-class  Map;
-class  MapConfig;
 enum   Biome;
 struct Phase;
+class  Map;
+class  MapConfig;
 
 namespace MapGenerator
 {
     // GENERATION
-    void generate(Map& o_Map);
-    void generate(Map& o_Map, const char* i_MapConfigFile);
+    void generate(Map& o_Map, const char* i_MapConfigFile = DEFAULT_MAP_CONFIG);
 
     // GENERATION
-    void placeBorders();
-    void fillWithInitEnv();
+    void placeBorders(const std::list<Border>& i_Borders);
+    void fillWithInitialBiome(Biome i_InitBiome);
     void executeMapGenPhase(const Phase& i_Phase);
     void runOverpass();
     void removeLonelyTiles(const Biome& i_ChangedBiome, 

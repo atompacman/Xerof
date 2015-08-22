@@ -2,7 +2,6 @@
 
 #include <Constraint.h>
 #include <set>
-#include <Tile.h>
 
 /*============================================================================\\
 | Environment to replace must be in a list of environment

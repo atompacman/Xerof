@@ -7,6 +7,7 @@
 #include <FatalErrorDialog.h>
 #include <JSONUtils.h>
 #include <limits>
+#include <Map.h>
 #include <NeighbouringEnvAttraction.h>
 #include <NeighbouringEnvLimits.h>
 #include <Phase.h>

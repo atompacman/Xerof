@@ -14,11 +14,14 @@
 | - DDimensions (double)
 \=============================================================================*/
 
-#define Coord       Elem2D<unsigned int>
-#define DCoord      Elem2D<double>
-#define SCoord      Elem2D<int>
-#define Dimensions  Elem2D<unsigned int>
-#define DDimensions Elem2D<double>
+template <typename T>
+struct Elem2D;
+
+typedef Elem2D<unsigned int> Coord;
+typedef Elem2D<double>       DCoord;
+typedef Elem2D<int>          SCoord;
+typedef Elem2D<unsigned int> Dimensions;
+typedef Elem2D<double>       DDimensions;
 
 template <typename T>
 struct Elem2D

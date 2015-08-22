@@ -18,47 +18,39 @@
 
 namespace MapGenerator
 {
-    Map*       s_Map;
-    MapConfig* s_Config;
-    Coord      s_ULCorner;
-    Coord      s_LRCorner;
-
-    void generate(Map& o_Map)
-    {
-        generate(o_Map, DEFAULT_MAP_CONFIG);
-    }
+    Map*  s_Map;
+    Coord s_ULCorner;
+    Coord s_LRCorner;
 
     void generate(Map& o_Map, const char* i_MapConfigFile)
     {
+        s_Map = &o_Map;
+
         // Read config file
-        s_Config = new MapConfig(i_MapConfigFile);
+        MapConfig config(i_MapConfigFile);
 
         // Initialized map with dimensions specified by the config file
-        s_Map = &o_Map;
-        s_Map->clearAndResize(s_Config->m_Dim);
+        s_Map->clearAndResize(config.m_Dim);
 
         // Build map constraints from the config file
-        s_Config->buildConstraints(*s_Map);
+        config.buildConstraints(*s_Map);
 
         // Initialize environments
-        placeBorders();
+        placeBorders(config.m_Borders);
 
         // Fill with initial environment
-        fillWithInitEnv();
+        fillWithInitialBiome(config.m_InitialBiome);
 
         // Execute map generation phases
-        for (const Phase& phase : s_Config->m_Phases) {
+        for (const Phase& phase : config.m_Phases) {
             executeMapGenPhase(phase);
         }
 
         // Pass over to polish the map and add the natural ressources
         runOverpass();
-
-        // Delete map config
-        delete s_Config;
     }
 
-    void placeBorders()
+    void placeBorders(const std::list<Border>& i_Borders)
     {
         // Zone that will be filled by the initial env 
         // (borders may reduce this space)
@@ -71,12 +63,12 @@ namespace MapGenerator
 
 
         // Borders overlap each other (the last one has the priority)
-        for (Border border : s_Config->m_Borders) {
+        for (Border border : i_Borders) {
             // Adjust generation zone
             switch (border.m_Side) {
-            case UP:    s_ULCorner.y = border.m_Width; break;
+            case UP:    s_ULCorner.y = border.m_Width;        break;
             case DOWN:  s_LRCorner.y = mapH - border.m_Width; break;
-            case LEFT:  s_ULCorner.x = border.m_Width; break;
+            case LEFT:  s_ULCorner.x = border.m_Width;        break;
             case RIGHT: s_LRCorner.x = mapW - border.m_Width; break;
             }
 
@@ -137,17 +129,16 @@ namespace MapGenerator
         }
     }
 
-    void fillWithInitEnv()
+    void fillWithInitialBiome(Biome i_InitBiome)
     {
-        if (s_Config->m_InitEnvType == OCEAN) {
+        if (i_InitBiome == OCEAN) {
             // Tiles are already ocean
             return;
         }
-
         Coord coord;
         for (coord.y = s_ULCorner.y; coord.y < s_LRCorner.y; ++coord.y) {
             for (coord.x = s_ULCorner.x; coord.x < s_LRCorner.x; ++coord.x) {
-                (*s_Map)(coord).setBiome(s_Config->m_InitEnvType);
+                (*s_Map)(coord).setBiome(i_InitBiome);
             }
         }
     }
