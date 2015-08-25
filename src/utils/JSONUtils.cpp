@@ -49,8 +49,7 @@ const Value& parseSubElem(const Value& i_Value, const char* i_Elem)
 {
     if (!i_Value.HasMember(i_Elem)) {
         std::stringstream ss;
-        ss << "Invalid JSON file: Missing \"" <<
-            i_Elem << "\" element";
+        ss << "Invalid JSON file: Missing \"" << i_Elem << "\" element";
         FatalErrorDialog(ss.str());
     }
     return i_Value[i_Elem];
@@ -61,8 +60,7 @@ unsigned int parseUINT(const Value& i_Value, const char* i_Elem)
     const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsUint()) {
         std::stringstream ss;
-        ss << "Parameter \"" << i_Elem <<
-            "\" value should be an unsigned integer";
+        ss <<"Parameter \"" <<i_Elem <<"\" value should be an unsigned integer";
         FatalErrorDialog(ss.str());
     }
     return subElem.GetUint();
@@ -73,8 +71,7 @@ double parseDouble(const Value& i_Value, const char* i_Elem)
     const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsNumber()) {
         std::stringstream ss;
-        ss << "Parameter \"" << i_Elem <<
-            "\" value should be a real number";
+        ss << "Parameter \"" << i_Elem << "\" value should be a real number";
         FatalErrorDialog(ss.str());
     }
     return subElem.GetDouble();
@@ -103,7 +100,7 @@ const char* parseString(const Value& i_Value, const char* i_Elem)
     return subElem.GetString();
 }
 
-Biome parseEnvType(const Value& i_Value, const char* i_Elem)
+Biome parseBiome(const Value& i_Value, const char* i_Elem)
 {
     auto it(STR_TO_BIOME.find(parseString(i_Value, i_Elem)));
     if (it == STR_TO_BIOME.end()) {
@@ -114,7 +111,7 @@ Biome parseEnvType(const Value& i_Value, const char* i_Elem)
     return it->second;
 }
 
-Biome parseEnvType(const Value& i_Value)
+Biome parseBiome(const Value& i_Value)
 {
-    return parseEnvType(i_Value, ENV_TYPE_ELEM);
+    return parseBiome(i_Value, BIOME_ELEM);
 }

@@ -47,9 +47,6 @@
     <Filter Include="src\world\generation">
       <UniqueIdentifier>{c95d2e84-34b8-492a-9fe8-67e6448ab34b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\world\generation\configuration">
-      <UniqueIdentifier>{d435bad9-5dec-4b55-ac84-1cc38d4b2d9b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\world\generation\constraint">
       <UniqueIdentifier>{b7f8ed7a-873f-4cd5-8d16-638513c57647}</UniqueIdentifier>
     </Filter>
@@ -157,15 +154,6 @@
     <ClInclude Include="src\utils\Random.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\generation\configuration\Border.h">
-      <Filter>src\world\generation\configuration</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\generation\configuration\MapConfig.h">
-      <Filter>src\world\generation\configuration</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\generation\configuration\Phase.h">
-      <Filter>src\world\generation\configuration</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\generation\constraint\Constraint.h">
       <Filter>src\world\generation\constraint</Filter>
     </ClInclude>
@@ -193,9 +181,6 @@
     <ClInclude Include="src\world\generation\constraint\NeighbouringEnvLimits.h">
       <Filter>src\world\generation\constraint</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\generation\MapGenerator.h">
-      <Filter>src\world\generation</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\Map.h">
       <Filter>src\world</Filter>
     </ClInclude>
@@ -210,6 +195,12 @@
     </ClInclude>
     <ClInclude Include="src\ai\WorldPerception.h">
       <Filter>src\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\generation\MapGenerator.h">
+      <Filter>src\world\generation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\generation\Phase.h">
+      <Filter>src\world\generation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -264,15 +255,6 @@
     <ClCompile Include="src\utils\Position.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\generation\configuration\MapConfig.cpp">
-      <Filter>src\world\generation\configuration</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\generation\configuration\Phase.cpp">
-      <Filter>src\world\generation\configuration</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\generation\MapGenerator.cpp">
-      <Filter>src\world\generation</Filter>
-    </ClCompile>
     <ClCompile Include="src\world\Tile.cpp">
       <Filter>src\world</Filter>
     </ClCompile>
@@ -281,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="src\ai\WorldPerception.cpp">
       <Filter>src\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\generation\MapGenerator.cpp">
+      <Filter>src\world\generation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\generation\Phase.cpp">
+      <Filter>src\world\generation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

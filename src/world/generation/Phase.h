@@ -21,7 +21,7 @@ typedef std::map<Biome,std::pair<size_t,std::vector<Constraint*>>> Constraints;
 #define QTY_ELEM            "Quantity"
 #define RELATIVE_ELEM       "Relative"
 #define ABSOLUTE_ELEM       "Absolute"
-#define ENV_TYPES_PROP_ELEM "EnvTypesProportions"
+#define ENV_TYPES_PROP_ELEM "BiomesProportions"
 #define CONSTRAINTS_ELEM    "Constraints"
 #define MAX_TRIES_ELEM      "MaxNumTriesBeforeSkipping"
 #define STRENGTH_ELEM       "Strength"

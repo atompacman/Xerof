@@ -4,17 +4,17 @@
 			"Width":  200, 
 			"Height": 150
 		},
-		"InitialEnvType": "OCEAN",
 		"Borders": {
-			"NORTH": { "Width": 4, "EnvType": "TUNDRA" },
-			"SOUTH": { "Width": 4, "EnvType": "TUNDRA" }
+			"NORTH": { "Width": 4, "Biome": "TUNDRA" },
+			"SOUTH": { "Width": 4, "Biome": "TUNDRA" }
 		},
+		"InitialBiome": "OCEAN",
 		"Phases": {
 			"Generate tundra on poles": {
 				"Quantity": { 
 					"Relative": 0.051
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"TUNDRA": 1
 				},
 				"Constraints": {
@@ -32,12 +32,12 @@
 				"Quantity": {
 					"Relative": 0.001
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"GRASSLAND": 1
 				},
 				"Constraints": {
 					"EnvironmentIs": {
-						"EnvType": "OCEAN"
+						"Biome": "OCEAN"
 					},
 					"AttractionTowardsCenter": {
 						"Strength": 0.5
@@ -49,12 +49,12 @@
 				"Quantity": { 
 					"Relative": 0.3
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"GRASSLAND": 1
 				},
 				"Constraints": {
 					"EnvironmentIs": {
-						"EnvType": "OCEAN"
+						"Biome": "OCEAN"
 					},
 					"AttractionTowardsCenter": {
 						"Strength": 1
@@ -70,12 +70,12 @@
 				"Quantity": { 
 					"Relative": 0.007
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"TUNDRA": 1
 				},
 				"Constraints": {
 					"EnvironmentIs": {
-						"EnvType": "GRASSLAND"
+						"Biome": "GRASSLAND"
 					},
                     "NeighbouringEnvLimits": {
 						"Min": 1,
@@ -92,13 +92,13 @@
 				"Quantity": { 
 					"Relative": 0.001
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"PLAIN": 0.7,
                     "ROCKY": 0.3
 				},
 				"Constraints": {
 					"EnvironmentIs": {
-						"EnvType": "GRASSLAND"
+						"Biome": "GRASSLAND"
 					},
 					"AttractionTowardsEquator": {
 						"Strength": 4
@@ -110,12 +110,12 @@
 				"Quantity": { 
 					"Relative": 0.07
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"PLAIN": 1
 				},
 				"Constraints": {
 					"EnvironmentIs": {
-						"EnvType": "GRASSLAND"
+						"Biome": "GRASSLAND"
 					},
                     "NeighbouringEnvLimits": {
 						"Min": 1,
@@ -136,7 +136,7 @@
 				"Quantity": { 
 					"Relative": 0.02
 				},
-				"EnvTypesProportions": {
+				"BiomesProportions": {
 					"ROCKY": 1
 				},
 				"Constraints": {

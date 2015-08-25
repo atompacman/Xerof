@@ -99,7 +99,7 @@ void Phase::parseCnstrts(const Value& i_CnstrtElem, const Map& i_Map)
             auto& cnstrnts(envCnstrnts.second.second);
             if (cnstName == "EnvironmentIs") {
                 cnstrnts.push_back(new EnvironmentIs(i_Map,
-                    parseEnvType(it->value)));
+                    parseBiome(it->value)));
             }
             else if (cnstName == "EnvironmentIsAmong") {
                 if (!it->value.IsArray()) {
