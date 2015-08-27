@@ -13,26 +13,23 @@
 |   - The manhattan distance to the fartest tile
 \=============================================================================*/
 
-class NeighbouringEnvConstraint : public virtual Constraint
+class NearbyElemConstraint : public virtual Constraint
 {
 public:
     // CONSTRUCTOR/DESTRUCTOR
-    NeighbouringEnvConstraint(const Map& i_Map, 
-                              Biome      i_EnvType, 
-                              UINT       i_Radius) :
+    NearbyElemConstraint(const Map& i_Map, unsigned int i_Radius) :
         Constraint(i_Map),
-        m_EnvType(i_EnvType),
         m_Radius(i_Radius)
     {}
 
-    // WEIGHT
-    UINT countNeighbourEnv(Coord i_Coord) const
+    // EVALUATE
+    unsigned int countNearbyBiome(Biome i_Biome, Coord i_Coord) const
     {
-        UINT count(0);
-        UINT begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
-        UINT begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
-        UINT endX(min(i_Coord.x + m_Radius + 1, m_Map.width()));
-        UINT endY(min(i_Coord.y + m_Radius + 1, m_Map.height()));
+        unsigned int count(0);
+        unsigned int begX(i_Coord.x < m_Radius ? 0 : i_Coord.x - m_Radius);
+        unsigned int begY(i_Coord.y < m_Radius ? 0 : i_Coord.y - m_Radius);
+        unsigned int endX(min(i_Coord.x + m_Radius + 1, m_Map.width()));
+        unsigned int endY(min(i_Coord.y + m_Radius + 1, m_Map.height()));
         Coord coord;
 
         for (coord.y = begY; coord.y < endY; ++coord.y) {
@@ -40,7 +37,7 @@ public:
                 if (coord == i_Coord) {
                     continue;
                 }
-                if(m_Map(coord).getEnvironment().getBiome() == m_EnvType){
+                if (m_Map(coord).getEnvironment().getBiome() == i_Biome){
                     ++count;
                 }
             }
@@ -49,6 +46,5 @@ public:
     }
 
 protected:
-    Biome m_EnvType;
-    UINT  m_Radius;
+    unsigned int m_Radius;
 };

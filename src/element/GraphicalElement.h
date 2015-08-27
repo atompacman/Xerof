@@ -7,6 +7,8 @@
 | GraphicalElement -> ...
 \=============================================================================*/
 
+typedef unsigned int ElemID;
+
 enum AssetID;
 
 class GraphicalElement

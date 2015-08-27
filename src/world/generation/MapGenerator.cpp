@@ -2,14 +2,13 @@
 #include <Constraint.h>
 #include <Elem2D.h>
 #include <Environment.h>
-#include <EnvironmentIs.h>
 #include <FatalErrorDialog.h>
 #include <JSONUtils.h>
+#include <list>
 #include <Map.h>
 #include <MapGenerator.h>
 #include <math.h>
 #include <Parameters.h>
-#include <Phase.h>
 #include <ProgressLogger.h>
 #include <Random.h>
 #include <rapidjson\error\en.h>
@@ -18,8 +17,6 @@
 #include <vector>
 
 using namespace rapidjson;
-
-typedef std::pair<unsigned int, unsigned int> pairUINT;
 
 namespace MapGenerator
 {
@@ -37,14 +34,26 @@ namespace MapGenerator
     Coord  s_ULCorner;
     Coord  s_LRCorner;
 
+
     // ----- Global variables ----- //
 
     // Map dimensions extremum
-    static pairUINT loadMapDimExtremum();
-    static const pairUINT s_MapDimExtremum(loadMapDimExtremum());
-
-    void generate(Map& o_Map, const char* i_MapConfigFile)
+    std::pair<unsigned int, unsigned int> loadMapDimExtremum()
     {
+        Document doc;
+        Value& root = parseJSON(doc, MAP_LIMITS, LIMITS_ROOT_ELEM);
+        return std::make_pair(parseUINT(root, MIN_MAP_SIZE_ELEM),
+                              parseUINT(root, MAX_MAP_SIZE_ELEM));
+    }
+    static const std::pair<unsigned int, unsigned int> 
+        s_MapDimExtremum = loadMapDimExtremum();
+
+
+    // ----- Functions ----- //
+
+    void generate(Map& o_Map, const std::string& i_MapConfigFile)
+    {
+        // Save a pointer to map
         s_Map = &o_Map;
 
         // Parse rapidjson document
@@ -52,35 +61,44 @@ namespace MapGenerator
         s_JSONRoot = &parseJSON(m_Doc, i_MapConfigFile, CONFIG_ROOT_ELEM);
 
         // Initialize map tiles
-        initializeMapTiles();
+        const Value& dimElem(parseSubElem(*s_JSONRoot, DIM_ELEM));
+        s_Map->clearAndResize(parseMapDimension(dimElem, DIM_WIDTH_SUB_ELEM),
+                              parseMapDimension(dimElem, DIM_HEIGHT_SUB_ELEM));
+
+        // Set initial unalterable map zone corners (borders will reduce it)
+        s_ULCorner = Coord(0, 0);
+        s_LRCorner = Coord(s_Map->dimensions());
 
         // Place unalterable borders
-        placeBorders();
+        const Value& borderElem(parseSubElem(*s_JSONRoot, BORDERS_ELEM));
+        for (auto it=borderElem.MemberBegin(); it!=borderElem.MemberEnd();++it){
+            placeBorder(it->value, it->name.GetString());
+        }
 
-        // Fill with initial biome
-        fillWithInitialBiome();
+        // Fill map with initial biome
+        Biome biome(parseBiome(*s_JSONRoot, INIT_BIOME_ELEM));
+        if (biome != OCEAN) {
+            fillBiomeRegion(biome, s_ULCorner, s_LRCorner);
+        }
 
-        // Execute environment generation phases
-        executeEnvironmentPhases();
+        // Execute generation phases
+        const Value& phasesElem(parseSubElem(*s_JSONRoot, PHASES_ELEM));
+        for (auto it=phasesElem.MemberBegin(); it!=phasesElem.MemberEnd();++it){
+            executePhase(it->value, it->name.GetString());
+        }
 
         // Pass over to polish the map and add the natural ressources
-        runOverpass();
+        //runOverpass();
     }
 
-    void initializeMapTiles()
-    {
-        const Value& elem(parseSubElem(*s_JSONRoot, DIM_ELEM));
-        s_Map->clearAndResize(parseMapDimension(elem, DIM_WIDTH_SUB_ELEM),
-                              parseMapDimension(elem, DIM_HEIGHT_SUB_ELEM));
-    }
-
-    unsigned int parseMapDimension(const Value&i_Elem,const char* i_SubElemName)
+    unsigned int parseMapDimension(const Value&       i_Elem,
+                                   const std::string& i_SubElemName)
     {
         unsigned int dim(parseUINT(i_Elem, i_SubElemName));
         if (dim < s_MapDimExtremum.first) {
             std::stringstream ss;
-            ss << i_SubElemName << " of map is too small (minimum is " 
-               << s_MapDimExtremum.first << ")";
+            ss << i_SubElemName << " of map is too small (minimum is "
+                << s_MapDimExtremum.first << ")";
             FatalErrorDialog(ss.str());
         }
         if (dim > s_MapDimExtremum.second) {
@@ -92,97 +110,68 @@ namespace MapGenerator
         return dim;
     }
 
-    void placeBorders()
+    void placeBorder(const Value& i_BorderElem, const std::string& i_SideName)
     {
-        // Set initial unalterable map zone (borders will reduce it)
-        s_ULCorner = Coord(0, 0);
-        s_LRCorner = Coord(s_Map->dimensions());
-
-        // Parse border element
-        const Value& elem(parseSubElem(*s_JSONRoot, BORDERS_ELEM));
-
-        // For each border (the last one has the priority)
-        for (auto it(elem.MemberBegin()); it != elem.MemberEnd(); ++it) {
-            // Parse border side string name ("NORTH", "EAST"...) 
-            const char* cardDir(it->name.GetString());
-
-            // Check if string is a valid cardinal direction
-            auto cardDirEntry(CARDINAL_DIRS.find(cardDir));
-            if (cardDirEntry == CARDINAL_DIRS.end()) {
-                std::stringstream ss;
-                ss << "\"" << cardDir << "\" is not a valid cardinal direction";
-                FatalErrorDialog(ss.str());
-            }
-
-            // Parse border sub-element
-            const Value& subElem(parseSubElem(elem, cardDir));
-
-            // Generate border
-            generateBorder(parseBiome(subElem), cardDirEntry->second, 
-                           cardDir, parseUINT(subElem, WIDTH_ELEM));
+        // Check if string is a valid cardinal direction
+        auto cardDirEntry(CARDINAL_DIRS.find(i_SideName));
+        if (cardDirEntry == CARDINAL_DIRS.end()) {
+            std::stringstream ss;
+            ss << "\"" << i_SideName << "\" is not a valid cardinal direction";
+            FatalErrorDialog(ss.str());
         }
-    }
 
-    void generateBorder(Biome i_Biome, BasicDir i_Side, 
-                        const std::string& i_SideName, unsigned int i_Width)
-    {
+        // Parse biome
+        Biome biome(parseBiome(i_BorderElem, BIOME_ELEM));
+
         // Skip ocean borders because tiles are ocean at initialization
-        if (i_Biome == OCEAN) {
+        if (biome == OCEAN) {
             return;
         }
+
+        // Parse width
+        unsigned int width(parseUINT(i_BorderElem, WIDTH_ELEM));
 
         // Get map size
         unsigned int mapW(s_Map->width());
         unsigned int mapH(s_Map->height());
 
-        // Generate potential error message
-        static const std::string ERR_MSG(i_SideName + 
-            " border cannot be larger than half of the map");
-
         // Check that border is not larger than half of map
-        unsigned int limitDim((i_Side == UP || i_Side == DOWN) ? mapH : mapW);
-        if (i_Width >= limitDim * 0.5) {
-            FatalErrorDialog(ERR_MSG.c_str());
+        BasicDir side(cardDirEntry->second);
+        unsigned int limitDim((side == UP || side == DOWN) ? mapH : mapW);
+        if (width >= limitDim * 0.5) {
+            FatalErrorDialog((i_SideName +
+                " border cannot be larger than half of the map").c_str());
         }
 
         // Set border region corners and adjust unalterable map zone
         Coord ulCorner;
         Coord lrCorner;
 
-        switch (i_Side) {
+        switch (side) {
         case UP:
-            ulCorner = Coord(0, 0); 
-            lrCorner = Coord(mapW, i_Width);
-            s_ULCorner.y = i_Width;
+            ulCorner = Coord(0, 0);
+            lrCorner = Coord(mapW, width);
+            s_ULCorner.y = width;
             break;
         case RIGHT:
-            ulCorner = Coord(mapW - i_Width, 0); 
+            ulCorner = Coord(mapW - width, 0);
             lrCorner = Coord(mapW, mapH);
-            s_LRCorner.x = mapW - i_Width;
+            s_LRCorner.x = mapW - width;
             break;
         case DOWN:
-            ulCorner = Coord(0, mapH - i_Width);
+            ulCorner = Coord(0, mapH - width);
             lrCorner = Coord(mapW, mapH);
-            s_LRCorner.y = mapH - i_Width;
+            s_LRCorner.y = mapH - width;
             break;
-        case LEFT:  
+        case LEFT:
             ulCorner = Coord(0, 0);
-            lrCorner = Coord(i_Width, mapH);
-            s_ULCorner.x = i_Width;
+            lrCorner = Coord(width, mapH);
+            s_ULCorner.x = width;
             break;
         }
 
         // Fill the border
-        fillBiomeRegion(i_Biome, ulCorner, lrCorner);
-    }
-
-    void fillWithInitialBiome()
-    {
-        // Parse init env type
-        Biome biome(parseBiome(*s_JSONRoot, INIT_BIOME_ELEM));
-        if (biome != OCEAN) {
-            fillBiomeRegion(biome, s_ULCorner, s_LRCorner);
-        }
+        fillBiomeRegion(biome, ulCorner, lrCorner);
     }
 
     void fillBiomeRegion(Biome i_Biome, Coord i_ULCorner, Coord i_LRCorner)
@@ -195,56 +184,124 @@ namespace MapGenerator
         }
     }
 
-    void executeEnvironmentPhases()
+    void executePhase(const Value& i_PhaseElem, const std::string i_PhaseName)
     {
-        // Parse phases
-        const Value& elem(parseSubElem(*s_JSONRoot, PHASES_ELEM));
-        
-        // For every phase
-        for (auto it = elem.MemberBegin(); it != elem.MemberEnd(); ++it) {
-            Phase phase(*s_Map, it->name.GetString(), it->value);
+        // Parse total number of tiles to change
+        unsigned int totalQty(parsePhaseQtyElem(i_PhaseElem));
 
-            for (const auto& envCnstrnts : phase.m_Cnstrts) {
-                unsigned int qty(envCnstrnts.second.first);
-                unsigned int placed(0);
-                unsigned int tries(0);
+        // Parse maximum number of tries
+        unsigned int maxTries(parseUINT(i_PhaseElem, MAX_TRIES_ELEM));
+        maxTries = maxTries == 0 ? (unsigned int)-1 : maxTries;
 
-                // Progress logging
+        // Parse constraints
+        std::list<Constraint*> cnstrnts;
+        const Value& cnstElem(parseSubElem(i_PhaseElem, CONSTRAINTS_ELEM));
+        for (auto it(cnstElem.MemberBegin()); it != cnstElem.MemberEnd(); ++it){
+            // Find constraint factory method
+            std::string cnstrntName(it->name.GetString());
+            auto entry(Constraint::s_Factory.find(cnstrntName));
+            if (entry == Constraint::s_Factory.end()) {
                 std::stringstream ss;
-                ss << "World generation - " << phase.m_Name << " - "
-                    << ENV_NAMES[envCnstrnts.first] << " [" << qty << " tiles]";
-                std::string msg = ss.str();
-                ProgressLogger progressLogger(qty, msg);
+                ss << "Invalid constraint \"" << cnstrntName << "\"";
+                FatalErrorDialog(ss.str());
+            }
 
-                // Loop until all needed tiles are placed
-                while (placed < qty) {
-                    // Generate a random coord
-                    const Coord coord(randCoord());
+            // Call factory method
+            cnstrnts.push_back((entry->second)(it->value, *s_Map));
+        }
 
-                    // At first, the probability of placing the env. is 100 %
-                    double totalProb(1.0);
+        // For each element
+        double sum(0);
+        const Value& elemProp(parseSubElem(i_PhaseElem, BIOMES_PROP_ELEM));
+        for (auto it = elemProp.MemberBegin(); it != elemProp.MemberEnd();++it){
+            auto entry(STR_TO_BIOME.find(it->name.GetString()));
 
-                    // Each constraint will reduce this probability 
-                    // (product of all constraint weights)
-                    for (const auto& constraint : envCnstrnts.second.second) {
-                        totalProb *= constraint->getWeightFor(coord);
-                    }
+            // Check if string element is valid
+            if (entry == STR_TO_BIOME.end()) {
+                std::stringstream ss;
+                ss << "Invalid element \"" << it->name.GetString() << "\"";
+                FatalErrorDialog(ss.str());
+            }
+            Biome elem(entry->second);
 
-                    // Generate a probability
-                    if (randProb() < totalProb) {
-                        // Set the env.
-                        (*s_Map)(coord).setBiome(envCnstrnts.first);
-                        ++placed;
-                        progressLogger.next();
-                    }
-                    else if (++tries > phase.m_MaxTries) {
-                        LOG(ERROR) << "Maximum number of tries reached."
-                            << " Skipping phase for this environment.";
-                        break;
-                    }
-                }
+            // Parse element placement proportion
+            double prop(it->value.GetDouble());
+            sum += prop;
+            double elemQty = (unsigned int)rint(prop * (double)totalQty);
+
+            // Execute phase for specific element
+            executePhaseForElement(elem,cnstrnts,i_PhaseName,elemQty,maxTries);
+        }
+
+        // Check if proportions sum to 1
+        if (!almostEqual(sum, 1)) {
+            FatalErrorDialog("Element proportions do not sum to 1");
+        }
+    }
+
+    void executePhaseForElement(Biome                         i_Element,
+                                const std::list<Constraint*>& i_Constraints,
+                                const std::string             i_PhaseName,
+                                unsigned int                  i_ElemQty,
+                                unsigned int                  i_MaxTries)
+    {
+        unsigned int placed(0);
+        unsigned int tries(0);
+
+        // Init progress logger
+        std::stringstream ss;
+        ss << "World generation - " << i_PhaseName << " - "
+            << ENV_NAMES[i_Element] << " [" << i_ElemQty << " tiles]";
+        std::string msg = ss.str();
+        ProgressLogger progressLogger(i_ElemQty, msg);
+
+        // Loop until all needed tiles are placed
+        while (placed < i_ElemQty) {
+            // Generate a random coord
+            const Coord coord(randCoord());
+
+            // At first, the probability of placing the env. is 100 %
+            double totalProb(1.0);
+
+            // Each constraint will reduce this probability 
+            // (product of all constraint weights)
+            for (const auto& constraint : i_Constraints) {
+                totalProb *= constraint->evaluate(i_Element, coord);
+            }
+
+            // Generate a probability
+            if (randProb() < totalProb) {
+                // Set the env.
+                (*s_Map)(coord).setBiome(i_Element);
+                ++placed;
+                progressLogger.next();
+            }
+            else if (++tries > i_MaxTries) {
+                LOG(ERROR) << "Maximum number of tries reached."
+                    << " Skipping phase for this environment.";
+                break;
             }
         }
+    }
+
+    unsigned int parsePhaseQtyElem(const Value& i_PhaseElem)
+    {
+        const Value& qtyElem(parseSubElem(i_PhaseElem, QTY_ELEM));
+
+        if (qtyElem.HasMember(RELATIVE_ELEM.c_str())) {
+            double relQty(parseDouble(qtyElem, RELATIVE_ELEM));
+            return (unsigned int)(relQty*s_Map->area() + 0.5);
+        }
+
+        if (qtyElem.HasMember(ABSOLUTE_ELEM.c_str())) {
+            return parseUINT(qtyElem, ABSOLUTE_ELEM);
+        }
+
+        std::stringstream ss;
+        ss << "Expecting a \"" << RELATIVE_ELEM << "\" or a \""
+            << ABSOLUTE_ELEM << "\" element for " << QTY_ELEM << " element";
+        FatalErrorDialog(ss.str());
+        return 0;
     }
 
     void runOverpass()
@@ -313,7 +370,7 @@ namespace MapGenerator
     }
 
     void removeLonelyTiles(const Biome& i_ChangedBiome,
-                           const Coord& i_ReadCoord)
+        const Coord& i_ReadCoord)
     {
         Coord surroundingCoord[8] = { Coord(-1, -1), Coord(0, -1), Coord(1, -1),
             Coord(-1, 0), Coord(1, 0), Coord(-1, 1), Coord(0, 1), Coord(1, 1) };
@@ -367,20 +424,7 @@ namespace MapGenerator
 
     const Coord randCoord()
     {
-        return Coord(randUINT(s_ULCorner.x, s_LRCorner.x - 1), 
+        return Coord(randUINT(s_ULCorner.x, s_LRCorner.x - 1),
                      randUINT(s_ULCorner.y, s_LRCorner.y - 1));
-    }
-
-
-    //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-    //                          MAXIMUM MAP DIMENSIONS                        //
-    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-    std::pair<unsigned int, unsigned int> loadMapDimExtremum()
-    {
-        Document doc;
-        Value& root = parseJSON(doc, MAP_LIMITS, LIMITS_ROOT_ELEM);
-        return std::make_pair(parseUINT(root, MIN_MAP_SIZE_ELEM),
-                              parseUINT(root, MAX_MAP_SIZE_ELEM));
     }
 }

@@ -166,21 +166,6 @@
     <ClInclude Include="src\world\generation\constraint\DistanceFromEquator.h">
       <Filter>src\world\generation\constraint</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\generation\constraint\EnvironmentIs.h">
-      <Filter>src\world\generation\constraint</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\generation\constraint\EnvironmentIsAmong.h">
-      <Filter>src\world\generation\constraint</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvAttraction.h">
-      <Filter>src\world\generation\constraint</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvConstraint.h">
-      <Filter>src\world\generation\constraint</Filter>
-    </ClInclude>
-    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvLimits.h">
-      <Filter>src\world\generation\constraint</Filter>
-    </ClInclude>
     <ClInclude Include="src\world\Map.h">
       <Filter>src\world</Filter>
     </ClInclude>
@@ -199,8 +184,20 @@
     <ClInclude Include="src\world\generation\MapGenerator.h">
       <Filter>src\world\generation</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\generation\Phase.h">
-      <Filter>src\world\generation</Filter>
+    <ClInclude Include="src\world\generation\constraint\ElementIs.h">
+      <Filter>src\world\generation\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\generation\constraint\ElementIsAmong.h">
+      <Filter>src\world\generation\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\generation\constraint\NearbyElemLimits.h">
+      <Filter>src\world\generation\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\generation\constraint\NearbyElemConstraint.h">
+      <Filter>src\world\generation\constraint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\generation\constraint\NearbyElemAttraction.h">
+      <Filter>src\world\generation\constraint</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,8 +264,8 @@
     <ClCompile Include="src\world\generation\MapGenerator.cpp">
       <Filter>src\world\generation</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\generation\Phase.cpp">
-      <Filter>src\world\generation</Filter>
+    <ClCompile Include="src\world\generation\constraint\Constraint.cpp">
+      <Filter>src\world\generation\constraint</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,5 +282,10 @@
     <ResourceCompile Include="Xerof.rc">
       <Filter>resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\map\MapConfig.default.json">
+      <Filter>resources</Filter>
+    </None>
   </ItemGroup>
 </Project>

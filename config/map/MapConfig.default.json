@@ -21,7 +21,7 @@
 					"AttractionTowardsPoles": {
 						"Strength": 4
 					},
-					"NeighbouringEnvAttraction": {
+					"NeighbouringElementAttraction": {
 						"Radius": 2,
 						"Strength": 0.8
 					}
@@ -36,7 +36,7 @@
 					"GRASSLAND": 1
 				},
 				"Constraints": {
-					"EnvironmentIs": {
+					"ElementIs": {
 						"Biome": "OCEAN"
 					},
 					"AttractionTowardsCenter": {
@@ -53,15 +53,15 @@
 					"GRASSLAND": 1
 				},
 				"Constraints": {
-					"EnvironmentIs": {
+					"ElementIs": {
 						"Biome": "OCEAN"
 					},
 					"AttractionTowardsCenter": {
 						"Strength": 1
 					},
-                    "NeighbouringEnvAttraction": {
+					"NeighbouringElementAttraction": {
 						"Strength": 2,
-                        "Radius": 1
+						"Radius": 1
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0
@@ -74,13 +74,13 @@
 					"TUNDRA": 1
 				},
 				"Constraints": {
-					"EnvironmentIs": {
+					"ElementIs": {
 						"Biome": "GRASSLAND"
 					},
-                    "NeighbouringEnvLimits": {
+					"NeighbouringElementLimits": {
 						"Min": 1,
-                        "Max": 8,
-                        "Radius": 1
+						"Max": 8,
+						"Radius": 1
 					},
 					"AttractionTowardsPoles": {
 						"Strength": 4
@@ -94,10 +94,10 @@
 				},
 				"BiomesProportions": {
 					"PLAIN": 0.7,
-                    "ROCKY": 0.3
+					"ROCKY": 0.3
 				},
 				"Constraints": {
-					"EnvironmentIs": {
+					"ElementIs": {
 						"Biome": "GRASSLAND"
 					},
 					"AttractionTowardsEquator": {
@@ -114,17 +114,17 @@
 					"PLAIN": 1
 				},
 				"Constraints": {
-					"EnvironmentIs": {
+					"ElementIs": {
 						"Biome": "GRASSLAND"
 					},
-                    "NeighbouringEnvLimits": {
+					"NeighbouringElementLimits": {
 						"Min": 1,
-                        "Max": 25,
-                        "Radius": 2
+						"Max": 25,
+						"Radius": 2
 					},
-                    "NeighbouringEnvAttraction": {
+					"NeighbouringElementAttraction": {
 						"Strength": 3,
-                        "Radius": 1
+						"Radius": 1
 					},
 					"AttractionTowardsEquator": {
 						"Strength": 4
@@ -140,18 +140,18 @@
 					"ROCKY": 1
 				},
 				"Constraints": {
-					"EnvironmentIsAmong": [
+					"ElementIsAmong": [
 						"GRASSLAND", 
-                        "PLAIN"
+						"PLAIN"
 					],
-                    "NeighbouringEnvLimits": {
+					"NeighbouringElementLimits": {
 						"Min": 1,
-                        "Max": 3,
-                        "Radius": 2
+						"Max": 3,
+						"Radius": 2
 					},
-                    "NeighbouringEnvAttraction": {
+					"NeighbouringElementAttraction": {
 						"Strength": 4,
-                        "Radius": 1
+						"Radius": 1
 					}
 				},
 				"MaxNumTriesBeforeSkipping": 0

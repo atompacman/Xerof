@@ -3,10 +3,10 @@
 #include <Object.h>
 
 /*============================================================================\\
-| Large plant objects
+| Plant objects
 |-----------------------------------------------------------------------------||
 | Class hierarchy:
-| GraphicalElement -> Object -> LargePlant -> ...
+| GraphicalElement -> Object -> (Plants) -> ...
 |
 |   - Occupies a whole tile
 |   - Not passable

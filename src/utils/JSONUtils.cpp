@@ -7,9 +7,9 @@
 
 using namespace rapidjson;
 
-Value& parseJSON(Document&   o_Doc,
-                 const char* i_JSONFile,
-                 const char* i_RootElemName)
+Value& parseJSON(Document&          o_Doc,
+                 const std::string& i_JSONFile,
+                 const std::string& i_RootElemName)
 {
     // Open file
     std::ifstream file(i_JSONFile);
@@ -34,7 +34,7 @@ Value& parseJSON(Document&   o_Doc,
     }
 
     // Check if it contains the root elem
-    if (!o_Doc.HasMember(i_RootElemName)) {
+    if (!o_Doc.HasMember(i_RootElemName.c_str())) {
         std::stringstream ss;
         ss << "JSON file \"" << i_JSONFile << "\" root element is not \""
             << i_RootElemName << "\"";
@@ -42,20 +42,20 @@ Value& parseJSON(Document&   o_Doc,
     }
 
     // Return document's root element
-    return o_Doc[i_RootElemName];
+    return o_Doc[i_RootElemName.c_str()];
 }
 
-const Value& parseSubElem(const Value& i_Value, const char* i_Elem)
+const Value& parseSubElem(const Value& i_Value, const std::string& i_Elem)
 {
-    if (!i_Value.HasMember(i_Elem)) {
+    if (!i_Value.HasMember(i_Elem.c_str())) {
         std::stringstream ss;
         ss << "Invalid JSON file: Missing \"" << i_Elem << "\" element";
         FatalErrorDialog(ss.str());
     }
-    return i_Value[i_Elem];
+    return i_Value[i_Elem.c_str()];
 }
 
-unsigned int parseUINT(const Value& i_Value, const char* i_Elem)
+unsigned int parseUINT(const Value& i_Value, const std::string& i_Elem)
 {
     const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsUint()) {
@@ -66,7 +66,7 @@ unsigned int parseUINT(const Value& i_Value, const char* i_Elem)
     return subElem.GetUint();
 }
 
-double parseDouble(const Value& i_Value, const char* i_Elem)
+double parseDouble(const Value& i_Value, const std::string& i_Elem)
 {
     const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsNumber()) {
@@ -77,7 +77,7 @@ double parseDouble(const Value& i_Value, const char* i_Elem)
     return subElem.GetDouble();
 }
 
-double parseNormDouble(const Value& i_Value, const char* i_Elem)
+double parseNormDouble(const Value& i_Value, const std::string& i_Elem)
 {
     double value(parseDouble(i_Value, i_Elem));
     if (value < 0 || value > 1.0) {
@@ -89,7 +89,7 @@ double parseNormDouble(const Value& i_Value, const char* i_Elem)
     return value;
 }
 
-const char* parseString(const Value& i_Value, const char* i_Elem)
+const std::string parseString(const Value& i_Value, const std::string& i_Elem)
 {
     const Value& subElem(parseSubElem(i_Value, i_Elem));
     if (!subElem.IsString()) {
@@ -100,7 +100,7 @@ const char* parseString(const Value& i_Value, const char* i_Elem)
     return subElem.GetString();
 }
 
-Biome parseBiome(const Value& i_Value, const char* i_Elem)
+Biome parseBiome(const Value& i_Value, const std::string& i_Elem)
 {
     auto it(STR_TO_BIOME.find(parseString(i_Value, i_Elem)));
     if (it == STR_TO_BIOME.end()) {
@@ -109,9 +109,4 @@ Biome parseBiome(const Value& i_Value, const char* i_Elem)
         FatalErrorDialog(ss.str());
     }
     return it->second;
-}
-
-Biome parseBiome(const Value& i_Value)
-{
-    return parseBiome(i_Value, BIOME_ELEM);
 }

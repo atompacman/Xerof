@@ -29,18 +29,19 @@ public:
         m_DoNegate(i_DoNegate)
     {}
 
-    // WEIGHT
-    double getWeightFor(Coord i_Coord) const
+    // EVALUATE
+    double evaluate(Biome i_Biome, Coord i_Coord) const
     {
+        double linear(evaluateLinearConstraint(i_Biome, i_Coord));
+
         if (m_DoNegate) {
-            return pow(1 - getSimpleWeightFor(i_Coord), m_Strength);
+            linear = 1 - linear;
         }
-        else {
-            return pow(getSimpleWeightFor(i_Coord), m_Strength);
-        }
+
+        return pow(linear, m_Strength);
     }
 
-    virtual double getSimpleWeightFor(Coord i_Coord) const = 0;
+    virtual double evaluateLinearConstraint(Biome i_Biome,Coord i_Coord)const=0;
 
 private:
     double m_Strength;

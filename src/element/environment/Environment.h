@@ -25,6 +25,14 @@ enum Biome
     TUNDRA
 };
 
+static const char* ENV_NAMES[] = {
+    "GRASSLAND",
+    "OCEAN",
+    "PLAIN",
+    "ROCKY",
+    "TUNDRA"
+};
+
 static const std::map<std::string, Biome> STR_TO_BIOME = {
     { "GRASSLAND", GRASSLAND },
     { "OCEAN",     OCEAN },
@@ -39,14 +47,6 @@ static const std::map<Biome, AssetID> BIOME_TO_ASSET = {
     { PLAIN,     BIOME_PLAINS },
     { ROCKY,     BIOME_ROCKY },
     { TUNDRA,    BIOME_TUNDRA }
-};
-
-static const char* ENV_NAMES[] = {
-    "GRASSLAND",
-    "OCEAN",
-    "PLAIN",
-    "ROCKY",
-    "TUNDRA"
 };
 
 class Environment : public GraphicalElement

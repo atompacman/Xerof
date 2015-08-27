@@ -120,13 +120,12 @@
     <ClInclude Include="src\world\generation\constraint\ConstraintWithStrength.h" />
     <ClInclude Include="src\world\generation\constraint\DistanceFromCenter.h" />
     <ClInclude Include="src\world\generation\constraint\DistanceFromEquator.h" />
-    <ClInclude Include="src\world\generation\constraint\EnvironmentIs.h" />
-    <ClInclude Include="src\world\generation\constraint\EnvironmentIsAmong.h" />
-    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvAttraction.h" />
-    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvConstraint.h" />
-    <ClInclude Include="src\world\generation\constraint\NeighbouringEnvLimits.h" />
+    <ClInclude Include="src\world\generation\constraint\ElementIs.h" />
+    <ClInclude Include="src\world\generation\constraint\ElementIsAmong.h" />
+    <ClInclude Include="src\world\generation\constraint\NearbyElemAttraction.h" />
+    <ClInclude Include="src\world\generation\constraint\NearbyElemConstraint.h" />
+    <ClInclude Include="src\world\generation\constraint\NearbyElemLimits.h" />
     <ClInclude Include="src\world\generation\MapGenerator.h" />
-    <ClInclude Include="src\world\generation\Phase.h" />
     <ClInclude Include="src\world\Map.h" />
     <ClInclude Include="src\world\Tile.h" />
     <ClInclude Include="src\world\World.h" />
@@ -149,8 +148,8 @@
     <ClCompile Include="src\engine\process\MoveProcess.cpp" />
     <ClCompile Include="src\utils\JSONUtils.cpp" />
     <ClCompile Include="src\utils\Position.cpp" />
+    <ClCompile Include="src\world\generation\constraint\Constraint.cpp" />
     <ClCompile Include="src\world\generation\MapGenerator.cpp" />
-    <ClCompile Include="src\world\generation\Phase.cpp" />
     <ClCompile Include="src\world\Tile.cpp" />
     <ClCompile Include="src\world\World.cpp" />
     <ClCompile Include="src\Xerof.cpp" />
@@ -163,6 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\xerof.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\map\MapConfig.default.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

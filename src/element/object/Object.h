@@ -10,6 +10,14 @@
 | GraphicalElement -> Object -> ...
 \=============================================================================*/
 
+// Starts at 5 because ObjIDs come after biomes
+static const unsigned int NUM_BIOMES = 5;
+
+enum ObjID
+{
+    BUSH_ID = NUM_BIOMES
+};
+
 enum class ObjSize
 {
     // A quarter of a tile
